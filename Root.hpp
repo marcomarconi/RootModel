@@ -1132,7 +1132,7 @@ public:
             }
         }
 
-        if(stepCount > 1000) {
+        if(stepCount > 1300) {
             int auxin_overflow_time = parm("Auxin Overflow").toDouble();
             auxin_overflow_count ++;
             if(auxin_overflow_time > 0 && auxin_overflow_count > auxin_overflow_time) {

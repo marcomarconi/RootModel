@@ -4,7 +4,6 @@
 using namespace std;
 using namespace ROOT;
 
-
 bool Mechanics::initialize(QWidget* parent) {
     Mesh* mesh = getMesh("Mesh 1");
     if(!mesh)
@@ -64,7 +63,6 @@ bool Mechanics::rewind(QWidget* parent) {
     if(!tissueProcess)
         throw(QString("Mechanics::rewind tissue process not set"));
     tissueProcess->resetMechanics();
-    realTime = 0;
     return false;
 }
 
@@ -2130,10 +2128,10 @@ bool Root::rewind(QWidget* parent) {
     time = 0;
     stepCount = 0;
     screenShotCount = 0;
+    mechanicsProcess->realTime = 0;
     mechanicsProcess->rewind(parent);
     chemicalsProcess->rewind(parent);
     mechanicsProcessConverged = false;
-    executeTestProcess->rewind(parent);
     MeshLoad meshLoad(*this);
     meshLoad.setParm("File Name", mesh->file());
     return meshLoad.run();
