@@ -1,0 +1,1 @@
+- Cells cannot be remeshed during execution. They tend to explode after remeshing, is it a constraint problem? Possibly shape or pressure
