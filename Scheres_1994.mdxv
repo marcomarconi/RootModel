@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -389.074 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 23.6648 -2.49103 -954.201 1
 SceneRadius: 500
-CameraZoom: -0.48
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 92.006
+Width: 92.0801
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 92.006
+Width: 92.0801
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 92.006
+Width: 92.0801
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05002 1.05002 1.05002
+Size: 1.05039 1.05039 1.05039
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -2737,7 +2737,7 @@ NumParms: 0
 ProcessName: Tools/System/Load View
 NumParms: 1
 ParmName: File Name
-ParmString: Root_model.mdxv
+ParmString: Scheres_1994.mdxv
 ProcessName: Tools/System/Quick Save
 NumParms: 0
 ProcessName: Tools/System/Save View
