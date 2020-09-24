@@ -2245,15 +2245,25 @@ bool Root::step() {
     SUBcm /= SUBcount;
 
     // Fix the camera on the Vascular initials
-    if(parm("Frame fixed on QC").toInt() != 0) {
-        currentStack()->getFrame().setTranslation(-VIcm.x(), -VIcm.y()-parm("Frame fixed on QC").toInt(), 0);
+    QStringList list_QC = parm("Frame fixed on QC").split(QRegExp(","));
+    if(list_QC.size() != 2)
+         throw("Frame fixed on QC should be two numbers separated by comma");
+    double x_QC = list_QC[0].toInt();
+    double y_QC = list_QC[1].toInt();
+    if(x_QC != 0 || y_QC != 0) {
+        currentStack()->getFrame().setTranslation(-VIcm.x()-x_QC, -VIcm.y()-y_QC, 0);
         updateState();
         updateViewer();
     }
 
     // Fix the camera on the Substrate
-    if(parm("Frame fixed on Substrate").toInt() != 0) {
-        currentStack()->getFrame().setTranslation(-SUBcm.x(), -SUBcm.y()-parm("Frame fixed on Substrate").toInt(), 0);
+    QStringList list_substrate = parm("Frame fixed on Substrate").split(QRegExp(","));
+    if(list_substrate.size() != 2)
+         throw("Frame fixed on Substrate should be two numbers separated by comma");
+    double x_substrate = list_substrate[0].toInt();
+    double y_substrate = list_substrate[1].toInt();
+    if(x_substrate != 0 || y_substrate != 0) {
+        currentStack()->getFrame().setTranslation(-SUBcm.x()-x_substrate, -SUBcm.y()-y_substrate, 0);
         updateState();
         updateViewer();
     }

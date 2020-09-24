@@ -1,2 +1,3 @@
+- Strain constraint at maximum level should be able to fully impede growth in that direction
 - Cells cannot be remeshed during execution. They tend to explode after remeshing, is it a constraint problem? Possibly shape or pressure
 - Upper cell close to the substrate accumlate auxin
