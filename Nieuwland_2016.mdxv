@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 -6.03993e-35 9.05187e-33 0 6.03993e-35 1 7.06792e-18 0 -9.05187e-33 -7.06792e-18 1 0 -9.36708e-11 -1.29353e-11 -767.261 1
+CameraFrame: 1 -6.03993e-35 9.05187e-33 0 6.03993e-35 1 7.06792e-18 0 -9.05187e-33 -7.06792e-18 1 0 0 0 -1046.99 1
 SceneRadius: 500
 CameraZoom: 0
 
@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 110.146
+Width: 110.405
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 110.146
+Width: 110.405
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 110.146
+Width: 110.405
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05086 1.05086 1.05086
+Size: 1.05123 1.05123 1.05123
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1075,7 +1075,7 @@ ParmString: 30
 ParmName: Mechanics Enabled
 ParmString: True
 ParmName: Chemicals Enabled
-ParmString: False
+ParmString: True
 ParmName: Growth Enabled
 ParmString: True
 ParmName: Cell Division Enabled
@@ -1085,15 +1085,15 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 10
+ParmString: 1
 ParmName: Snapshots Timer
-ParmString: 0
+ParmString: 5
 ParmName: Snapshots Directory
-ParmString: Test
+ParmString: Nieuwland
 ParmName: Debug
 ParmString: True
 ParmName: Debug File
-ParmString: debug.csv
+ParmString: Nieuwland_debug.csv
 ParmName: Frame fixed on QC
 ParmString: 0,0
 ParmName: Frame fixed on Substrate
@@ -1101,7 +1101,7 @@ ParmString: 0,0
 ParmName: Execution Time
 ParmString: 10000
 ParmName: Output Mesh
-ParmString: mesh.mdxm
+ParmString: Nieuwland_mesh.mdxm
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ParmName: Mechanical Solver Process
@@ -1233,7 +1233,7 @@ ParmString: 10
 ParmName: Mass Spring Parameters
 ParmString: 
 ParmName: Wall EK
-ParmString: 0
+ParmString: 1
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK

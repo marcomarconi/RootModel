@@ -2247,7 +2247,7 @@ bool Root::step() {
     // Fix the camera on the Vascular initials
     QStringList list_QC = parm("Frame fixed on QC").split(QRegExp(","));
     if(list_QC.size() != 2)
-         throw("Frame fixed on QC should be two numbers separated by comma");
+         throw(QString("Frame fixed on QC should be two numbers separated by comma"));
     double x_QC = list_QC[0].toInt();
     double y_QC = list_QC[1].toInt();
     if(x_QC != 0 || y_QC != 0) {
@@ -2259,7 +2259,7 @@ bool Root::step() {
     // Fix the camera on the Substrate
     QStringList list_substrate = parm("Frame fixed on Substrate").split(QRegExp(","));
     if(list_substrate.size() != 2)
-         throw("Frame fixed on Substrate should be two numbers separated by comma");
+         throw(QString("Frame fixed on Substrate should be two numbers separated by comma"));
     double x_substrate = list_substrate[0].toInt();
     double y_substrate = list_substrate[1].toInt();
     if(x_substrate != 0 || y_substrate != 0) {
