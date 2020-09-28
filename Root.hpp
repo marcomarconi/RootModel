@@ -181,6 +181,7 @@ public:
         addParm("Walls Growth", "Walls Growth", "");
         addParm("Strain Threshold for Growth", "Strain Threshold for Growth", "0.01");
         addParm("Walls Growth Rate", "Walls Growth Rate", "10");
+        addParm("Area Growth Rate", "Area Growth Rate", "0");
         addParm("MicroFibrils", "MicroFibrils", "");
         addParm("MF reorientation rate", "MF Reorientation Rate", "0.02");
         addParm("MF reorientation strainrate",

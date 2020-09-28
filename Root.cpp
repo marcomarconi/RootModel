@@ -47,9 +47,6 @@ bool Mechanics::initialize(QWidget* parent) {
          cD.pressureMax = parm("Turgor Pressure").toDouble();
      }
 
-
-
-
     return true;
 }
 
@@ -62,6 +59,7 @@ bool Mechanics::rewind(QWidget* parent) {
         throw(QString("Mechanics::rewind No current mesh, cannot rewind"));
     if(!tissueProcess)
         throw(QString("Mechanics::rewind tissue process not set"));
+    PBDProcess->initialize(parent);
     tissueProcess->resetMechanics();
     return false;
 }
@@ -543,6 +541,7 @@ bool MechanicalGrowth::step(double Dt) {
     // Zonation and Resting values update
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
     double wallsMaxGrowthRate = parm("Walls Growth Rate").toDouble();
+    double areaMaxGrowthRate = parm("Area Growth Rate").toDouble();
     double elongationZone = parm("Elongation Zone").toDouble();
     double differentatiationZone = parm("Differentiation Zone").toDouble();
     for(auto c : cellAttr) {
@@ -557,13 +556,15 @@ bool MechanicalGrowth::step(double Dt) {
         }
         // Growth rates, rest lengths....
         if(cD.mfRORate == 0)
-            continue;
+            continue;  /////////////// FIXME
         if(cD.growthRate > growthRateThresh)
+            //cD.restArea += cD.area * areaMaxGrowthRate * Dt;
             cD.restArea = cD.area;
         for(CCIndex f : *cD.cellFaces) {
             Tissue::FaceData& fD = faceAttr[f];
             if(cD.growthRate > growthRateThresh)
-                fD.restAreaFace = fD.area;
+                //fD.restAreaFace += fD.area * areaMaxGrowthRate * Dt;
+                fD.restAreaFace = fD.area ;
             for(CCIndex e : cs.incidentCells(f, 1)) {
                 Tissue::EdgeData& eD = edgeAttr[e];
                 if(eD.type == Tissue::Wall) {
@@ -577,7 +578,8 @@ bool MechanicalGrowth::step(double Dt) {
                         }
                     }
                 } else if (eD.type == Tissue::Shear)
-                    eD.restLength = eD.length;
+                    //if(eD.length > eD.restLength) // this seems to have very little effect
+                    eD.restLength = eD.length ;
             }
         }
     }
