@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 5.39494e-17 -1.11022e-16 0 -5.39494e-17 1 1.45405e-33 0 1.11022e-16 4.53554e-33 1 0 1.70074e-11 -7.10543e-12 -923.396 1
+CameraFrame: 0.998878 0.00630484 0.046943 0 -0.00328589 0.997937 -0.0641124 0 -0.0472504 0.0638862 0.996838 0 -5.96856e-13 7.95808e-13 -5385.83 1
 SceneRadius: 500
-CameraZoom: 0
+CameraZoom: -2.592
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 132.031
+Width: 131.895
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 132.031
+Width: 131.895
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 132.031
+Width: 131.895
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.04953 1.04953 1.04953
+Size: 1.05002 1.05002 1.05002
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1095,9 +1095,9 @@ ParmString: True
 ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
-ParmString: 0
+ParmString: 0,0
 ParmName: Frame fixed on Substrate
-ParmString: 0
+ParmString: 0,0
 ParmName: Execution Time
 ParmString: 10000
 ParmName: Output Mesh
@@ -1269,7 +1269,7 @@ ParmString: Model/Root/03 Cell Tissue
 ParmName: PBD Engine
 ParmString: Model/Root/07 PBD Engine
 ProcessName: Model/Root/052 Mechanical Growth
-NumParms: 16
+NumParms: 17
 ParmName: Verbose
 ParmString: True
 ParmName: Polarity Method
@@ -1282,6 +1282,8 @@ ParmName: Strain Threshold for Growth
 ParmString: 0.01
 ParmName: Walls Growth Rate
 ParmString: 10
+ParmName: Area Growth Rate
+ParmString: 0
 ParmName: MicroFibrils
 ParmString: 
 ParmName: MF reorientation rate
@@ -1334,10 +1336,10 @@ ParmName: Pin1
 ParmString: 
 ParmName: Pin1 Basal Production Rate
 ParmString: 0.2
-ParmName: Pin1 Half-max Auxin-induced K
-ParmString: 0.05
 ParmName: Pin1 Max Auxin-induced Expression
 ParmString: 50
+ParmName: Pin1 Half-max Auxin-induced K
+ParmString: 0.05
 ParmName: Pin1 Max Concentration
 ParmString: 2
 ParmName: Pin1 Cytoplasmic Decay Rate
@@ -1775,7 +1777,7 @@ NumParms: 1
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ProcessName: Model/Root/4 Execute Test
-NumParms: 10
+NumParms: 11
 ParmName: QC Ablation
 ParmString: 0
 ParmName: Alternate Source Removal
@@ -1796,6 +1798,8 @@ ParmName: Delete Cell Process
 ParmString: Model/Root/31 Delete Cell
 ParmName: Mechanical Growth Process
 ParmString: Model/Root/052 Mechanical Growth
+ParmName: Delete Selection Process
+ParmString: Mesh/System/Delete Selection
 ProcessName: Model/Root/Add Face
 NumParms: 2
 ParmName: Orientation
