@@ -933,7 +933,7 @@ void Tissue::CellData::division(const CCStructure &cs,
                                 CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas) {
 
     if(!tissue)
-        throw("Tissue::CellData::division: tissue not set");
+        throw(QString("Tissue::CellData::division: tissue not set"));
 
     Point3d cm, QCcm;
     for(auto c : cellAttr) {

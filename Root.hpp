@@ -265,7 +265,7 @@ public:
                                                         QStringList() << "Soft-max"
                                                                       << "Arithmetic Average");
 
-        addParm("Auxin Polarity Method", "Auxin Polarity Method", "PINOID",
+        addParm("Auxin Polarity Method", "Auxin Polarity Method", "Flow",
                 QStringList() << "PINOID"
                               << "Flow");
         addParm("Auxin-Flux Impact Half-max", "Auxin-Flux Impact Half-max", "0.1");
@@ -1658,7 +1658,7 @@ public:
                 vs.push_back(v);
 
         if(vs.size() != 2)
-            throw("Too many edges selected");
+            throw(QString("Too many edges selected"));
 
         CCIndex e = CCIndexFactory.getIndex();
 

@@ -485,6 +485,7 @@ bool MechanicalGrowth::step(double Dt) {
         else
             throw(QString("Wrong Polarity Method"));
 
+        // MF degradation
         Point3d a1U = norm(cD.a1) > 0 ? cD.a1 / norm(cD.a1) : Point3d(0, 0, 0);
         Point3d a2U = norm(cD.a2) > 0 ? cD.a2 / norm(cD.a2) : Point3d(0, 0, 0);
         Point3d degr_a1 =
@@ -492,13 +493,16 @@ bool MechanicalGrowth::step(double Dt) {
         Point3d degr_a2 =
             (cD.mfRORate > 0) ? parm("MF Degradation").toDouble() * a2U * norm(cD.a2) : Point3d(0, 0, 0);
 
+        // MF final update
         cD.a1 += (a1_inc * cD.mfRORate - degr_a1) * Dt;
         cD.a2 += (a2_inc * cD.mfRORate - degr_a2) * Dt;
 
+        // MF cannot be longer than 1
         if(norm(cD.a1) > 1)
             cD.a1 = shortenLength(cD.a1, norm(cD.a1) - 1);
         if(norm(cD.a2) > 1)
             cD.a2 = shortenLength(cD.a2, norm(cD.a2) - 1);
+        // a1 is always the longest MF
         if(norm(cD.a1) < norm(cD.a2)) {
             Point3d tmp = cD.a1;
             cD.a1 = cD.a2;
@@ -677,16 +681,15 @@ void Chemicals::calcDerivsEdge(const CCStructure& cs,
         for(CCIndex en : edges) {
             Tissue::EdgeData& eDn = edgeAttr[en];
             if(eDn.type == Tissue::Wall) {
-                // Auxin diffusion between edges
+                // Auxin diffusion between adjacient intercellular edges
                 double diffusion = auxinDiffusionRate * (eD.intercellularAuxin - eDn.intercellularAuxin) / (eD.length + eDn.length) * Dt;
                 eD.intercellularAuxin -= diffusion;
                 eDn.intercellularAuxin += diffusion;
             }
         }
+        // auxin decay can be fast if the maximum amount is reached
         double edge_decay = eD.intercellularAuxin * (kauxinDecay + (kauxinMaxDecay - kauxinDecay) *
                                  (pow(eD.intercellularAuxin/eD.length,10) / (pow(kauxinMaxEdge,10) + pow(eD.intercellularAuxin/eD.length,10)))) * Dt;
-        if(edge_decay > 0.1)
-            cout << "high decay in edge " << e << endl;
         eD.intercellularAuxin -= edge_decay;
     }
 }
@@ -1133,7 +1136,7 @@ bool Chemicals::update() {
                          eD.auxinFluxImpact[label] =
                              (pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4) / (pow(Kpinoid, 4) + pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4))) ;
                     else
-                        throw("Choose a correct auxin flux method, you ass");
+                        throw(QString("Choose a correct auxin flux method, you ass"));
 
                     // Calculate MF impact
                     double MFvalue = cD.a1/norm(cD.a1) * eD.outwardNormal[f] ;
@@ -1913,7 +1916,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             mdxInfo << "CellDivision.step: Dividing cell (" << label << "), of type " << Tissue::ToString(cD.type) << " with area " << indexAttr[f].measure << " using algorithm: " << DivAlg <<  endl;        // Simple division, shortest edge through centroid
         if(DivAlg == 0) {
                if(!divideCell2dX(cs, indexAttr, vMAttr, f, *this, subdiv))
-                    throw("CellDivision.step: Failed division for: " +  label);
+                    throw(QString("CellDivision.step: Failed division for: " +  label));
         // Division along vector through centroid
         } else if(DivAlg == 1){
             if(Verbose)
@@ -1932,7 +1935,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                     divisionPoints.insert(v);
             if(!divideCell2dX(cs, indexAttr, vMAttr, f, *this, subdiv, (mdx::Cell2dDivideParms::DivAlg)2, cD.divVector,
                               divisionPoints, parm("Max Joining Distance").toDouble())){
-                throw("CellDivision.step: Failed division for: " +  label);
+                throw(QString("CellDivision.step: Failed division for: " +  label));
             }
 
         }
@@ -1942,7 +1945,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         if(&cellAttr[label] != nullptr)
             daughters[label] = cellAttr[label].daughters;
         else
-            throw("CellDivision.step: null cell" +  label);
+            throw(QString("CellDivision.step: null cell" +  label));
     }
 
     // re-triangulate the cell, and soft remesh
@@ -2097,7 +2100,7 @@ bool Root::initialize(QWidget* parent) {
             //string viewFile = "views/" + currentDateTime() + ".mdxv";
             //saveView(QString::fromStdString(viewFile));
             if(system((string("mkdir ") + snapshotDir).c_str()) == -1)
-                throw("Error creating snapshot directory");
+                throw(QString("Error creating snapshot directory"));
         }
         begin_clock = clock();
         mdxInfo << "Root initialization completed." << endl;
@@ -2139,7 +2142,7 @@ bool Root::rewind(QWidget* parent) {
     return meshLoad.run();
 }
 
-// Needed to automatically run the process we calling --run on the console
+// When calling --run on the console this does not work
 // bool Root::run() { mdxInfo << "Running Root" << endl; return step(); }
 bool Root::step() {
 
