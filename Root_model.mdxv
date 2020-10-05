@@ -1,4 +1,4 @@
-//  Parameters for MorphoDynamX
+// Parameters for MorphoDynamX
 [Main]
 MDXVersion: 2.0
 MDXRevision: 2-613-g46128500-dirty
@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.998878 0.00630484 0.046943 0 -0.00328589 0.997937 -0.0641124 0 -0.0472504 0.0638862 0.996838 0 -5.96856e-13 7.95808e-13 -5385.83 1
+CameraFrame: 0.998878 0.00630484 0.046943 0 -0.00328589 0.997937 -0.0641124 0 -0.0472504 0.0638862 0.996838 0 2.13163e-14 -1.42109e-14 -1243.59 1
 SceneRadius: 500
-CameraZoom: -2.592
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 131.895
+Width: 131.992
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 131.895
+Width: 131.992
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 131.895
+Width: 131.992
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05002 1.05002 1.05002
+Size: 1.05027 1.05027 1.05027
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1305,7 +1305,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 69
+NumParms: 70
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1323,6 +1323,8 @@ ParmString: 1
 ParmName: Auxin Cell Permeability
 ParmString: 0
 ParmName: Auxin Basal Production Rate
+ParmString: 0
+ParmName: Auxin QC Basal Production Rate
 ParmString: 0
 ParmName: Auxin Decay Rate
 ParmString: 0.0125
@@ -1777,8 +1779,10 @@ NumParms: 1
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ProcessName: Model/Root/4 Execute Test
-NumParms: 11
+NumParms: 12
 ParmName: QC Ablation
+ParmString: 0
+ParmName: Source Removal
 ParmString: 0
 ParmName: Alternate Source Removal
 ParmString: 0
