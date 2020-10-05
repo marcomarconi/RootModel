@@ -251,17 +251,17 @@ public:
         addParm("Pin1 Cytoplasmic Decay Rate", "Pin1 Cytoplasmic Decay Rate", "0.08");
         addParm("Pin1 Membrane Max Decay Rate", "Pin1 Membrane Max Decay Rate", "0.8");
         addParm("Pin1 Max Trafficking Rate", "Pin1 Max Trafficking Rate", "1");
-        addParm("Pin1 Max Amount Edge", "Pin1 Max Amount Edge( auxin per nm)", "20");
+        addParm("Pin1 Max Amount Edge", "Pin1 Max Amount Edge( auxin per nm)", "15");
         addParm("Pin1-auxin export rate", "Pin1-auxin export rate", "1.4");
         addParm("Pin1 Sensitivity Suppression by Auxin Amount",
-                "Pin1 Sensitivity Suppression by Auxin Amount (auxin per nm squared)", "3"); //// be careful
+                "Pin1 Sensitivity Suppression by Auxin Amount (auxin per nm squared)", "300"); //// be careful
         addParm("Columella Auto-Efflux", "Columella Auto-Efflux", "True", QStringList() << "True" << "False" );
         addParm("Pin1 Sensitivity MF K", "Pin1 Sensitivity MF K", "0");
-        addParm("Pin1 Sensitivity Auxin-flux K", "Pin1 Sensitivity Auxin-flux K", "5");
+        addParm("Pin1 Sensitivity Auxin-flux K", "Pin1 Sensitivity Auxin-flux K", "3");
         addParm("Pin1 Sensitivity Geometry K", "Pin1 Sensitivity Geometry K", "2");
-        addParm("Pin1 Sensitivity MF+Auxin-flux K", "Pin1 Sensitivity MF+Auxin-flux K", "5");
+        addParm("Pin1 Sensitivity MF+Auxin-flux K", "Pin1 Sensitivity MF+Auxin-flux K", "3");
         addParm("Pin1 Sensitivity MF+Geometry K", "Pin1 Sensitivity MF+Geometry K", "0");
-        addParm("Pin1 Sensitivity Auxin-flux+Geometry K", "Pin1 Sensitivity Auxin-flux+Geometry K", "2");
+        addParm("Pin1 Sensitivity Auxin-flux+Geometry K", "Pin1 Sensitivity Auxin-flux+Geometry K", "0");
         addParm("Pin1 Sensitivity Average Method", "Pin1 Sensitivity Average Method", "Soft-max",
                                                         QStringList() << "Soft-max"
                                                                       << "Arithmetic Average");
@@ -282,7 +282,7 @@ public:
         addParm("Aux1 Max Concentration", "Aux1 Max Concentration", "2");
         addParm("Aux1 Cytoplasmic Decay Rate", "Aux1 Cytoplasmic Decay Rate", "0.08");
         addParm("Aux1 Max Trafficking Rate", "Aux1 Max Trafficking Rate", "1");
-        addParm("Aux1 Max Amount Edge", "Aux1 Max Amount Edge", "20");
+        addParm("Aux1 Max Amount Edge", "Aux1 Max Amount Edge", "15");
         addParm("Aux1-auxin import rate", "Aux1-auxin import rate", "1");
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
