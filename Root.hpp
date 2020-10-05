@@ -1096,6 +1096,8 @@ public:
         Tissue::CellDataAttr &cellAttr =
             mesh->attributes().attrMap<int, Tissue::CellData>(
                 "CellData");
+        Tissue::VertexDataAttr& vMAttr =
+            mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
 
         if(!getProcess(parm("Tissue Process"), tissueProcess))
             throw(QString("Root::initialize Cannot make Tissue Process") + parm("Tissue Process"));
@@ -1122,11 +1124,10 @@ public:
         int source_removal_time = parm("Source Removal").toDouble();
         source_removal_count ++;
         if(source_removal_time > 0 && source_removal_count > source_removal_time) {
-            source_removal_count = 0;
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
                 if(cD.type == Tissue::Source)
-                    cD.auxinProdRate = 0;
+                    cD.setType(Tissue::Substrate, vMAttr);
             }
         }
 
