@@ -236,6 +236,7 @@ public:
         addParm("Auxin Intercellular Diffusion", "Auxin Intercellular Diffusion", "1");
         addParm("Auxin Cell Permeability", "Auxin Cell Permeability", "0.2");
         addParm("Auxin Basal Production Rate", "Auxin Basal Production Rate", "0");
+        addParm("Auxin QC Basal Production Rate", "Auxin QC Basal Production Rate", "0");
         addParm("Auxin Decay Rate", "Auxin Decay Rate", "0.0125");
         addParm("Auxin Max Decay Rate", "Auxin Decay Rate", "0.125");
         addParm("Auxin Max Amount Cell", "Auxin Max Amount (auxin per nm squared)", "3");
@@ -1056,6 +1057,7 @@ public:
         setName("Model/Root/4 Execute Test");
         setDesc("ExecuteTest.");
         addParm("QC Ablation", "QC Ablation", "0");
+        addParm("Source Removal", "Source Removal", "0");
         addParm("Alternate Source Removal", "Alternate Source Removal", "0");
         addParm("Auxin Overflow", "Auxin Overflow", "0");
         addParm("TIP Removal Time", "TIP Removal Time", "0");
@@ -1069,7 +1071,7 @@ public:
                 "Model/Root/052 Mechanical Growth");
         addParm("Delete Selection Process", "Delete Selection Process", "Mesh/System/Delete Selection");
 
-        alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
+        source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
         tip_removed = false;
         overflow = false;
@@ -1077,7 +1079,7 @@ public:
     }
 
     bool rewind(QWidget* parent) {
-        alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
+        source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
         tip_removed = false;
         overflow = false;
@@ -1114,6 +1116,17 @@ public:
                 Tissue::CellData& cD = cellAttr[c.first];
                 if(cD.type == Tissue::QC)
                      cD.type = Tissue::Undefined;
+            }
+        }
+
+        int source_removal_time = parm("Source Removal").toDouble();
+        source_removal_count ++;
+        if(source_removal_time > 0 && source_removal_count > source_removal_time) {
+            source_removal_count = 0;
+            for(auto c : cellAttr) {
+                Tissue::CellData& cD = cellAttr[c.first];
+                if(cD.type == Tissue::Source)
+                    cD.auxinProdRate = 0;
             }
         }
 
@@ -1220,7 +1233,7 @@ private:
     MechanicalGrowth * mechanicalGrowthProcess = 0;
     DeleteSelection* deleteSelectionProcess = 0;
     std::map<int, double> cellsProdRates;
-    int alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
+    int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
     bool tip_removed = false;
     bool overflow = false;

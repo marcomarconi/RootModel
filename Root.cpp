@@ -879,9 +879,9 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             double PP2A_conc_eD = eD.PP2A[label] / eD.length;
             double auxin_ratio = eD.auxinGrad[label] > 0 ? eD.auxinGrad[label] : 0;
             // exocytosis
-            double trafficked_PINOID = Dt * cD.PINOID * (eD.length / cD.perimeter)
-                        * PINOIDKrate
-                        * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2)))
+            double trafficked_PINOID = Dt * cD.PINOID
+                        * PINOIDKrate * (eD.length / cD.perimeter) // equal trafficking for edge
+                        * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2))) // auxin promotes trafficking
                         * (pow(PINOIDMaxEdge,10) / (pow(PINOIDMaxEdge,10) + pow(PINOID_conc_eD,10))) // Max amount on edge
                         ;
             double trafficked_PP2A = Dt * cD.PP2A * (eD.length / cD.perimeter)
@@ -1061,7 +1061,7 @@ bool Chemicals::update() {
         if(cD.dualVertex.isPseudocell())
             continue;
 
-        // calculate auxin gradient between adjacient cells
+        // calculate auxin gradient between adjacient cells (never actually used)
         cD.auxinFluxVector = Point3d(0., 0., 0.);
         cD.auxinGradientVector = Point3d(0., 0., 0.);
         for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
@@ -1079,7 +1079,7 @@ bool Chemicals::update() {
         else
             cD.auxinGradientVector = 0.5 * Point3d(sqrtf(2.), sqrtf(2.), 0.);
 
-         // Auxin ratio gradients
+         // Auxin ratio gradients (used by the polarizer model)
         for(CCIndex e : cD.perimeterEdges) {
             Tissue::EdgeData& eD = edgeAttr[e];
             eD.auxinGrad[label] = 0;
@@ -1198,6 +1198,8 @@ bool Chemicals::update() {
         advance(it, i);
         Tissue::CellData& cD = it->second;
         cD.auxinDecayRate = parm("Auxin Decay Rate").toDouble();
+        if(cD.type == Tissue::QC)
+            cD.auxinProdRate = parm("Auxin QC Basal Production Rate").toDouble();
         // FIXME this should be automatized
         if(cD.type == Tissue::Substrate)
             cD.auxin = 0;
