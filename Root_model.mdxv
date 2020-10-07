@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.998878 0.00630484 0.046943 0 -0.00328589 0.997937 -0.0641124 0 -0.0472504 0.0638862 0.996838 0 -1.49226 46.045 -1243.59 1
+CameraFrame: 0.998878 0.00630484 0.046943 0 -0.00328589 0.997937 -0.0641124 0 -0.0472504 0.0638862 0.996838 0 1.42109e-14 0 -1127.87 1
 SceneRadius: 500
-CameraZoom: -1.152
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 114.233
+Width: 114.44
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 114.233
+Width: 114.44
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 114.233
+Width: 114.44
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05079 1.05079 1.05079
+Size: 1.05114 1.05114 1.05114
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -965,7 +965,7 @@ ParmString: No
 ProcessName: Mesh/System/Load
 NumParms: 4
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/RootCells_embrio_minimal_reloaded.mdxm
+ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Add
@@ -1047,7 +1047,7 @@ ParmString:
 ProcessName: Mesh/System/Save
 NumParms: 3
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxm
+ParmString: /home/marco/trabajo/MDX models/Root/test.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Mesh Id
@@ -1085,7 +1085,7 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 10
+ParmString: 1
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
@@ -1513,15 +1513,15 @@ ParmString: Model/Root/052 Mechanical Growth
 ParmName: Divide Process
 ParmString: Model/Root/04 Divide Cells
 ParmName: Undefined Wall EK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Wall CK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Shear EK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Shear CK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Turgor Pressure
-ParmString: -1
+ParmString: 0
 ParmName: Undefined Growth Factor
 ParmString: 0
 ParmName: Undefined Max area

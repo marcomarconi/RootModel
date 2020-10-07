@@ -59,8 +59,13 @@ bool Mechanics::rewind(QWidget* parent) {
         throw(QString("Mechanics::rewind No current mesh, cannot rewind"));
     if(!tissueProcess)
         throw(QString("Mechanics::rewind tissue process not set"));
+    if(Verbose)
+        mdxInfo << "Mechanics::rewind" << endl;
     PBDProcess->initialize(parent);
     tissueProcess->resetMechanics();
+    realTime = 0;
+    userTime = 0;
+
     return false;
 }
 
@@ -1891,7 +1896,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     if(!trigger_division)
         return false;
 
-    // there is at least one cell divide, turn all the cells into single faces and
+    // there is at least one cell divide, turn the cells into single faces and
     // find again which ones to divide
     clearCellsProcess->clearCell(cDs[0].label);
     updateGeometry(cs, indexAttr);
@@ -1916,6 +1921,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             DivAlg = cD.divAlg;
         if(Verbose)
             mdxInfo << "CellDivision.step: Dividing cell (" << label << "), of type " << Tissue::ToString(cD.type) << " with area " << indexAttr[f].measure << " using algorithm: " << DivAlg <<  endl;        // Simple division, shortest edge through centroid
+        // Division along closest walls
         if(DivAlg == 0) {
                if(!divideCell2dX(cs, indexAttr, vMAttr, f, *this, subdiv))
                     throw(QString("CellDivision.step: Failed division for: " +  label));
@@ -1950,7 +1956,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             throw(QString("CellDivision.step: null cell" +  label));
     }
 
-    // re-triangulate the cell, and soft remesh
+    // re-triangulate the cell, recreate the dual tissue and soft remesh
     indexAttr[*D.begin()].selected = true;
     triangulateProcess->step();
     tissueProcess->initialize();
@@ -2135,9 +2141,9 @@ bool Root::rewind(QWidget* parent) {
     time = 0;
     stepCount = 0;
     screenShotCount = 0;
-    mechanicsProcess->realTime = 0;
     mechanicsProcess->rewind(parent);
     chemicalsProcess->rewind(parent);
+    executeTestProcess->rewind(parent);
     mechanicsProcessConverged = false;
     MeshLoad meshLoad(*this);
     meshLoad.setParm("File Name", mesh->file());
@@ -2985,7 +2991,10 @@ bool PrintCellAttr::step() {
                     << " gMax: " << cD.gMax
                     << " gMin: " << cD.gMin
                     << " restCm: " << cD.restCm << " "
-                    << " invRestMat: " << cD.invRestMat << endl;
+                    << " invRestMat: " << cD.invRestMat << " "
+                    << " restX0: ";
+                    for(auto x : cD.restX0) mdxInfo << x << " ";
+                    mdxInfo << endl;
             mdxInfo << " a1: " << cD.a1 << " "
                     << " a2: " << cD.a2 << " "
                     << " axisMin: " << cD.axisMin << " "
@@ -3018,7 +3027,7 @@ bool PrintCellAttr::step() {
             mdxInfo << "Face: " << f  << " type: " << Tissue::ToString(fD.type) << " center: " << cIdx.pos << " label " << cIdx.label  << " owner " << fD.owner
                     << endl
                     //<< " orientation with TOP: " << cs.ro(CCIndex::TOP, f) << endl
-                    << " area: " << fD.area << " restAreaFace: " << fD.restAreaFace << " invRestMat: " << fD.invRestMat
+                    << " area: " << fD.area << " restAreaFace: " << fD.restAreaFace << " invRestMat: " << fD.invRestMat << " restPos: " << fD.restPos[0] << " : " << fD.restPos[1] << " : " << fD.restPos[2]
                     << endl
                     //<< " prev_centroid: " << fD.prev_centroid << endl
                     << " E: " << fD.E << " " << " F: " << fD.F << " " << " R: " << fD.R << " " << " G: " << fD.G << " " << " V: " << fD.V << endl

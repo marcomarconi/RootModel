@@ -55,6 +55,15 @@ bool  PBD::solve_ShapeMatchingConstraint(const std::vector<Point3d> x0,
                                    bool allowStretch,
                                    std::vector<Point3d>& corr,
                                    Matrix3d* rot=NULL) {
+    if(numPoints <= 0) {
+        mdxInfo << "PBD::solve_ShapeMatchingConstraint: numPoints = " << numPoints << endl;
+        return false;
+    }
+    if(restCm == Point3d(0,0,0)) {
+        mdxInfo << "PBD::solve_ShapeMatchingConstraint: restCm = " << restCm << endl;
+        return false;
+    }
+
     // center of mass
     Point3d cm(0.0, 0.0, 0.0);
     double wsum = 0.0;
@@ -804,7 +813,6 @@ void PBD::solve() {
         mesh->attributes().attrMap<CCIndex, Tissue::EdgeData>("EdgeData");
     CCStructure& cs = mesh->ccStructure("Tissue");
 
-
     // Update proposal positions and initialize constrain corrections
     ////#pragma omp parallel for
     for(uint i = 0; i < cs.vertices().size(); i++) {
@@ -890,16 +898,14 @@ void PBD::solve() {
         if(PBDstrainStiffness > 0) {
             // Strains Constraint
             ////#pragma omp parallel for schedule(static)
-            double avg_a1 = 0, avg_a2 = 0;
             for(uint i = 0; i < cs.faces().size(); i++) {
                 CCIndex f = cs.faces()[i];
                 Tissue::FaceData& fD = faceAttr[f];
-                Tissue::CellData& cD = cellAttr[indexAttr[f].label];
                 std::vector<CCIndex> vs = faceVertices(cs, f);
                 Point3d p0 = indexAttr[vs[0]].pos;
                 Point3d p1 = indexAttr[vs[1]].pos;
                 Point3d p2 = indexAttr[vs[2]].pos;
-                double faceAngle = mdx::angle(Point3d(1,0,0), cD.a1/norm(cD.a1), Point3d(0,0,-1));
+                double faceAngle = mdx::angle(Point3d(1,0,0), fD.a1/norm(fD.a1), Point3d(0,0,-1));
                 Point3d x0 = Rotate(fD.restPos[0], faceAngle);
                 Point3d x1 = Rotate(fD.restPos[1], faceAngle);
                 Point3d x2 = Rotate(fD.restPos[2], faceAngle);
@@ -923,8 +929,6 @@ void PBD::solve() {
                 double stiffnessXY = PBDstrainShearStiffness;
                 stiffnessYY = norm(fD.a1) - norm(fD.a2);
                 stiffnessXX = 0;//norm(fD.a2);
-                avg_a1 += norm(fD.a1);
-                avg_a2 += norm(fD.a2);
                 if(!solve_StrainTriangleConstraint(p0, m0, p1, m1, p2, m2, fD.invRestMat, stiffnessXX, stiffnessYY, stiffnessXY,
                                                    PBDstrainNormalize, PBDstrainNormalize, corr0, corr1, corr2)) {
                     mdxInfo << "solvePBD: Failed solving strain constraint for face: " << f << endl;

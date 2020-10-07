@@ -470,6 +470,7 @@ public:
             restX0.clear();
             for(Point3d i : rX0)
                 restX0.push_back(i);
+            readPOD<Point3d>(restCm, ba, pos);
             //
             readPOD<double>(lifeTime, ba, pos);
             readPOD<double>(pressure, ba, pos);
@@ -537,6 +538,7 @@ public:
             size_t rx0_sz = rx0.size();
             writePOD<size_t>(rx0_sz, ba);
             writeChar(rx0.data(), rx0_sz * sizeof(Point3d), ba);
+            writePOD<Point3d>(restCm, ba);
             //
             writePOD<double>(lifeTime, ba);
             writePOD<double>(pressure, ba);
@@ -566,9 +568,7 @@ public:
         void resetMechanics(FaceDataAttr& faceAttr) {
             a1 = Point3d(1, 1, 0) * EPS, a2 = Point3d(1, 1, 0) * EPS;
             restArea = area;
-            invRestMat = 0;
             restCm = centroid;
-            restX0.clear();
             shapeInit = false;
             invmassVertices = 1;            
             mfRORate = -1;
@@ -1254,7 +1254,9 @@ public:
             readPOD<Point3d>(restPos[0], ba, pos);
             readPOD<Point3d>(restPos[1], ba, pos);
             readPOD<Point3d>(restPos[2], ba, pos);
-            //readPOD<Matrix3d>(invRestMat, ba, pos); prob not needed as it is recalculated at every step
+            readPOD<Point2d>(invRestMat[0], ba, pos);
+            readPOD<Point2d>(invRestMat[1], ba, pos);
+            readPOD<Point2d>(invRestMat[2], ba, pos);
             return true;
         }
 
@@ -1269,7 +1271,9 @@ public:
             writePOD<Point3d>(restPos[0], ba);
             writePOD<Point3d>(restPos[1], ba);
             writePOD<Point3d>(restPos[2], ba);
-            //writePOD<Matrix3d>(invRestMat, ba);
+            writePOD<Point2d>(invRestMat[0], ba);
+            writePOD<Point2d>(invRestMat[1], ba);
+            writePOD<Point2d>(invRestMat[2], ba);
             return true;
         }
         bool operator==(const FaceData& other) const {

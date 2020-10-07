@@ -589,6 +589,7 @@ public:
 
 };
 
+// This process is a big mess, it should be rewritten completely
 // remesh the CS, a very messy job, remember to reinitialize
 // all the processes as the CS is destroyed
 class Remesh : public Process {
@@ -1073,6 +1074,7 @@ public:
 
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
+        LRC_removed = false;
         tip_removed = false;
         overflow = false;
         cellsProdRates.clear();
@@ -1081,6 +1083,7 @@ public:
     bool rewind(QWidget* parent) {
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
+        LRC_removed = false;
         tip_removed = false;
         overflow = false;
         cellsProdRates.clear();
@@ -1197,7 +1200,7 @@ public:
 
         int LRC_removal_time = parm("LRC Removal Time").toDouble();
         LRC_removal_count ++;
-        if(LRC_removal_time > 0 && LRC_removal_count > LRC_removal_time) {
+        if(LRC_removal_time > 0 && LRC_removal_count > LRC_removal_time && !LRC_removed) {
             std::set<int> labels;
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
@@ -1205,6 +1208,7 @@ public:
                     labels.insert(cD.label);
             }
             deleteProcess->step(labels);
+            LRC_removed = true;
         }
 
         int pin2_removal_time = parm("PIN2 Removal Time").toDouble();
@@ -1236,6 +1240,7 @@ private:
     std::map<int, double> cellsProdRates;
     int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
+    bool LRC_removed = false;
     bool tip_removed = false;
     bool overflow = false;
 };
