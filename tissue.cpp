@@ -1046,6 +1046,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.restArea = (cD1.area / area) * restArea;
     cD1.prevArea = (cD1.area / area) * prevArea;
     cD1.mfRORate = mfRORate;
+    cD1.divAlg = divAlg;
     cD1.auxin = auxin / 2;
     cD1.auxinProdRate = auxinProdRate;
     cD1.pinProdRate = pinProdRate;
@@ -1071,6 +1072,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.restArea = (cD2.area / area) * restArea;
     cD2.prevArea = (cD2.area / area) * prevArea;
     cD2.mfRORate = mfRORate;
+    cD2.divAlg = divAlg;
     cD2.auxin = auxin / 2;
     cD2.auxinProdRate = auxinProdRate;
     cD2.pinProdRate = pinProdRate;

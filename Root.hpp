@@ -86,11 +86,11 @@ public:
         addParm("Wall CK", "Stiffness of the cross springs", "1");
         addParm("Shear EK", "Extensional Stiffness of the shear edge springs", "0");
         addParm("Shear CK", "Compression Stiffness of the shear edge springs", "1");
-        addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.01");
-        addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "2");
-        addParm("Wall stress", "Wall stress", "10");
-        addParm("Wall stress K1", "Wall stress K1", "0.05");
-        addParm("Wall stress K2", "Wall stress K2", "0.75");
+        addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
+        addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "3");
+        addParm("Wall stress", "Wall stress", "1");
+        addParm("Wall stress K1", "Wall stress K1", "0.01");
+        addParm("Wall stress K2", "Wall stress K2", "2");
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");
@@ -169,7 +169,7 @@ public:
                               << "False");
         addParm("Polarity Method",
                 "Polarity Method",
-                "Principal Strains",
+                "Cell Axis",
                 QStringList() << "Cell Axis"
                               << "Principal Strains"
                               << "Membrane Stretch");
@@ -192,8 +192,8 @@ public:
                 QStringList() << "True"
                               << "False");
         addParm("Zonation", "Zonation", "");
-        addParm("Elongation Zone", "Elongation Zone", "500");
-        addParm("Differentiation Zone", "Differentiation Zone", "1000");
+        addParm("Elongation Zone", "Elongation Zone", "50");
+        addParm("Differentiation Zone", "Differentiation Zone", "100");
         addParm("Mechanics Process",
                 "Name of Mechanics derivatives process",
                 "Model/Root/05 Mechanics");
@@ -370,7 +370,7 @@ public:
                               << "False");
         addParm("Division Algorithm",
                 "Name of the Division Algorithm",
-                "0",
+                "1",
                 QStringList() << "0"
                               << "1"
                               << "2"  );
@@ -380,7 +380,7 @@ public:
                 "1" );
         addParm("Minimum Polarity Vector Norm",
                 "Minimum Polarity Vector Norm",
-                "0.01" );
+                "0.05" );
         addParm("Root Process", "Name of the process for the Root", "Model/Root/01 Root");
         addParm("Remesh", "Remesh", "Model/Root/02 Remesh");
         addParm("Triangulate Faces Process", "Triangulate Faces", "Model/Root/Triangulate Faces");
@@ -872,7 +872,6 @@ public:
     std::vector<Process*> processes;
 
 private:
-    QGLViewer *q;
     bool debugging = false;
     bool process_started = false;
     bool snapshot = false;

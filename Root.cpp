@@ -1881,7 +1881,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                         <<   " bigger than " << cD.cellMaxArea << endl;
             }
-            if(norm(cD.a1) < parm("Minimum Polarity Vector Norm").toDouble()) {
+            // Skip division if division algoritm MF depending but cell has no polarity
+            if(cD.divAlg != 0 && norm(cD.a1) < parm("Minimum Polarity Vector Norm").toDouble()) {
                 if(Verbose)
                     mdxInfo << "CellDivision.step: WARNING: Non-polar division prevented: " << cD.label << " division vector norm: " << norm(cD.a1) << endl;
                  continue;
@@ -2160,7 +2161,7 @@ bool Root::step() {
     if(ccName != "Tissue")
         throw(QString("Root::run Error, please tun the model on the Tissue Complex"));
     CCStructure& cs = mesh->ccStructure("Tissue");
-    //CCIndexDataAttr& indexAttr = mesh->indexAttr();
+    CCIndexDataAttr& indexAttr = mesh->indexAttr();
 
     Tissue::VertexDataAttr& vMAttr =
         mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
@@ -2294,7 +2295,6 @@ bool Root::step() {
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {"Chems: Auxin By Area", "Mechs: Growth Rate", "Cell Type"};
         for(QString signalName: signals_set) {
-            mesh->updateAll();
             mesh->updateProperties("Tissue");
             mesh->drawParms("Tissue").setGroupVisible("Faces", true);
             mesh->drawParms("Tissue").setRenderChoice("Faces", signalName);
@@ -2309,6 +2309,7 @@ bool Root::step() {
                 mesh->drawParms("TissueVisual").setGroupVisible("Vertices", true);
             }
             mesh->setSignal(signalName);
+            mesh->updateAll();
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
             takeSnapshot(fileName, 1, 645*2, 780*2, 100, true);
         }
