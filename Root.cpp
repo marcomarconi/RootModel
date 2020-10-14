@@ -369,7 +369,8 @@ bool MechanicalGrowth::initialize(QWidget* parent) {
             for(CCIndex f : *cD.cellFaces)
                 cD.restArea += indexAttr[f].measure;
         }
-        cD.mfRORate = parm("MF reorientation rate").toDouble();
+        if(cD.mfRORate == -1)
+            cD.mfRORate = parm("MF reorientation rate").toDouble();
     }
     // init rest area
     for(CCIndex f : cs.faces()) {
@@ -2016,7 +2017,10 @@ void write_debug_header(std::ofstream &output_file) {
                 << ","
                 << "Average PIN1 Expression"
                 << ","
-                << "Average PIN1 Trafficking" << endl
+                << "Average PIN1 Trafficking"
+                << ","
+                << "Anisotropy degree"
+                << endl
                 << flush;
 }
 
@@ -2378,6 +2382,17 @@ bool Root::step() {
                 total_auxin += eD.intercellularAuxin;
         }
 
+        double anisotropy_degree = 0;
+        int anisotropy_count = 0;
+        for(auto c : cellAttr) {
+            Tissue::CellData& cD = cellAttr[c.first];
+            if(cD.mfRORate > 0 && cD.centroid[1] < 0) {
+                anisotropy_degree += norm(cD.axisMax) / norm(cD.axisMin);
+                anisotropy_count++;
+            }
+        }
+        anisotropy_degree /= anisotropy_count;
+
         output_file << stepCount << "," << time << "," << mechanicsProcess->realTime  << ","
                     << rootGR << "," << QCcm << "," << avg_pressure << "," << avg_sigma << ","
                     << avg_cell_growth << "," << avg_velocity << "," << avg_auxin << "," << std_auxin << ","
@@ -2385,7 +2400,9 @@ bool Root::step() {
                     << chemicalsProcess->debugs["Average Auxin Diffusion"] << ","
                     << chemicalsProcess->debugs["Average Auxin Export"]*-1 << ","
                     << chemicalsProcess->debugs["Average PIN1 Expression"] << ","
-                    << chemicalsProcess->debugs["Average PIN1 Trafficking"] << endl
+                    << chemicalsProcess->debugs["Average PIN1 Trafficking"] << ","
+                    << anisotropy_degree
+                    << endl
                     << flush;
 
 
@@ -3258,6 +3275,7 @@ bool SetCellAttr::step() {
             cD.auxinProdRate = parm("Auxin production rate").toDouble();
             if(parm("Periclinal Division") != "")
                 cD.periclinalDivision = parm("Periclinal Division") == "True";
+            cD.mfRORate = parm("MF reorientation rate").toDouble();
             QStringList list = parm("Microfibril 1").split(QRegExp(","));
             cD.a1[0] = list[0].toDouble();
             cD.a1[1] = list[1].toDouble();

@@ -1305,6 +1305,7 @@ public:
                 QStringList() << ""
                               << "False"
                               << "True");
+        addParm("MF reorientation rate", "MF reorientation rate", "-1");
         addParm("Microfibril 1", "Microfibril 1", "0,1,0");
         addParm("Microfibril 2", "Microfibril 2", "0,-1,0");
 

@@ -333,6 +333,7 @@ public:
         double lastDivision = 0;
         Point3d axisMin, axisMax, prev_axisMin, prev_axisMax;
         bool periclinalDivision = false;
+        int divAlg = -1;
         bool shapeInit = false;
         double cellMaxArea = 1000;
         Point3d restCm;
@@ -354,7 +355,6 @@ public:
         bool selected = false;
         std::pair<int, int> daughters;
         Point3d divVector = Point3d(1., 0., 0.);
-        int divAlg = 1;
         bool mfDelete = false;
         double perimeter = 0;
         double wallStress = -1;
@@ -476,6 +476,7 @@ public:
             readPOD<double>(pressure, ba, pos);
             readPOD<double>(pressureMax, ba, pos);
             readPOD<bool>(shapeInit, ba, pos);
+            readPOD<int>(divAlg, ba, pos);
 
             return true;
         }
@@ -544,6 +545,7 @@ public:
             writePOD<double>(pressure, ba);
             writePOD<double>(pressureMax, ba);
             writePOD<bool>(shapeInit, ba);
+            writePOD<int>(divAlg, ba);
 
             return true;
         }
