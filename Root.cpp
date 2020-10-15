@@ -1067,24 +1067,14 @@ bool Chemicals::update() {
         if(cD.dualVertex.isPseudocell())
             continue;
 
-        // calculate auxin gradient between adjacient cells (never actually used)
+        // calculate auxin gradient between adjacient cells
         cD.auxinFluxVector = Point3d(0., 0., 0.);
-        cD.auxinGradientVector = Point3d(0., 0., 0.);
         for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
             int labeln = indexAttr[vn].label;
             if(cellAttr.find(labeln) ==  cellAttr.end())
                 continue;
-            Tissue::CellData& cDn = cellAttr[labeln];
-            Point3d distanceVector =
-                (cD.centroid - cDn.centroid) / (cD.centroid - cDn.centroid).norm();
-            cD.auxinGradientVector += distanceVector * (cDn.auxin - cD.auxin);
             cD.auxinFluxVector += cD.auxinFluxes[labeln];
         }
-        if(cD.auxinGradientVector.norm() >= 1.e-12)
-            cD.auxinGradientVector *= 1. / cD.auxinGradientVector.norm();
-        else
-            cD.auxinGradientVector = 0.5 * Point3d(sqrtf(2.), sqrtf(2.), 0.);
-
          // Auxin ratio gradients (used by the polarizer model)
         for(CCIndex e : cD.perimeterEdges) {
             Tissue::EdgeData& eD = edgeAttr[e];
@@ -3036,7 +3026,6 @@ bool PrintCellAttr::step() {
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " auxinProdRate: " << cD.auxinProdRate << " " << " pinProdRate: " << cD.pinProdRate << " "
-                    << " auxinGradientVector: " << cD.auxinGradientVector << " "
                     << " auxinFluxVector: " << cD.auxinFluxVector << endl;
             for(auto p : cD.auxinFluxes)
                 mdxInfo << " auxinFlux with " << p.first << " : " << p.second << " ";

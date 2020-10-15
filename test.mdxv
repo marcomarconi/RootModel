@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 6.22705e-17 -5.55112e-17 0 -6.22705e-17 1 1.8761e-34 0 5.55112e-17 3.2691e-33 1 0 -9.38754 21.2204 -328.905 1
+CameraFrame: 1 6.22705e-17 -5.55112e-17 0 -6.22705e-17 1 1.8761e-34 0 5.55112e-17 3.2691e-33 1 0 -7.0122 1.14485 -328.905 1
 SceneRadius: 500
-CameraZoom: 0.288
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 99.8081
+Width: 97.4899
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 99.8081
+Width: 97.4899
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 99.8081
+Width: 97.4899
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1169,7 +1169,7 @@ ParmString: 0
 ParmName: Draw Strain Tensors Rescale
 ParmString: 0
 ParmName: Draw MF
-ParmString: False
+ParmString: True
 ParmName: Draw Bounding Box
 ParmString: False
 ParmName: Draw Auxin-Flux Rescale
@@ -1199,11 +1199,11 @@ ParmString: 2
 ParmName: Verbose
 ParmString: True
 ParmName: Division Algorithm
-ParmString: 0
+ParmString: 1
 ParmName: Max Joining Distance
 ParmString: 1.5
 ParmName: Minimum Polarity Vector Norm
-ParmString: 0
+ParmString: 0.05
 ParmName: Root Process
 ParmString: Model/Root/01 Root
 ParmName: Remesh
@@ -1489,17 +1489,19 @@ ParmString: True
 ProcessName: Model/Root/21 Print Cell Attr
 NumParms: 0
 ProcessName: Model/Root/22 Set Cell Attr
-NumParms: 7
+NumParms: 8
 ParmName: Cell Type
 ParmString: Undefined
 ParmName: Vertices Masses
-ParmString: 1
+ParmString: 100
 ParmName: Auxin production rate
 ParmString: 0
 ParmName: Division Algorithm
-ParmString: 0
+ParmString: 1
 ParmName: Periclinal Division
 ParmString: False
+ParmName: MF reorientation rate
+ParmString: 0
 ParmName: Microfibril 1
 ParmString: 0,-0.01,0
 ParmName: Microfibril 2
@@ -1513,19 +1515,19 @@ ParmString: Model/Root/052 Mechanical Growth
 ParmName: Divide Process
 ParmString: Model/Root/04 Divide Cells
 ParmName: Undefined Wall EK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Wall CK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Shear EK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Shear CK
-ParmString: -1
+ParmString: 1
 ParmName: Undefined Turgor Pressure
-ParmString: 10
+ParmString: 0
 ParmName: Undefined Growth Factor
 ParmString: 0
 ParmName: Undefined Max area
-ParmString: 70
+ParmString: 700
 ParmName: Undefined MF reorientation rate
 ParmString: 0
 ParmName: QC Wall EK

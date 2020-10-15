@@ -1149,22 +1149,29 @@ public:
             }
         }
 
-        if(stepCount > 1300) {
-            int auxin_overflow_time = parm("Auxin Overflow").toDouble();
+        QStringList list_overflow = parm("Auxin Overflow").split(QRegExp(","));
+        if(list_overflow.size() != 3)
+             throw(QString("Specify the Auxin Overflow test as start,inverval,amout"));
+        int start = list_overflow[0].toInt();
+        int interval = list_overflow[1].toInt();
+        int amount = list_overflow[2].toInt();
+        cout << start << " " << interval << " " << amount << " " << auxin_overflow_count << " " << stepCount << endl;
+
+        if(stepCount > start) {
             auxin_overflow_count ++;
-            if(auxin_overflow_time > 0 && auxin_overflow_count > auxin_overflow_time) {
+            if(interval > 0 && auxin_overflow_count > interval) {
                 auxin_overflow_count = 0;
-                overflow = !overflow;
                 for(auto c : cellAttr) {
                     Tissue::CellData& cD = cellAttr[c.first];
                     if(!overflow && cD.type != Tissue::Source) {
                         cellsProdRates[cD.label] = cD.auxinProdRate;
-                        cD.auxinProdRate = 10;
+                        cD.auxinProdRate = amount;
                     }
                     else if (overflow && cD.type != Tissue::Source) {
                         cD.auxinProdRate = cellsProdRates[cD.label];
                     }
                 }
+                overflow = !overflow;
             }
         }
 

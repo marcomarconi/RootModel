@@ -564,7 +564,6 @@ public:
             Aux1 = 0;
             auxinFluxes.clear();
             auxinFluxVector = Point3d(0, 0, 0);
-            auxinGradientVector = Point3d(0, 0, 0);
         }
 
         void resetMechanics(FaceDataAttr& faceAttr) {
