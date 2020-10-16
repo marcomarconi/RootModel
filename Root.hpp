@@ -1150,29 +1150,38 @@ public:
         }
 
         QStringList list_overflow = parm("Auxin Overflow").split(QRegExp(","));
-        if(list_overflow.size() != 3)
+        if(list_overflow.size() != 4)
              throw(QString("Specify the Auxin Overflow test as start,inverval,amout"));
         int start = list_overflow[0].toInt();
-        int interval = list_overflow[1].toInt();
-        int amount = list_overflow[2].toInt();
-        cout << start << " " << interval << " " << amount << " " << auxin_overflow_count << " " << stepCount << endl;
-
+        int interval1 = list_overflow[1].toInt();
+        int interval2 = list_overflow[2].toInt();
+        int amount = list_overflow[3].toInt();
         if(stepCount > start) {
             auxin_overflow_count ++;
-            if(interval > 0 && auxin_overflow_count > interval) {
-                auxin_overflow_count = 0;
+            if(!overflow && interval1 > 0 && auxin_overflow_count > interval1) {
                 for(auto c : cellAttr) {
                     Tissue::CellData& cD = cellAttr[c.first];
-                    if(!overflow && cD.type != Tissue::Source) {
+                    if(cD.type != Tissue::Source) {
                         cellsProdRates[cD.label] = cD.auxinProdRate;
                         cD.auxinProdRate = amount;
                     }
-                    else if (overflow && cD.type != Tissue::Source) {
+                }
+                overflow = true;
+                auxin_overflow_count = 0;
+
+            }
+            if(overflow && interval2 > 0 && auxin_overflow_count > interval2) {
+                for(auto c : cellAttr) {
+                    Tissue::CellData& cD = cellAttr[c.first];
+                    if (cD.type != Tissue::Source) {
                         cD.auxinProdRate = cellsProdRates[cD.label];
                     }
                 }
-                overflow = !overflow;
+                overflow = false;
+                auxin_overflow_count = 0;
+
             }
+
         }
 
         int tip_removal_time = parm("TIP Removal Time").toDouble();
