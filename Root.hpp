@@ -1258,17 +1258,19 @@ public:
 
         int endodermal_cells_time = parm("Endodermal Cells Delete").toDouble();
         endodermal_cells_count ++;
-        if(stepCount > 1500 && endodermal_cells_time > 0 && endodermal_cells_count > endodermal_cells_time) {
+        if(stepCount > 350 && endodermal_cells_time > 0 && endodermal_cells_count > endodermal_cells_time) {
             endodermal_cells_count = 0;
-            int rnd = (rand() % cellAttr.size());
-            int i = 0;
+            std::vector<int> endos ;
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
-                if(cD.type == Tissue::Endodermis && i++ > rnd) {
-                    std::set<int> s = {cD.label};
-                    deleteProcess->step(s);
-                }
+                if(cD.type == Tissue::Endodermis)
+                    endos.push_back(cD.label);
             }
+            // choose a random endodermal cell to delete
+            std::set<int> to_delete;
+            std::random_shuffle(endos.begin(), endos.end());
+            to_delete.insert(*endos.begin());
+            deleteProcess->step(to_delete);
         }
 
         return false;
