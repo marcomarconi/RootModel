@@ -950,7 +950,6 @@ public:
     }
 
 
-private:
     void deleteCell(int label) {
         Mesh* mesh = getMesh("Mesh 1");
         CCStructure& cs = mesh->ccStructure("Tissue");
@@ -1043,6 +1042,8 @@ private:
         mdxInfo << "Cell " << cD.label << " in position " << label <<  " removed" << endl;
         cellAttr.erase(label);
     }
+
+private:
     Tissue* tissueProcess = 0;
 
 };
@@ -1064,6 +1065,7 @@ public:
         addParm("PIN2 Knockdown Time", "PIN2 Knockdown Time", "0");
         addParm("PIN1 Knockdown Time", "PIN1 Knockdown Time", "0");
         addParm("Strain Removal Time", "Strain Removal Time", "0");
+        addParm("Endodermal Cells Delete'", "Endodermal Cells Delete'", "0");
         addParm("Tissue Process", "Name of Tissue Process", "Model/Root/03 Cell Tissue");
         addParm("Delete Cell Process", "Delete Cell Process", "Model/Root/31 Delete Cell");
         addParm("Mechanical Growth Process",
@@ -1072,7 +1074,7 @@ public:
         addParm("Delete Selection Process", "Delete Selection Process", "Mesh/System/Delete Selection");
 
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, pin2_removal_count = 0,strain_removal_count = 0;
+        tip_removal_count = 0, pin2_removal_count = 0, pin2_removal_count = 0,strain_removal_count = 0, endodermal_cells_count = 0;;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1081,7 +1083,7 @@ public:
 
     bool rewind(QWidget* parent) {
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0,strain_removal_count = 0;
+        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0,strain_removal_count = 0, endodermal_cells_count = 0;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1262,8 +1264,10 @@ public:
             int i = 0;
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
-                if(cD.type == Tissue::Endodermis && i++ > rnd)
-                    deleteProcess->step(std::set(cD.label));
+                if(cD.type == Tissue::Endodermis && i++ > rnd) {
+                    std::set<int> s = {cD.label};
+                    deleteProcess->step(s);
+                }
             }
         }
 
@@ -1277,7 +1281,7 @@ private:
     DeleteSelection* deleteSelectionProcess = 0;
     std::map<int, double> cellsProdRates;
     int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0,strain_removal_count = 0;
+        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0,strain_removal_count = 0, endodermal_cells_count = 0;
     bool LRC_removed = false;
     bool tip_removed = false;
     bool overflow = false;
