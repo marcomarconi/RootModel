@@ -900,6 +900,57 @@ public:
 
     }
 
+    bool step(std::set<int> labels) {
+        Mesh* mesh = getMesh("Mesh 1");
+        CCStructure& cs = mesh->ccStructure("Tissue");
+        Tissue::CellDataAttr &cellAttr =
+            mesh->attributes().attrMap<int, Tissue::CellData>(
+                "CellData");
+
+        if(!getProcess(parm("Tissue Process"), tissueProcess))
+            throw(QString("Root::initialize Cannot make Tissue Process") + parm("Tissue Process"));
+
+        std::set<int> to_delete;
+        for(auto c : cellAttr) {
+            Tissue::CellData& cD = cellAttr[c.first];
+            if(labels.find(cD.label) != labels.end())
+                 to_delete.insert(cD.label);
+        }
+        for(int label : to_delete)
+                deleteCell(label);
+
+        tissueProcess->initialize();
+        tissueProcess->restore(cs);
+        tissueProcess->step(EPS);
+        mesh->updateAll();
+
+        return false;
+    }
+
+    bool step() {
+        Mesh* mesh = getMesh("Mesh 1");
+        CCStructure& cs = mesh->ccStructure("Tissue");
+        CCIndexDataAttr& indexAttr = mesh->indexAttr();
+        if(!getProcess(parm("Tissue Process"), tissueProcess))
+            throw(QString("Root::initialize Cannot make Tissue Process") + parm("Tissue Process"));
+
+        std::set<int> to_delete;
+        for(CCIndex f : cs.faces())
+            if(indexAttr[f].selected)
+                to_delete.insert(indexAttr[f].label);
+        for(int label : to_delete)
+                deleteCell(label);
+
+        tissueProcess->initialize();
+        tissueProcess->restore(cs);
+        tissueProcess->step(EPS);
+        mesh->updateAll();
+
+        return false;
+    }
+
+
+private:
     void deleteCell(int label) {
         Mesh* mesh = getMesh("Mesh 1");
         CCStructure& cs = mesh->ccStructure("Tissue");
@@ -992,58 +1043,6 @@ public:
         mdxInfo << "Cell " << cD.label << " in position " << label <<  " removed" << endl;
         cellAttr.erase(label);
     }
-
-
-    bool step(std::set<int> labels) {
-        Mesh* mesh = getMesh("Mesh 1");
-        CCStructure& cs = mesh->ccStructure("Tissue");
-        Tissue::CellDataAttr &cellAttr =
-            mesh->attributes().attrMap<int, Tissue::CellData>(
-                "CellData");
-
-        if(!getProcess(parm("Tissue Process"), tissueProcess))
-            throw(QString("Root::initialize Cannot make Tissue Process") + parm("Tissue Process"));
-
-        std::set<int> to_delete;
-        for(auto c : cellAttr) {
-            Tissue::CellData& cD = cellAttr[c.first];
-            if(labels.find(cD.label) != labels.end())
-                 to_delete.insert(cD.label);
-        }
-        for(int label : to_delete)
-                deleteCell(label);
-
-        tissueProcess->initialize();
-        tissueProcess->restore(cs);
-        tissueProcess->step(EPS);
-        mesh->updateAll();
-
-        return false;
-    }
-
-    bool step() {
-        Mesh* mesh = getMesh("Mesh 1");
-        CCStructure& cs = mesh->ccStructure("Tissue");
-        CCIndexDataAttr& indexAttr = mesh->indexAttr();
-        if(!getProcess(parm("Tissue Process"), tissueProcess))
-            throw(QString("Root::initialize Cannot make Tissue Process") + parm("Tissue Process"));
-
-        std::set<int> to_delete;
-        for(CCIndex f : cs.faces())
-            if(indexAttr[f].selected)
-                to_delete.insert(indexAttr[f].label);
-        for(int label : to_delete)
-                deleteCell(label);
-
-        tissueProcess->initialize();
-        tissueProcess->restore(cs);
-        tissueProcess->step(EPS);
-        mesh->updateAll();
-
-        return false;
-    }
-
-private:
     Tissue* tissueProcess = 0;
 
 };
@@ -1062,7 +1061,8 @@ public:
         addParm("Auxin Overflow", "Auxin Overflow", "0");
         addParm("TIP Removal Time", "TIP Removal Time", "0");
         addParm("LRC Removal Time", "LRC Removal Time", "0");
-        addParm("PIN2 Removal Time", "PIN2 Removal Time", "0");
+        addParm("PIN2 Knockdown Time", "PIN2 Knockdown Time", "0");
+        addParm("PIN1 Knockdown Time", "PIN1 Knockdown Time", "0");
         addParm("Strain Removal Time", "Strain Removal Time", "0");
         addParm("Tissue Process", "Name of Tissue Process", "Model/Root/03 Cell Tissue");
         addParm("Delete Cell Process", "Delete Cell Process", "Model/Root/31 Delete Cell");
@@ -1072,7 +1072,7 @@ public:
         addParm("Delete Selection Process", "Delete Selection Process", "Mesh/System/Delete Selection");
 
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
+        tip_removal_count = 0, pin2_removal_count = 0, pin2_removal_count = 0,strain_removal_count = 0;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1081,7 +1081,7 @@ public:
 
     bool rewind(QWidget* parent) {
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
+        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0,strain_removal_count = 0;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1226,12 +1226,23 @@ public:
             LRC_removed = true;
         }
 
-        int pin2_removal_time = parm("PIN2 Removal Time").toDouble();
+        int pin2_removal_time = parm("PIN2 Knockdown Time").toDouble();
         pin2_removal_count ++;
         if(pin2_removal_time > 0 && pin2_removal_count > pin2_removal_time) {
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
                 if(cD.type == Tissue::LRC || cD.type == Tissue::Cortex || cD.type == Tissue::Epidermis)
+                    cD.pinProdRate = cD.pinInducedRate = 0;
+
+            }
+        }
+
+        int pin1_removal_time = parm("PIN1 Knockdown Time").toDouble();
+        pin1_removal_count ++;
+        if(pin1_removal_time > 0 && pin1_removal_count > pin1_removal_time) {
+            for(auto c : cellAttr) {
+                Tissue::CellData& cD = cellAttr[c.first];
+                if(cD.type == Tissue::Vascular || cD.type == Tissue::VascularInitial || cD.type == Tissue::Pericycle || cD.type == Tissue::Endodermis)
                     cD.pinProdRate = cD.pinInducedRate = 0;
 
             }
@@ -1243,6 +1254,18 @@ public:
                mechanicalGrowthProcess->setParm("MF Degradation", "0.5");
         }
 
+        int endodermal_cells_time = parm("Endodermal Cells Delete").toDouble();
+        endodermal_cells_count ++;
+        if(stepCount > 1500 && endodermal_cells_time > 0 && endodermal_cells_count > endodermal_cells_time) {
+            endodermal_cells_count = 0;
+            int rnd = (rand() % cellAttr.size());
+            int i = 0;
+            for(auto c : cellAttr) {
+                Tissue::CellData& cD = cellAttr[c.first];
+                if(cD.type == Tissue::Endodermis && i++ > rnd)
+                    deleteProcess->step(std::set(cD.label));
+            }
+        }
 
         return false;
     }
@@ -1254,7 +1277,7 @@ private:
     DeleteSelection* deleteSelectionProcess = 0;
     std::map<int, double> cellsProdRates;
     int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, strain_removal_count = 0;
+        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0,strain_removal_count = 0;
     bool LRC_removed = false;
     bool tip_removed = false;
     bool overflow = false;

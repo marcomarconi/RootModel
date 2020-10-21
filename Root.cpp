@@ -2272,7 +2272,7 @@ bool Root::step() {
     // Save a snapshot of the simulation
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
-        std::set<QString> signals_set = {"Chems: Auxin By Area", "Mechs: Growth Rate", "Cell Type"};
+        std::set<QString> signals_set = {"Chems: Auxin By Area", "Mechs: Growth Rate"/*, "Cell Type"*/};
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
             mesh->drawParms("Tissue").setGroupVisible("Faces", true);
