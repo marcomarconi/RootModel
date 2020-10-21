@@ -345,7 +345,7 @@ public:
         double PINOID = 0;
         double PP2A = 0;
         double lifeTime = 0;
-        double pressure = 1, pressureMax = 1;
+        double pressure = 1, pressureMax = -1;
         double auxinProdRate = -1;
         double auxinDecayRate = 0;
         double pinProdRate = -1;
@@ -570,6 +570,7 @@ public:
             a1 = Point3d(1, 1, 0) * EPS, a2 = Point3d(1, 1, 0) * EPS;
             restArea = area;
             restCm = centroid;
+            pressureMax = -1;
             shapeInit = false;
             invmassVertices = 1;            
             mfRORate = -1;

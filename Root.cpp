@@ -44,7 +44,8 @@ bool Mechanics::initialize(QWidget* parent) {
          auto it = cellAttr.begin();
          advance(it, i);
          Tissue::CellData& cD = it->second;
-         cD.pressureMax = parm("Turgor Pressure").toDouble();
+         if(cD.pressureMax == -1)
+            cD.pressureMax = parm("Turgor Pressure").toDouble();
      }
 
     return true;
@@ -154,22 +155,6 @@ bool Mechanics::step() {
                                                         pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
                                                         );
             }
-            /*for(CCIndex f : *cD.cellFaces)
-                for(CCIndex e :cs.incidentCells(f, 1)) {
-                    Tissue::EdgeData& eD = edgeAttr[e];
-                    if(eD.type == Tissue::Shear)
-                    {
-                        auto eb = cs.edgeBounds(e);
-                        Point3d versor = (*indexAttr)[eb.first].pos - (*indexAttr)[eb.second].pos;
-                        if(norm(cD.a1) > 0.1)
-                            eD.eStiffness = (cD.a1/norm(cD.a1) ^ Point3d(0,0,-1)) * (versor/norm(versor));
-                        else
-                            eD.eStiffness = 0;
-                        if(eD.eStiffness < 0)
-                            eD.eStiffness *= -1;
-                        cout << e <<  " " <<  eD.eStiffness<< endl;
-                    }
-                }*/
 
     }
 
@@ -551,14 +536,13 @@ bool MechanicalGrowth::step(double Dt) {
     // Zonation and Resting values update
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
     double wallsMaxGrowthRate = parm("Walls Growth Rate").toDouble();
-    double areaMaxGrowthRate = parm("Area Growth Rate").toDouble();
     double elongationZone = parm("Elongation Zone").toDouble();
     double differentatiationZone = parm("Differentiation Zone").toDouble();
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         cD.lifeTime += Dt;
         // Zonation
-        if(elongationZone > 0 && differentatiationZone > 0 && elongationZone < differentatiationZone) {
+        if(lrc != -BIG_VAL && elongationZone > 0 && differentatiationZone > 0 && elongationZone < differentatiationZone) {
             if(cD.centroid.y() - lrc >  elongationZone)
                 cD.divisionAllowed = false;
             if(cD.centroid.y() - lrc >  differentatiationZone)
@@ -566,7 +550,7 @@ bool MechanicalGrowth::step(double Dt) {
         }
         // Growth rates, rest lengths....
         if(cD.mfRORate == 0)
-            continue;  /////////////// FIXME
+            continue;  /////////////// FIXME?
         if(cD.growthRate > growthRateThresh)
             //cD.restArea += cD.area * areaMaxGrowthRate * Dt;
             cD.restArea = cD.area;
@@ -1188,7 +1172,7 @@ bool Chemicals::update() {
     }
 
     // update cell chemicals attributes FIXME do we need this?
-    //#pragma omp parallel for
+    double avg_auxin_conc = 0; // needed for later debug print
     for(uint i = 0; i < cellAttr.size(); i++) {
         auto it = cellAttr.begin();
         advance(it, i);
@@ -1205,8 +1189,9 @@ bool Chemicals::update() {
         for(auto chem : chems)
             if(*chem.second < 0)
                 *chem.second = 0;
-
+        avg_auxin_conc += cD.auxin/cD.area;
     }
+    avg_auxin_conc /= cellAttr.size();
 
     // update edge chemicals (only on the walls) FIXME do we need this?
     //#pragma omp parallel for
@@ -1241,7 +1226,7 @@ bool Chemicals::update() {
     // Print some debug info
     if(++debug_step >=  parm("Debug Steps").toInt()) {
         if(parm("Verbose") == "True")
-            mdxInfo << "Chemical Time: " << userTime <<" Norm: " << normal <<  endl;
+            mdxInfo << "Chemical Time: " << userTime <<" Norm: " << normal << " Average Auxin Conc. :" << avg_auxin_conc << endl;
         debug_step = 0;
     }
 
@@ -3187,7 +3172,7 @@ bool SetGlobalAttr::step() {
     for(CCIndex e : cs.edges())
         if(edgeAttr[e].type == Tissue::Wall)
             edgeAttr[e].cStiffness = edgeAttr[e].eStiffness = 0;
-    for(auto c : cellAttr) {
+    for(auto c : cellAttr) {  // If values != -1 all paramters are replaced
         Tissue::CellData& cD = cellAttr[c.first];
         QString str = Tissue::ToString(cD.type);
         if(parm(QString(str + " Turgor Pressure")).toDouble() >= 0)
