@@ -1258,7 +1258,7 @@ public:
 
         int endodermal_cells_time = parm("Endodermal Cells Delete").toDouble();
         endodermal_cells_count ++;
-        if(stepCount > 350 && endodermal_cells_time > 0 && endodermal_cells_count > endodermal_cells_time) {
+        if(stepCount > 1500 && endodermal_cells_time > 0 && endodermal_cells_count > endodermal_cells_time) {
             endodermal_cells_count = 0;
             std::vector<int> endos ;
             for(auto c : cellAttr) {
