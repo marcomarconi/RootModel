@@ -2140,8 +2140,6 @@ bool Root::step() {
     if(ccName != "Tissue")
         throw(QString("Root::run Error, please tun the model on the Tissue Complex"));
     CCStructure& cs = mesh->ccStructure("Tissue");
-    CCIndexDataAttr& indexAttr = mesh->indexAttr();
-
     Tissue::VertexDataAttr& vMAttr =
         mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
     Tissue::EdgeDataAttr& edgeAttr =
@@ -2290,7 +2288,7 @@ bool Root::step() {
             mesh->setSignal(signalName);
             mesh->updateAll();
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
-            takeSnapshot(fileName, 1, 645*2, 780*2, 100, true);
+            takeSnapshot(fileName, 1, 645*4, 780*4, 100, true);
         }
         screenShotCount++;
     }
