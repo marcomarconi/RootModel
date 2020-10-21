@@ -1065,7 +1065,7 @@ public:
         addParm("PIN2 Knockdown Time", "PIN2 Knockdown Time", "0");
         addParm("PIN1 Knockdown Time", "PIN1 Knockdown Time", "0");
         addParm("Strain Removal Time", "Strain Removal Time", "0");
-        addParm("Endodermal Cells Delete'", "Endodermal Cells Delete'", "0");
+        addParm("Endodermal Cells Delete", "Endodermal Cells Delete", "0");
         addParm("Tissue Process", "Name of Tissue Process", "Model/Root/03 Cell Tissue");
         addParm("Delete Cell Process", "Delete Cell Process", "Model/Root/31 Delete Cell");
         addParm("Mechanical Growth Process",
