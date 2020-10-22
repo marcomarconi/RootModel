@@ -73,7 +73,7 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: -2.22045e-16 1 6.87739e-17 0 -1 -2.22045e-16 -4.31408e-32 0 -3.08149e-32 -6.87739e-17 1 0 4.86003e-30 0 -1650.31 1
 SceneRadius: 50
-CameraZoom: -0.288
+CameraZoom: -0.576
 
 
 [Clip1]
@@ -1081,7 +1081,7 @@ ParmString: False
 ParmName: Cell Division Enabled
 ParmString: False
 ParmName: Remesh at start
-ParmString: Hard
+ParmString: Soft
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer

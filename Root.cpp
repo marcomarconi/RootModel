@@ -2380,10 +2380,10 @@ bool Root::step() {
 
 
         // positions, auxin and growth rate (for plotting)        
-        /*for(auto c : cellAttr) {
+        for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
-            cerr <<  mechanicsProcess->realTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << endl;
-        }*/
+            cerr <<  mechanicsProcess->realTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.axisMax) / norm(cD.axisMin) << endl;
+        }
 
     }
 
