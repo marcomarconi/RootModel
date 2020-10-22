@@ -73,13 +73,13 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: -2.22045e-16 1 6.87739e-17 0 -1 -2.22045e-16 -4.31408e-32 0 -3.08149e-32 -6.87739e-17 1 0 4.86003e-30 0 -1650.31 1
 SceneRadius: 50
-CameraZoom: 0
+CameraZoom: -0.288
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 67.9788
+Width: 68.0128
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 67.9788
+Width: 68.0128
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 67.9788
+Width: 68.0128
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1781,7 +1781,7 @@ NumParms: 1
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ProcessName: Model/Root/4 Execute Test
-NumParms: 14
+NumParms: 15
 ParmName: QC Ablation
 ParmString: 0
 ParmName: Source Removal
@@ -1797,6 +1797,8 @@ ParmString: 0
 ParmName: PIN2 Knockdown Time
 ParmString: 0
 ParmName: PIN1 Knockdown Time
+ParmString: 0
+ParmName: AUX1 Overexpression Time
 ParmString: 0
 ParmName: Strain Removal Time
 ParmString: 0
@@ -2755,7 +2757,7 @@ NumParms: 0
 ProcessName: Tools/System/Save View
 NumParms: 1
 ParmName: File Name
-ParmString: 
+ParmString: /home/marco/trabajo/MDX models/Root/Root_model_half.mdxv
 ProcessName: Tools/System/Snapshot
 NumParms: 6
 ParmName: File Name
