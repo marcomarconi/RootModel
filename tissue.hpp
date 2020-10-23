@@ -776,6 +776,9 @@ public:
             // Geometry
             updateGeom(indexAttr, faceAttr, edgeAttr, Dt);
 
+            // Misc updates
+            lastDivision += Dt;
+
             if(perimeterVertices.size() > 0) {
                 // bounding box
                 std::vector<Point3d> points;

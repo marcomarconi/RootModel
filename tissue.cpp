@@ -348,7 +348,7 @@ void Tissue::restore(CCStructure csCurr) {
     for(int label : labels) {
         if(label < 1)
             throw(QString("Tissue::restore: cell with unallowed label " + label));
-        // if a cell with the same label exist, we just reset its faces set, FIXME (why? removed later)
+        // if a cell with the same label exist, we just reset its faces set,
         // which will be refilled in the next loop, otherwise, create a new cell
         if(cellAttr.find(label) != cellAttr.end()) {
             // verify that the cell was actually initialized

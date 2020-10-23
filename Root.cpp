@@ -400,8 +400,7 @@ bool MechanicalGrowth::step(double Dt) {
     for(uint i = 0; i < cellAttr.size(); i++) {
         auto it = cellAttr.begin();
         advance(it, i);
-        Tissue::CellData& cD = it->second;
-        cD.lastDivision += mechanicsProcess->userTime; // FIXME here??? move it to cell division
+        Tissue::CellData& cD = it->second;        
         if(cD.mfRORate != 0)
             cD.mfDelete = parm("MF Delete After Division") == "True";
         if(norm(cD.a1) == 0)
@@ -550,7 +549,7 @@ bool MechanicalGrowth::step(double Dt) {
         }
         // Growth rates, rest lengths....
         if(cD.mfRORate == 0)
-            continue;  /////////////// FIXME?
+            continue;  ///
         if(cD.growthRate > growthRateThresh)
             //cD.restArea += cD.area * areaMaxGrowthRate * Dt;
             cD.restArea = cD.area;
@@ -797,7 +796,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     double Pmax = parm("Pin1 Max Concentration").toDouble();
     double inducedExpression = Preg *
                                     (
-                                     (pow(cD.auxin / cD.area, 2) / (pow(Kaux, 2) + pow(cD.auxin / cD.area, 2))) * // FIXME lower this
+                                     (pow(cD.auxin / cD.area, 2) / (pow(Kaux, 2) + pow(cD.auxin / cD.area, 2))) *
                                      (pow(Pmax, 8) / (pow(Pmax, 8) + pow(cD.Pin1 / cD.area, 8)))
                                     );
     /* High auxin induces PIN decay
@@ -1145,7 +1144,7 @@ bool Chemicals::update() {
                             +   (KPin1geomauxinflux * eD.auxinFluxImpact[label] * eD.geomImpact[label])
                                );
                             ;
-                    if(cs.onBorder(e) || (cD.type == Tissue::Columella && parm("Columella Auto-Efflux") == "True")) /////////////// FIXME
+                    if(cs.onBorder(e) || (cD.type == Tissue::Columella && parm("Columella Auto-Efflux") == "True"))
                        eD.pin1SensitivityRaw[label] = 0;
                     if(cD.type == Tissue::Source ) //
                        eD.pin1SensitivityRaw[label] = 10 * eD.MFImpact[label];
@@ -1180,7 +1179,6 @@ bool Chemicals::update() {
         cD.auxinDecayRate = parm("Auxin Decay Rate").toDouble();
         if(cD.type == Tissue::QC)
             cD.auxinProdRate = parm("Auxin QC Basal Production Rate").toDouble();
-        // FIXME this should be automatized
         if(cD.type == Tissue::Substrate)
             cD.auxin = 0;
         // negative check of chemicals
@@ -1194,7 +1192,6 @@ bool Chemicals::update() {
     avg_auxin_conc /= cellAttr.size();
 
     // update edge chemicals (only on the walls) FIXME do we need this?
-    //#pragma omp parallel for
     for(uint i = 0; i < tissueProcess->wallEdges.size(); i++) {
         auto p = tissueProcess->wallEdges.begin();
         advance(p, i);
@@ -1865,7 +1862,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             }
             trigger_division = true;
             cDs.push_back(cD);
-            break;  ///// FIXME Known bug: dividing two adjacient cells at the same time provokes the Undefined type cell bug
+            break;  ///// Known bug: dividing two adjacient cells at the same time provokes the Undefined type cell bug
         }
     }
 
@@ -2140,6 +2137,7 @@ bool Root::step() {
     if(ccName != "Tissue")
         throw(QString("Root::run Error, please tun the model on the Tissue Complex"));
     CCStructure& cs = mesh->ccStructure("Tissue");
+    CCIndexDataAttr& indexAttr = mesh->indexAttr();
     Tissue::VertexDataAttr& vMAttr =
         mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
     Tissue::EdgeDataAttr& edgeAttr =
@@ -2273,22 +2271,114 @@ bool Root::step() {
         std::set<QString> signals_set = {"Chems: Auxin By Area", "Mechs: Growth Rate"/*, "Cell Type"*/};
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
-            mesh->drawParms("Tissue").setGroupVisible("Faces", true);
-            mesh->drawParms("Tissue").setRenderChoice("Faces", signalName);
-            if(signalName != QString("Chems: Auxin By Area")) {
-               mesh->drawParms("TissueVisual").setGroupVisible("Faces", false);
-               mesh->drawParms("TissueVisual").setGroupVisible("Edges", false);
-               mesh->drawParms("TissueVisual").setGroupVisible("Vertices", false);
+            // move unwanted visual back
+            if(signalName == QString("Chems: Auxin By Area")) {
+                for(uint i = 0; i < cellAttr.size(); i++) {
+                    auto it = cellAttr.begin();
+                    advance(it, i);
+                    Tissue::CellData& cD = it->second;
+                    indexAttr[cD.PDGmax_e].pos[2] -= 10;
+                    indexAttr[cD.PDGmax_v1].pos[2] -= 10;
+                    indexAttr[cD.PDGmax_v2].pos[2] -= 10;
+                    indexAttr[cD.PDGmin_e].pos[2] -= 10;
+                    indexAttr[cD.PDGmin_v1].pos[2] -= 10;
+                    indexAttr[cD.PDGmin_v2].pos[2] -= 10;
+                }
             }
-            else {
-                mesh->drawParms("TissueVisual").setGroupVisible("Faces", true);
-                mesh->drawParms("TissueVisual").setGroupVisible("Edges", true);
-                mesh->drawParms("TissueVisual").setGroupVisible("Vertices", true);
+            else if(signalName == QString("Mechs: Growth Rate")) {
+                for(uint i = 0; i < cellAttr.size(); i++) {
+                    auto it = cellAttr.begin();
+                    advance(it, i);
+                    Tissue::CellData& cD = it->second;
+                    indexAttr[cD.auxinFlux_v1].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_v2].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_v3].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_v4].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_e].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_el].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_er].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_eb].pos[2] -= 10;
+                    indexAttr[cD.auxinFlux_f].pos[2] -= 10;
+                }
+                for(CCIndex e : cs.edges()) {
+                    Tissue::EdgeData& eD = edgeAttr[e];
+                    indexAttr[eD.pin_v1_1].pos[2] -= 10;
+                    indexAttr[eD.pin_v2_1].pos[2] -= 10;
+                    indexAttr[eD.pin_v3_1].pos[2] -= 10;
+                    indexAttr[eD.pin_v4_1].pos[2] -= 10;
+                    indexAttr[eD.pin_e1_1].pos[2] -= 10;
+                    indexAttr[eD.pin_e2_1].pos[2] -= 10;
+                    indexAttr[eD.pin_e3_1].pos[2] -= 10;
+                    indexAttr[eD.pin_e4_1].pos[2] -= 10;
+                    indexAttr[eD.pin_f_1].pos[2] -= 10;
+                    indexAttr[eD.pin_v1_2].pos[2] -= 10;
+                    indexAttr[eD.pin_v2_2].pos[2] -= 10;
+                    indexAttr[eD.pin_v3_2].pos[2] -= 10;
+                    indexAttr[eD.pin_v4_2].pos[2] -= 10;
+                    indexAttr[eD.pin_e1_2].pos[2] -= 10;
+                    indexAttr[eD.pin_e2_2].pos[2] -= 10;
+                    indexAttr[eD.pin_e3_2].pos[2] -= 10;
+                    indexAttr[eD.pin_e4_2].pos[2] -= 10;
+                    indexAttr[eD.pin_f_2].pos[2] -= 10;
+                }
             }
+
             mesh->setSignal(signalName);
             mesh->updateAll();
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
-            takeSnapshot(fileName, 1, 645*4, 780*4, 100, true);
+            takeSnapshot(fileName, 1, 645*4, 780*4, 10, true);
+            // restore unwanted visual forward
+            if(signalName == QString("Chems: Auxin By Area")) {
+                for(uint i = 0; i < cellAttr.size(); i++) {
+                    auto it = cellAttr.begin();
+                    advance(it, i);
+                    Tissue::CellData& cD = it->second;
+                    indexAttr[cD.PDGmax_e].pos[2] += 10;
+                    indexAttr[cD.PDGmax_v1].pos[2] += 10;
+                    indexAttr[cD.PDGmax_v2].pos[2] += 10;
+                    indexAttr[cD.PDGmin_e].pos[2] += 10;
+                    indexAttr[cD.PDGmin_v1].pos[2] += 10;
+                    indexAttr[cD.PDGmin_v2].pos[2] += 10;
+                }
+            }
+            else if(signalName == QString("Mechs: Growth Rate")) {
+                for(uint i = 0; i < cellAttr.size(); i++) {
+                    auto it = cellAttr.begin();
+                    advance(it, i);
+                    Tissue::CellData& cD = it->second;
+                    indexAttr[cD.auxinFlux_v1].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_v2].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_v3].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_v4].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_e].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_el].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_er].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_eb].pos[2] += 10;
+                    indexAttr[cD.auxinFlux_f].pos[2] += 10;
+                }
+                for(CCIndex e : cs.edges()) {
+                    Tissue::EdgeData& eD = edgeAttr[e];
+                    indexAttr[eD.pin_v1_1].pos[2] += 10;
+                    indexAttr[eD.pin_v2_1].pos[2] += 10;
+                    indexAttr[eD.pin_v3_1].pos[2] += 10;
+                    indexAttr[eD.pin_v4_1].pos[2] += 10;
+                    indexAttr[eD.pin_e1_1].pos[2] += 10;
+                    indexAttr[eD.pin_e2_1].pos[2] += 10;
+                    indexAttr[eD.pin_e3_1].pos[2] += 10;
+                    indexAttr[eD.pin_e4_1].pos[2] += 10;
+                    indexAttr[eD.pin_f_1].pos[2] += 10;
+                    indexAttr[eD.pin_v1_2].pos[2] += 10;
+                    indexAttr[eD.pin_v2_2].pos[2] += 10;
+                    indexAttr[eD.pin_v3_2].pos[2] += 10;
+                    indexAttr[eD.pin_v4_2].pos[2] += 10;
+                    indexAttr[eD.pin_e1_2].pos[2] += 10;
+                    indexAttr[eD.pin_e2_2].pos[2] += 10;
+                    indexAttr[eD.pin_e3_2].pos[2] += 10;
+                    indexAttr[eD.pin_e4_2].pos[2] += 10;
+                    indexAttr[eD.pin_f_2].pos[2] += 10;
+                }
+            }
+
         }
         screenShotCount++;
     }
