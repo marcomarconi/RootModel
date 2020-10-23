@@ -1051,6 +1051,19 @@ private:
 
 
 class ExecuteTest : public Process {
+private:
+    Tissue* tissueProcess = 0;
+    DeleteCell* deleteProcess = 0;
+    MechanicalGrowth * mechanicalGrowthProcess = 0;
+    DeleteSelection* deleteSelectionProcess = 0;
+    std::map<int, double> cellsProdRates;
+    int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
+        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
+    bool PIN1_knockdown = false;
+    bool AUX1_knockdown = false;
+    bool LRC_removed = false;
+    bool tip_removed = false;
+    bool overflow = false;
 public:
     ExecuteTest(const Process& process)
         : Process(process) {
@@ -1064,6 +1077,7 @@ public:
         addParm("LRC Removal Time", "LRC Removal Time", "0");
         addParm("PIN2 Knockdown Time", "PIN2 Knockdown Time", "0");
         addParm("PIN1 Knockdown Time", "PIN1 Knockdown Time", "0");
+        addParm("AUX1 Knockdown Time", "AUX1 Knockdown Time", "0");
         addParm("AUX1 Overexpression Time", "AUX1 Overexpression Time", "0");
         addParm("Strain Removal Time", "Strain Removal Time", "0");
         addParm("Endodermal Cells Delete", "Endodermal Cells Delete", "0");
@@ -1075,8 +1089,9 @@ public:
         addParm("Delete Selection Process", "Delete Selection Process", "Mesh/System/Delete Selection");
 
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, pin2_removal_count = 0, aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;;
+        tip_removal_count = 0, pin1_removal_count = 0, pin2_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;;
         PIN1_knockdown = false;
+        AUX1_knockdown = false;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1085,8 +1100,9 @@ public:
 
     bool rewind(QWidget* parent) {
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
+        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
         PIN1_knockdown = false;
+        AUX1_knockdown = false;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1255,6 +1271,16 @@ public:
             }
         }
 
+        int aux1_removal_time = parm("AUX1 Knockdown Time").toDouble();
+        aux1_removal_count ++;
+        if(aux1_removal_time > 0 && aux1_removal_count > aux1_removal_time) {
+            for(auto c : cellAttr) {
+                Tissue::CellData& cD = cellAttr[c.first];
+                if(cD.type != Tissue::Source && cD.type != Tissue::Substrate )
+                    cD.Aux1 = 1;
+           }
+        }
+
         int aux1_overexpr_time = parm("AUX1 Overexpression Time").toDouble();
         aux1_overexpr_count ++;
         if(aux1_overexpr_time > 0 && aux1_overexpr_count > aux1_overexpr_time) {
@@ -1289,18 +1315,7 @@ public:
         return false;
     }
 
-private:
-    Tissue* tissueProcess = 0;
-    DeleteCell* deleteProcess = 0;
-    MechanicalGrowth * mechanicalGrowthProcess = 0;
-    DeleteSelection* deleteSelectionProcess = 0;
-    std::map<int, double> cellsProdRates;
-    int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
-        tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
-    bool PIN1_knockdown = false;
-    bool LRC_removed = false;
-    bool tip_removed = false;
-    bool overflow = false;
+
 };
 
 
