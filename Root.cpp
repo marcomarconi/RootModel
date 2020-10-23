@@ -2271,6 +2271,8 @@ bool Root::step() {
         std::set<QString> signals_set = {"Chems: Auxin By Area", "Mechs: Growth Rate"/*, "Cell Type"*/};
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
+            mesh->drawParms("Tissue").setGroupVisible("Faces", true);
+            mesh->drawParms("Tissue").setRenderChoice("Faces", signalName);
             // move unwanted visual back
             if(signalName == QString("Chems: Auxin By Area")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
