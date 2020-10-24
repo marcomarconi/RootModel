@@ -743,8 +743,6 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     double basalProduction = Kbase + cD.auxinProdRate * (pow(kauxinMaxCell,10) / (pow(kauxinMaxCell,10) + pow(cD.auxin/cD.area,10)));
     double decay = cD.auxin * (kauxinDecay + (kauxinMaxDecay - kauxinDecay) *
                               (pow(cD.auxin/cD.area,10) / (pow(kauxinMaxCell,10) + pow(cD.auxin/cD.area,10))));
-    if(decay > 100)
-        cout << "high decay in cell " << label << endl;
     cD.prevAuxin = cD.auxin;
     cD.auxin += (basalProduction - decay + diffusion + activeTransport) * Dt;
     if(cD.selected)
@@ -2475,7 +2473,7 @@ bool Root::step() {
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             if(cD.type != Tissue::Source && cD.type != Tissue::Substrate && cD.type != Tissue::QC )
-                cerr <<  mechanicsProcess->userTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
+                ;//cerr <<  mechanicsProcess->userTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
         }
 
     }

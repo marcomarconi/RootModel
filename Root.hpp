@@ -1056,6 +1056,7 @@ private:
     DeleteCell* deleteProcess = 0;
     MechanicalGrowth * mechanicalGrowthProcess = 0;
     DeleteSelection* deleteSelectionProcess = 0;
+    Remesh* remeshProcess = 0;
     std::map<int, double> cellsProdRates;
     int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
@@ -1064,6 +1065,7 @@ private:
     bool LRC_removed = false;
     bool tip_removed = false;
     bool overflow = false;
+
 public:
     ExecuteTest(const Process& process)
         : Process(process) {
@@ -1086,6 +1088,7 @@ public:
         addParm("Mechanical Growth Process",
                 "Name of the process for Mechanical Growth",
                 "Model/Root/052 Mechanical Growth");
+        addParm("Remesh Process", "Remesh Process", "Model/Root/02 Remesh");
         addParm("Delete Selection Process", "Delete Selection Process", "Mesh/System/Delete Selection");
 
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
@@ -1129,6 +1132,9 @@ public:
         if(!getProcess(parm("Mechanical Growth Process"), mechanicalGrowthProcess))
             throw(QString("Root::initialize Cannot make Mechanical Growth Process:") +
                   parm("Mechanical Growth Process"));
+        if(!getProcess(parm("Remesh Process"), remeshProcess))
+            throw(QString("Root::initialize Cannot make Remesh Process:") +
+                  parm("Remesh Process"));
         if(!getProcess(parm("Delete Selection Process"), deleteSelectionProcess))
             throw(QString("Root::initialize Cannot make Delete Selection Process:") + parm("Delete Selection Process"));
 
@@ -1231,6 +1237,7 @@ public:
                 if(indexAttr[v].pos[1] < VIcm.y())
                     indexAttr[v].selected = true;
             deleteSelectionProcess->run(cs, indexAttr);
+            remeshProcess->step(true, false, false);
             tip_removed = true;
         }
 
@@ -1252,8 +1259,8 @@ public:
         if(pin2_removal_time > 0 && pin2_removal_count > pin2_removal_time) {
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
-                if(cD.type == Tissue::LRC || cD.type == Tissue::Cortex || cD.type == Tissue::Epidermis)
-                    cD.pinProdRate = cD.pinInducedRate = 0;
+                if(cD.type == Tissue::LRC || cD.type == Tissue::Cortex || cD.type == Tissue::Epidermis || cD.type == Tissue::EpLrcInitial)
+                    cD.Pin1 = 1;
 
             }
         }
