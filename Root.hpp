@@ -1062,6 +1062,7 @@ private:
         tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
     bool PIN1_knockdown = false;
     bool AUX1_knockdown = false;
+    bool AUX1_overexpr = false;
     bool LRC_removed = false;
     bool tip_removed = false;
     bool overflow = false;
@@ -1095,6 +1096,7 @@ public:
         tip_removal_count = 0, pin1_removal_count = 0, pin2_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;;
         PIN1_knockdown = false;
         AUX1_knockdown = false;
+        AUX1_overexpr = false;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1106,6 +1108,7 @@ public:
         tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
         PIN1_knockdown = false;
         AUX1_knockdown = false;
+        AUX1_overexpr = false;
         LRC_removed = false;
         tip_removed = false;
         overflow = false;
@@ -1119,6 +1122,8 @@ public:
         Mesh* mesh = getMesh("Mesh 1");
         CCStructure& cs = mesh->ccStructure("Tissue");
         CCIndexDataAttr& indexAttr = mesh->indexAttr();
+        Tissue::EdgeDataAttr& edgeAttr =
+            mesh->attributes().attrMap<CCIndex, Tissue::EdgeData>("EdgeData");
         Tissue::CellDataAttr &cellAttr =
             mesh->attributes().attrMap<int, Tissue::CellData>(
                 "CellData");
@@ -1280,22 +1285,36 @@ public:
 
         int aux1_removal_time = parm("AUX1 Knockdown Time").toDouble();
         aux1_removal_count ++;
-        if(aux1_removal_time > 0 && aux1_removal_count > aux1_removal_time) {
+        if(!AUX1_knockdown && aux1_removal_time > 0 && aux1_removal_count > aux1_removal_time) {
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
-                if(cD.type != Tissue::Source && cD.type != Tissue::Substrate )
-                    cD.Aux1 = 1;
+                if(cD.type != Tissue::Source && cD.type != Tissue::Substrate ) {
+                    cD.Aux1 = 0;
+                    cD.aux1InducedRate = 0;
+                    for(CCIndex e : cD.perimeterEdges) {
+                        Tissue::EdgeData& eD = edgeAttr[e];
+                        eD.Aux1[cD.label] /= 10;
+                    }
+                }
+                AUX1_knockdown = true;
            }
+
         }
 
         int aux1_overexpr_time = parm("AUX1 Overexpression Time").toDouble();
         aux1_overexpr_count ++;
-        if(aux1_overexpr_time > 0 && aux1_overexpr_count > aux1_overexpr_time) {
+        if(!AUX1_overexpr && aux1_overexpr_time > 0 && aux1_overexpr_count > aux1_overexpr_time) {
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
-                cD.Aux1 = 1000;
+                if(cD.type != Tissue::Source && cD.type != Tissue::Substrate ) {
+                    cD.aux1MaxEdge *= 2;
+                    cD.aux1ProdRate = 100;
+                }
             }
+            AUX1_overexpr = true;
         }
+
+
         int strain_removal_time = parm("Strain Removal Time").toDouble();
         strain_removal_count ++;
         if(strain_removal_time > 0 && strain_removal_count > strain_removal_time) {

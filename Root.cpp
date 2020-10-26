@@ -626,6 +626,12 @@ bool Chemicals::initialize(QWidget* parent) {
             cD.pinProdRate = parm("Pin1 Basal Production Rate").toDouble();
         if(cD.pinInducedRate == -1)
             cD.pinInducedRate = parm("Pin1 Max Auxin-induced Expression").toDouble();
+        if(cD.aux1ProdRate == -1)
+            cD.aux1ProdRate = parm("Aux1 Basal Production Rate").toDouble();
+        if(cD.aux1InducedRate == -1)
+            cD.aux1InducedRate = parm("Aux1 Max Auxin-induced Expression").toDouble();
+        if(cD.aux1MaxEdge == -1)
+            cD.aux1MaxEdge = parm("Aux1 Max Amount Edge").toDouble();
     }
 
     Dt = parm("Dt").toDouble();
@@ -751,8 +757,8 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     debugs["Average Auxin Export"] += activeTransport * Dt;
 
     // AUX1 Cytoplasmic
-    double AUX1basalProduction = parm("Aux1 Basal Production Rate").toDouble();
-    double AUX1reg = parm("Aux1 Max Auxin-induced Expression").toDouble();
+    double AUX1basalProduction = cD.aux1ProdRate;
+    double AUX1reg = cD.aux1InducedRate;
     double AUX1Kaux = parm("Aux1 Half-max Auxin-induced K").toDouble();
     double AUX1max = parm("Aux1 Max Concentration").toDouble();
     double AUX1decayRate = parm("Aux1 Cytoplasmic Decay Rate").toDouble();
@@ -771,7 +777,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
 
     // AUX1 membranes derivatives
     double AUX1Krate = parm("Aux1 Max Trafficking Rate").toDouble();
-    double AUX1MaxEdge = parm("Aux1 Max Amount Edge").toDouble();
+    double AUX1MaxEdge = cD.aux1MaxEdge;
     for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
         for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, indexAttr[vn].label)]) {
     //for(CCIndex e : cD.perimeterEdges){{
@@ -3099,8 +3105,9 @@ bool PrintCellAttr::step() {
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
-                    << " auxinProdRate: " << cD.auxinProdRate << " " << " pinProdRate: " << cD.pinProdRate << " "
-                    << " auxinFluxVector: " << cD.auxinFluxVector << endl;
+                    << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
+                    << " auxinProdRate: " << cD.auxinProdRate << " " << " auxinFluxVector: " << cD.auxinFluxVector
+                    << endl;
             for(auto p : cD.auxinFluxes)
                 mdxInfo << " auxinFlux with " << p.first << " : " << p.second << " ";
             mdxInfo << endl << endl;

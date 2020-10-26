@@ -350,6 +350,9 @@ public:
         double auxinDecayRate = 0;
         double pinProdRate = -1;
         double pinInducedRate = -1;
+        double aux1ProdRate = -1;
+        double aux1InducedRate = -1;
+        double aux1MaxEdge = -1;
 
         // other dinamically loaded attribute
         bool selected = false;

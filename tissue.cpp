@@ -1051,6 +1051,9 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.auxinProdRate = auxinProdRate;
     cD1.pinProdRate = pinProdRate;
     cD1.pinInducedRate = pinInducedRate;
+    cD1.aux1ProdRate = aux1ProdRate;
+    cD1.aux1InducedRate = aux1InducedRate;
+    cD1.aux1MaxEdge = aux1MaxEdge;
     cD1.growthFactor = growthFactor;
     cD1.pressureMax = pressureMax;
     cD1.Pin1 = Pin1 / 2;
@@ -1077,6 +1080,9 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.auxinProdRate = auxinProdRate;
     cD2.pinProdRate = pinProdRate;
     cD2.pinInducedRate = pinInducedRate;
+    cD2.aux1ProdRate = aux1ProdRate;
+    cD2.aux1InducedRate = aux1InducedRate;
+    cD2.aux1MaxEdge = aux1MaxEdge;
     cD2.growthFactor = growthFactor;
     cD2.pressureMax = pressureMax;
     cD2.Pin1 = Pin1 / 2;
