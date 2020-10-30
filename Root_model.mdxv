@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 2.22045e-16 1 -2.47494e-17 0 -1 2.22045e-16 2.60263e-16 0 2.60263e-16 2.47494e-17 1 0 -20.0451 12.9704 -865.383 1
+CameraFrame: 2.22045e-16 1 -2.47494e-17 0 -1 2.22045e-16 2.60263e-16 0 2.60263e-16 2.47494e-17 1 0 14.8143 44.4428 -865.383 1
 SceneRadius: 500
-CameraZoom: -2.77556e-17
+CameraZoom: 0.192
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 114.91
+Width: 115.058
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 114.91
+Width: 115.058
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 114.91
+Width: 115.058
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05439 1.05439 1.05439
+Size: 1.05491 1.05491 1.05491
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
