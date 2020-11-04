@@ -1058,6 +1058,7 @@ private:
     DeleteSelection* deleteSelectionProcess = 0;
     Remesh* remeshProcess = 0;
     std::map<int, double> cellsProdRates;
+    double auxinConc = 0;
     int source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
         tip_removal_count = 0, pin2_removal_count = 0, pin1_removal_count = 0, aux1_removal_count = 0,aux1_overexpr_count = 0, strain_removal_count = 0, endodermal_cells_count = 0;
     bool PIN1_knockdown = false;
@@ -1101,7 +1102,9 @@ public:
         tip_removed = false;
         overflow = false;
         cellsProdRates.clear();
+        auxinConc = 0;
     }
+
 
     bool rewind(QWidget* parent) {
         source_removal_count = 0, alternate_source_count = 0, auxin_overflow_count = 0, QC_ablation_count = 0, LRC_removal_count = 0,
@@ -1113,6 +1116,7 @@ public:
         tip_removed = false;
         overflow = false;
         cellsProdRates.clear();
+        auxinConc = 0;
         return false;
     }
 
@@ -1191,15 +1195,18 @@ public:
         if(stepCount > start) {
             auxin_overflow_count ++;
             if(!overflow && interval1 > 0 && auxin_overflow_count > interval1) {
+                auxinConc = 0;
                 for(auto c : cellAttr) {
                     Tissue::CellData& cD = cellAttr[c.first];
                     if(cD.type != Tissue::Source) {
                         cellsProdRates[cD.label] = cD.auxinProdRate;
                         cD.auxinProdRate = amount;
+                        auxinConc += cD.auxin;
                     }
                 }
                 overflow = true;
                 auxin_overflow_count = 0;
+                auxinConc /= cellAttr.size();
 
             }
             if(overflow && interval2 > 0 && auxin_overflow_count > interval2) {
@@ -1207,6 +1214,7 @@ public:
                     Tissue::CellData& cD = cellAttr[c.first];
                     if (cD.type != Tissue::Source) {
                         cD.auxinProdRate = cellsProdRates[cD.label];
+                        cD.auxin = auxinConc;
                     }
                 }
                 overflow = false;
