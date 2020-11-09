@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 2.10565 101.065 -762.875 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -762.875 1
 SceneRadius: 500
-CameraZoom: -1.632
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 126.605
+Width: 126.669
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 126.605
+Width: 126.669
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 126.605
+Width: 126.669
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05536 1.05536 1.05536
+Size: 1.05589 1.05589 1.05589
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1071,7 +1071,7 @@ NumParms: 32
 ParmName: Max Mechanical Iterations
 ParmString: 1
 ParmName: Max Chemical Iterations
-ParmString: 1
+ParmString: 30
 ParmName: Mechanics Enabled
 ParmString: True
 ParmName: Chemicals Enabled
