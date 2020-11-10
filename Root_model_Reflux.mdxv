@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -762.875 1
+CameraFrame: 1 -1.05626e-33 -1.3021e-18 0 1.03819e-33 1 -1.38778e-17 0 1.3021e-18 1.38778e-17 1 0 0.468998 22.5874 -1522.15 1
 SceneRadius: 500
-CameraZoom: 0
+CameraZoom: -1.056
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 126.669
+Width: 127.658
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 126.669
+Width: 127.658
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 126.669
+Width: 127.658
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05589 1.05589 1.05589
+Size: 1.05619 1.05619 1.05619
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1081,13 +1081,13 @@ ParmString: True
 ParmName: Cell Division Enabled
 ParmString: True
 ParmName: Remesh at start
-ParmString: Hard
+ParmString: Soft
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 10
+ParmString: 1
 ParmName: Snapshots Timer
-ParmString: 10
+ParmString: 0
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1173,7 +1173,7 @@ ParmString: False
 ParmName: Draw Bounding Box
 ParmString: False
 ParmName: Draw Auxin-Flux Rescale
-ParmString: 10
+ParmString: 0
 ParmName: Draw PGD Rescale
 ParmString: 0
 ParmName: Draw PINs
@@ -1317,7 +1317,7 @@ ParmString: 10
 ParmName: Auxin
 ParmString: 
 ParmName: Auxin Source
-ParmString: 50
+ParmString: 40
 ParmName: Auxin Intercellular Diffusion
 ParmString: 1
 ParmName: Auxin Cell Permeability
@@ -1361,9 +1361,9 @@ ParmString: True
 ParmName: Pin1 Sensitivity MF K
 ParmString: 0
 ParmName: Pin1 Sensitivity Auxin-flux K
-ParmString: 3
+ParmString: 20
 ParmName: Pin1 Sensitivity Geometry K
-ParmString: 2
+ParmString: 0
 ParmName: Pin1 Sensitivity MF+Auxin-flux K
 ParmString: 3
 ParmName: Pin1 Sensitivity MF+Geometry K
@@ -1491,7 +1491,7 @@ NumParms: 0
 ProcessName: Model/Root/22 Set Cell Attr
 NumParms: 8
 ParmName: Cell Type
-ParmString: ColumellaInitial
+ParmString: Substrate
 ParmName: Vertices Masses
 ParmString: 1
 ParmName: Auxin production rate

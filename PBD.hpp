@@ -177,6 +177,7 @@ public:
     void solve();
 
     bool initialize(QWidget* parent);
+    bool rewind(QWidget* parent);
     void update(double Dt);
 
     bool printStats = false;

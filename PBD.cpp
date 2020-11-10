@@ -729,6 +729,27 @@ bool PBD::initialize(QWidget* parent) {
     return true;
 }
 
+// Rest pos attributes creates problem when starting from a saved mesh. Rewind the PBD process to fix it
+bool PBD::rewind(QWidget* parent) {
+    Mesh* mesh = getMesh("Mesh 1");
+    if(!mesh)
+        throw(QString("PBD::initialize No current mesh"));
+
+    CCStructure& cs = mesh->ccStructure("Tissue");
+    CCIndexDataAttr& indexAttr = mesh->indexAttr();
+
+    Tissue::FaceDataAttr &faceAttr =
+      mesh->attributes().attrMap<CCIndex, Tissue::FaceData>("FaceData");
+    for(CCIndex f : cs.faces()) {
+        faceAttr[f].invRestMat = 0;
+        for(int i = 0; i < 3; i++) {
+            std::vector<CCIndex> vs = faceVertices(cs, f);
+            faceAttr[f].restPos[i] = indexAttr[vs[i]].pos;
+        }
+    }
+    return true;
+}
+
 // does not seems to work
 void PBD::momentumPreservation(const CCStructure& cs, const CCIndexDataAttr &indexAttr, Tissue::VertexDataAttr &vMAttr, double K) {
   const CCIndexVec &vertices = cs.vertices();

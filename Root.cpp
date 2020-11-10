@@ -2070,13 +2070,17 @@ bool Root::initialize(QWidget* parent) {
         // give it a grow
         mechanicalGrowthProcess->initialize(parent);
         mechanicalGrowthProcess->step(mechanicsProcess->Dt);
-
+        // to avoid problems with the strain constraint
+        mechanicsProcess->initialize(parent);
+        mechanicsProcess->PBDProcess->rewind(parent);
+        // init the debug file
         if(parm("Debug") == "True") {
             if(!output_file.is_open()) {
                 output_file.open(parm("Debug File").toStdString());
                 write_debug_header(output_file);
             }
         }
+        // create the snapshots dir
         if(parm("Snapshots Timer").toInt() > 0) {
             if(system("mkdir \"snapshots\"") == -1)
                 mdxInfo << "Error creating snapshot directory" << endl;

@@ -112,6 +112,7 @@ public:
     bool initialize(QWidget* parent);
     bool rewind(QWidget* parent);
     bool step();
+    PBD* PBDProcess = 0;
     double Dt = 0;
     double userTime = 0;
     double realTime = 0;
@@ -129,7 +130,6 @@ private:
 
     CCIndexDataAttr* indexAttr = 0;
     Tissue* tissueProcess = 0;
-    PBD* PBDProcess = 0;
     double wallStress = 0, wallStressK1 = 0, wallStressK2 = 0;
     Point3d gravity;
     double convergeThresh = 1e-6;
@@ -615,6 +615,7 @@ public:
         addParm("SplitEdges", "SplitEdges", "Mesh/Structure/Split Edges");
         addParm("Polygonize", "Polygonize", "Tools/Cell Maker/Mesh 2D/Tools/Polygonize Triangles");
     }
+
     bool initialize(QWidget* parent) {
         if(!getProcess(parm("Tissue Process"), tissueProcess))
             throw(QString("Root::initialize Cannot make Tissue Process:") + parm("TissueProcess"));
@@ -857,7 +858,6 @@ public:
     QWidget* widget_parent = 0;
     MechanicalGrowth* mechanicalGrowthProcess = 0;
     Chemicals* chemicalsProcess = 0;
-    PBD* PBDProcess = 0;
     Mechanics* mechanicsProcess = 0;
     Tissue* tissueProcess = 0;
     RootDivide* divideProcess = 0;
