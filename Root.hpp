@@ -255,6 +255,7 @@ public:
         addParm("Pin1-auxin export rate", "Pin1-auxin export rate", "1.4");
         addParm("Pin1 Sensitivity Suppression by Auxin Amount",
                 "Pin1 Sensitivity Suppression by Auxin Amount (auxin per nm squared)", "300"); //// be careful
+        addParm("Simulate PIN4", "Simulate PIN4", "False", QStringList() << "True" << "False" );
         addParm("Columella Auto-Efflux", "Columella Auto-Efflux", "True", QStringList() << "True" << "False" );
         addParm("Pin1 Sensitivity MF K", "Pin1 Sensitivity MF K", "0");
         addParm("Pin1 Sensitivity Auxin-flux K", "Pin1 Sensitivity Auxin-flux K", "3");
@@ -578,7 +579,7 @@ public:
         CCIndexDataAttr& indexAttr = mesh->indexAttr();
         CCStructure& cs = mesh->ccStructure("Tissue");
         for(CCIndex f : cs.faces())
-            if(indexAttr[f].selected) {                
+            if(indexAttr[f].selected) {
                 clearCell(indexAttr[f].label);
                 return false;
             }
@@ -1243,7 +1244,7 @@ public:
                 Tissue::CellData& cD = cellAttr[c.first];
                 if(cD.type == Tissue::QC || cD.centroid.y() < QCcm.y())
                     labels.insert(cD.label);
-            }            
+            }
             deleteProcess->step(labels);
             */
             for(CCIndex v : cs.vertices())

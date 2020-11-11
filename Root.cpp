@@ -1036,6 +1036,17 @@ bool Chemicals::update() {
     // some debug infos
     debugs.clear();
 
+    // coordinates of the root tip
+    Point3d root_tip;
+    root_tip = BIG_VAL;
+    for(uint i = 0; i < cellAttr.size(); i++) {
+        auto it = cellAttr.begin();
+        advance(it, i);
+        Tissue::CellData& cD = it->second;
+        if(cD.centroid.y() < root_tip.y())
+            root_tip = cD.centroid;
+    }
+
     // Calculate chemicals changes on cells
     for(auto c : cellAttr)
             calcDerivsCell(cs, csDual, indexAttr, cellAttr, edgeAttr, c.first, Dt);
@@ -1053,7 +1064,6 @@ bool Chemicals::update() {
         int label = cD.label;
         if(cD.dualVertex.isPseudocell())
             continue;
-
         // calculate auxin gradient between adjacient cells
         cD.auxinFluxVector = Point3d(0., 0., 0.);
         for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
@@ -1097,7 +1107,6 @@ bool Chemicals::update() {
         double KPin1MFgeom  = parm("Pin1 Sensitivity MF+Geometry K").toDouble();
         double KPin1geomauxinflux  = parm("Pin1 Sensitivity Auxin-flux+Geometry K").toDouble();
         double KPINOIDMax = parm("PINOID Max Amount Edge").toDouble();
-
         double normSum = 0;
         for(CCIndex e : cD.perimeterEdges) {
             Tissue::EdgeData& eD = edgeAttr[e];
@@ -1120,7 +1129,6 @@ bool Chemicals::update() {
                              (pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4) / (pow(Kpinoid, 4) + pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4))) ;
                     else
                         throw(QString("Choose a correct auxin flux method, you ass"));
-
                     // Calculate MF impact
                     double MFvalue = cD.a1/norm(cD.a1) * eD.outwardNormal[f] ;
                     if(MFvalue < 0)
@@ -1148,9 +1156,16 @@ bool Chemicals::update() {
                             +   (KPin1geomauxinflux * eD.auxinFluxImpact[label] * eD.geomImpact[label])
                                );
                             ;
+                    // Columella has PIN3, uniform pins all around
                     if(cs.onBorder(e) || (cD.type == Tissue::Columella && parm("Columella Auto-Efflux") == "True"))
                        eD.pin1SensitivityRaw[label] = 0;
-                    if(cD.type == Tissue::Source ) //
+                    // simulate PIN4, does not work if the root bends
+                    if(parm("Simulate PIN4") == "True")
+                        if(cD.type == Tissue::QC || cD.type == Tissue::VascularInitial ||  cD.type == Tissue::CEI)
+                            if(norm(eD.midPoint - root_tip) > norm(cD.centroid - root_tip))
+                                eD.pin1SensitivityRaw[label] = 0;
+                    // Sources have stronger directional flow
+                    if(cD.type == Tissue::Source)
                        eD.pin1SensitivityRaw[label] = 10 * eD.MFImpact[label];
                     if(parm("Pin1 Sensitivity Average Method") == "Soft-max")
                         normSum += exp(eD.pin1SensitivityRaw[label]);
@@ -1158,7 +1173,6 @@ bool Chemicals::update() {
                         normSum += eD.pin1SensitivityRaw[label];
                 }
         }
-
         // now softmax the Pin sensitivity on the edges
         for(CCIndex e : cD.perimeterEdges) {
             Tissue::EdgeData& eD = edgeAttr[e];
@@ -1174,7 +1188,7 @@ bool Chemicals::update() {
         }
     }
 
-    // update cell chemicals attributes FIXME do we need this?
+    // update miscellaneous cell chemicals attributes
     double avg_auxin_conc = 0; // needed for later debug print
     for(uint i = 0; i < cellAttr.size(); i++) {
         auto it = cellAttr.begin();
@@ -1195,7 +1209,7 @@ bool Chemicals::update() {
     }
     avg_auxin_conc /= cellAttr.size();
 
-    // update edge chemicals (only on the walls) FIXME do we need this?
+    // update miscellaneous edge chemicals (only on the walls)
     for(uint i = 0; i < tissueProcess->wallEdges.size(); i++) {
         auto p = tissueProcess->wallEdges.begin();
         advance(p, i);
@@ -1216,10 +1230,9 @@ bool Chemicals::update() {
         }
     }
 
-    // some debug infos
+    // divide all debugs infos by the total vertices, so getting the mean
     for(auto p : debugs)
         p.second /= mesh->ccStructure("TissueDual").vertices().size();
-
 
     userTime += Dt;
     double normal = calcNorm();
@@ -1229,8 +1242,9 @@ bool Chemicals::update() {
         if(parm("Verbose") == "True")
             mdxInfo << "Chemical Time: " << userTime <<" Norm: " << normal << " Average Auxin Conc. :" << avg_auxin_conc << endl;
         debug_step = 0;
-    }
+    }  
 
+    // Chemical convergence is ***only*** based on auxin flow
     if(normal <= convergeThresh) {
         if(parm("Verbose") == "True") {
             mdxInfo << "Chemical solver converged" <<  endl;
