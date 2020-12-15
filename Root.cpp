@@ -772,7 +772,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     if(cD.type == Tissue::Source)
         cD.Aux1 = 0;
     if(cD.type == Tissue::Substrate) // Substrate has no auxin so is does not express AUX1 by itself
-        cD.Aux1 = 10;
+        cD.Aux1 = 100;
     debugs["Average AUX1 Expression"] += AUX1inducedExpression * Dt;
 
     // AUX1 membranes derivatives
