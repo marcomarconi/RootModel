@@ -723,7 +723,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             Tissue::EdgeData& eD = edgeAttr[e];
             double edge_diffusion = permeability * (eD.intercellularAuxin - cD.auxin) * 1. / cD.area * eD.length;
             double edge_import = Kaux1 * eD.intercellularAuxin * eD.Aux1[label]  * 1. / 1.; // we assume intercell space 1 nm thick
-            double edge_export = Kpin1 * cD.auxin * eD.Pin1[label] * 1. / cD.area;
+            double edge_export = Kpin1 * cD.auxin * eD.Pin1[label] * 1. / cD.area; // FIXME, is this wrong? where is the length?
             double edge_transport = edge_import - edge_export;
             // check for maximums
             if(edge_diffusion > 0)
@@ -878,14 +878,14 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
                         * (pow(PINOIDMaxEdge,10) / (pow(PINOIDMaxEdge,10) + pow(PINOID_conc_eD,10))) // Max amount on edge
                         ;
             double trafficked_PP2A = Dt * cD.PP2A * (eD.length / cD.perimeter)
-                        * (
+                        * (  // not equal trafficking for edge
                            PP2AKrate +
                            AUXIN_PP2A_Relief_T * (pow(auxin_ratio, 4) / (pow(auxin_ratio, 4) + pow(AUXIN_PP2A_Relief_K, 4))) +
                            Geom_PP2A_Relief_T * (pow(1-eD.geomImpact[label], 4) / (pow(1-eD.geomImpact[label], 4) + pow(1-Geom_PP2A_Relief_K, 4))) +
                            MF_PP2A_Relief_T * (pow(1-eD.MFImpact[label], 4) / (pow(1-eD.MFImpact[label], 4) + pow(1-MF_PP2A_Relief_K, 4)))
                           )
-                        * (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) / (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) + pow(PINOID_conc_eD, 8)))
-                        * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2)))
+                        * (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) / (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) + pow(PINOID_conc_eD, 8))) // not used
+                        * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2))) // auxin promotes trafficking
                         * (pow(PP2AMaxEdge,10) / (pow(PP2AMaxEdge,10) + pow(PP2A_conc_eD,10))) // Max amount on edge
                       ;
             trafficked_PINOID_total += trafficked_PINOID;
@@ -1870,7 +1870,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                 QCcm /= 2;
                 mdxInfo << "CellDivision.step: Cell division triggered by " << cD.label << " of size " << cD.area
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
-                        <<   " bigger than " << cD.cellMaxArea << endl;
+                        <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision <<  endl;
             }
             // Skip division if division algoritm MF depending but cell has no polarity
             if(cD.divAlg != 0 && norm(cD.a1) < parm("Minimum Polarity Vector Norm").toDouble()) {
@@ -3101,16 +3101,10 @@ bool PrintCellAttr::step() {
                     << " restX0: ";
                     for(auto x : cD.restX0) mdxInfo << x << " ";
                     mdxInfo << endl;
-            mdxInfo << " a1: " << cD.a1 << " "
-                    << " a2: " << cD.a2 << " "
-                    << " axisMin: " << cD.axisMin << " "
-                    << " axisMax: " << cD.axisMax << " "
-                    << " divVector " << cD.divVector << " "
-                    << " periclinal division: " << cD.periclinalDivision <<  " division algorithm: " << cD.divAlg
-                    << " MF reorientation: " << cD.mfRORate << " "
-                    << " pressure: " << cD.pressure << " "
-                    << " pressureMax: " << cD.pressureMax << " "
-                    << " wallStress : " << cD.wallStress << endl;
+            mdxInfo << " a1: " << cD.a1 << " " << " a2: " << cD.a2 << " "
+                    << " axisMin: " << cD.axisMin << " " << " axisMax: " << cD.axisMax << " " << " divVector " << cD.divVector << " MF reorientation: " << cD.mfRORate << endl
+                    << " periclinal division: " << cD.periclinalDivision <<  " division algorithm: " << cD.divAlg << " last division: " << cD.lastDivision << endl
+                    << " pressure: " << cD.pressure << " " << " pressureMax: " << cD.pressureMax << " " << " wallStress : " << cD.wallStress << endl;
             mdxInfo << " strain rate on the edges: ";
                        for(auto e : cD.perimeterEdges) {
                            Tissue::EdgeData& eD = edgeAttr[e];

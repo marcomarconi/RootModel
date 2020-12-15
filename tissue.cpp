@@ -634,6 +634,7 @@ bool Tissue::step(double Dt) {
 
 
     CCIndexIntAttr& cellTypeSignal = mesh->signalAttr<int>("Cell Type");
+    CCIndexIntAttr& cellLineageSignal = mesh->signalAttr<int>("Cell Lineage");
     CCIndexDoubleAttr& auxinSignal = mesh->signalAttr<double>("Chems: Auxin");
     CCIndexDoubleAttr& auxinByAreaSignal = mesh->signalAttr<double>("Chems: Auxin By Area");
     CCIndexDoubleAttr& intercellularAuxinSignal = mesh->signalAttr<double>("Chems: Intercellular Auxin");
@@ -663,6 +664,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& pressureConstrainSignal = mesh->signalAttr<double>("PBD: pressure constrain");
 
     cellTypeSignal.clear();
+    cellLineageSignal.clear();
     auxinSignal.clear();
     auxinByAreaSignal.clear();
     intercellularAuxinSignal.clear();
@@ -846,6 +848,7 @@ bool Tissue::step(double Dt) {
 
         // Signals
         cellTypeSignal[f] = cellAttr[indexAttr[f].label].type;
+        cellLineageSignal[f] = cellAttr[indexAttr[f].label].lineage;
         auxinSignal[f] = cD.auxin;
         auxinByAreaSignal[f] = cD.auxin / cD.area;
         Aux1CytSignal[f] = fD.Aux1Cyt;
@@ -1034,6 +1037,7 @@ void Tissue::CellData::division(const CCStructure &cs,
 
     cD1.tissue = tissue;
     cD1.type = type1;
+    cD1.lineage = lineage;
     cD1.periclinalDivision = periclinalDivision1;
     if(mfDelete && mfRORate > 0) {
         cD1.a1 = Point3d(0, 0.0001, 0);
@@ -1063,6 +1067,7 @@ void Tissue::CellData::division(const CCStructure &cs,
 
     cD2.tissue = tissue;
     cD2.type = type2;
+    cD2.lineage = lineage;
     cD2.periclinalDivision = periclinalDivision2;
     if(mfDelete && mfRORate > 0) {
         cD2.a1 = Point3d(0, 0.0001, 0);

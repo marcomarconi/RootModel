@@ -321,6 +321,7 @@ public:
         Tissue *tissue = 0;
         int label = -1;
         CellType type = Undefined;
+        int lineage = 0;
         CCIndex dualVertex;
         std::set<CCIndex>* cellFaces = 0;
         std::vector<CCIndex> cellVertices;
@@ -652,7 +653,8 @@ public:
                      EdgeDataAttr& edgeAttr,
                      VertexDataAttr& vMAttr) {
             this->tissue = tissue;
-
+            if(lineage == 0)
+                lineage = label;
             // find my faces
             uint old_cellFaces = cellFaces->size();
             cellFaces->clear();
