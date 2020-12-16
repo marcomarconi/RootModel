@@ -1851,14 +1851,24 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
 
     bool manualCellDivision = parm("Manual Cell Division Enabled") == "True";
+    double divisionProbHalf = parm("Division half-probability by Auxin Concentration").toDouble();
+    double divisionProbSteep = parm("Division probability steepness by Auxin Concentration").toDouble();
+    double Dt = rootProcess->mechanicsProcess->Dt;
 
     // check if there are any cells to divide (depending on are or other clues)
     std::vector<Tissue::CellData> cDs;
     bool trigger_division = false;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
+        // Auxin conc is ignored if divisionProbSteep is 0
+        bool divisionByAuxin = false;
+        if(divisionProbSteep > 0) {
+            double divProb = Dt / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalf)));
+            divisionByAuxin = (rand() < RAND_MAX * divProb);
+        } else
+            divisionByAuxin = true;
         if((manualCellDivision && cD.selected) ||
-           (cD.divisionAllowed && cD.area > cD.cellMaxArea && cD.lastDivision > 1)) {
+           (cD.divisionAllowed && cD.area > cD.cellMaxArea && cD.lastDivision > 1 && divisionByAuxin)) {
             if(Verbose) {
                 // find the QC so we can print the distance (for plotting)
                 Point3d  QCcm;

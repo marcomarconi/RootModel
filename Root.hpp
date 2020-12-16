@@ -382,6 +382,12 @@ public:
         addParm("Minimum Polarity Vector Norm",
                 "Minimum Polarity Vector Norm",
                 "0.05" );
+        addParm("Division half-probability by Auxin Concentration",
+                "Division half-probability by Auxin Concentration",
+                "1" );
+        addParm("Division probability steepness by Auxin Concentration",
+                "Division probability steepness by Auxin Concentration",
+                "0" );
         addParm("Root Process", "Name of the process for the Root", "Model/Root/01 Root");
         addParm("Remesh", "Remesh", "Model/Root/02 Remesh");
         addParm("Triangulate Faces Process", "Triangulate Faces", "Model/Root/Triangulate Faces");
