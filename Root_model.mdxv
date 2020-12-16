@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1162.07 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -234.176 1
 SceneRadius: 500
 CameraZoom: 0
 
@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 115.288
+Width: 115.186
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 115.288
+Width: 115.186
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 115.288
+Width: 115.186
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05521 1.05521 1.05521
+Size: 1.05533 1.05533 1.05533
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1185,7 +1185,7 @@ ParmString: 20
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 16
+NumParms: 18
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1204,6 +1204,10 @@ ParmName: Max Joining Distance
 ParmString: 1.5
 ParmName: Minimum Polarity Vector Norm
 ParmString: 0.05
+ParmName: Division half-probability by Auxin Concentration
+ParmString: 0
+ParmName: Division probability steepness by Auxin Concentration
+ParmString: 0
 ParmName: Root Process
 ParmString: Model/Root/01 Root
 ParmName: Remesh
@@ -1305,7 +1309,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 70
+NumParms: 71
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1356,6 +1360,8 @@ ParmName: Pin1-auxin export rate
 ParmString: 1.4
 ParmName: Pin1 Sensitivity Suppression by Auxin Amount
 ParmString: 400
+ParmName: Simulate PIN4
+ParmString: False
 ParmName: Columella Auto-Efflux
 ParmString: True
 ParmName: Pin1 Sensitivity MF K
