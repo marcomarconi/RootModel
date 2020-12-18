@@ -73,13 +73,13 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -825.635 1
 SceneRadius: 500
-CameraZoom: -0.576
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 115.311
+Width: 115.426
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 115.311
+Width: 115.426
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 115.311
+Width: 115.426
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05542 1.05542 1.05542
+Size: 1.05595 1.05595 1.05595
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1185,7 +1185,7 @@ ParmString: 20
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 18
+NumParms: 19
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1206,6 +1206,8 @@ ParmName: Minimum Polarity Vector Norm
 ParmString: 0.05
 ParmName: Division half-probability by Auxin Concentration
 ParmString: 0
+ParmName: Division half-probability by Cell Size Ratio
+ParmString: 1.25
 ParmName: Division probability steepness by Auxin Concentration
 ParmString: 0
 ParmName: Root Process
