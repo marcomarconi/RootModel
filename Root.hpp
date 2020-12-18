@@ -385,6 +385,9 @@ public:
         addParm("Division half-probability by Auxin Concentration",
                 "Division half-probability by Auxin Concentration",
                 "1" );
+        addParm("Division half-probability by Cell Size Ratio",
+                "Division half-probability by Cell Size Ratio",
+                "1.25" );
         addParm("Division probability steepness by Auxin Concentration",
                 "Division probability steepness by Auxin Concentration",
                 "0" );
@@ -428,8 +431,6 @@ private:
     TriangulateFacesX* triangulateProcess = 0;
     Tissue* tissueProcess = 0;
     Point3d divVector;
-    double CellMaxArea;
-    double CellMaxAreaOvule;
 };
 
 

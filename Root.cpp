@@ -772,7 +772,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     if(cD.type == Tissue::Source)
         cD.Aux1 = 0;
     if(cD.type == Tissue::Substrate) // Substrate has no auxin so is does not express AUX1 by itself
-        cD.Aux1 = 10;
+        cD.Aux1 = 100;
     debugs["Average AUX1 Expression"] += AUX1inducedExpression * Dt;
 
     // AUX1 membranes derivatives
@@ -1493,7 +1493,6 @@ bool CellDivision::initialize(QWidget* parent) {
 
 bool CellDivision::processParms() {
     // Process parameters
-    CellMaxArea = parm("Cell Max Area").toDouble();
     Verbose = stringToBool(parm("Verbose"));
 
     return true;
@@ -1851,7 +1850,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
 
     bool manualCellDivision = parm("Manual Cell Division Enabled") == "True";
-    double divisionProbHalf = parm("Division half-probability by Auxin Concentration").toDouble();
+    double divisionProbHalfAuxin = parm("Division half-probability by Auxin Concentration").toDouble();
+    double divisionProbHalfSize = parm("Division half-probability by Cell Size Ratio").toDouble();
     double divisionProbSteep = parm("Division probability steepness by Auxin Concentration").toDouble();
     double Dt = rootProcess->mechanicsProcess->Dt;
 
@@ -1861,15 +1861,17 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         // Auxin conc is ignored if divisionProbSteep is 0
-        bool divisionByAuxin = false;
+        bool division = false;
         if(divisionProbSteep > 0) {
-            double divProb = Dt / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalf)));
-            divisionByAuxin = (rand() < RAND_MAX * divProb);
+            double divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
+            double divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
+            division = (rand() < RAND_MAX * (divProbSize + divProbAuxin * divProbSize)*0.5 * Dt);
         } else
-            divisionByAuxin = true;
+            division = true;
         if((manualCellDivision && cD.selected) ||
-           (cD.divisionAllowed && cD.area > cD.cellMaxArea && cD.lastDivision > 1 && divisionByAuxin)) {
+           (cD.divisionAllowed && cD.area > cD.cellMaxArea && cD.lastDivision > 1 && division)) {
             if(Verbose) {
+
                 // find the QC so we can print the distance (for plotting)
                 Point3d  QCcm;
                 for(auto c : cellAttr) {
@@ -1881,6 +1883,11 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                 mdxInfo << "CellDivision.step: Cell division triggered by " << cD.label << " of size " << cD.area
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                         <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision <<  endl;
+
+                double divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
+                double divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
+                cout << divProbAuxin << " " << divProbSize << " " << (divProbSize + divProbAuxin * divProbSize)*0.5 << endl;
+
             }
             // Skip division if division algoritm MF depending but cell has no polarity
             if(cD.divAlg != 0 && norm(cD.a1) < parm("Minimum Polarity Vector Norm").toDouble()) {
