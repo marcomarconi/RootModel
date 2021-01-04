@@ -702,6 +702,30 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     if(cD.dualVertex.isPseudocell())
         return;
 
+    // Division Inhibitor
+    double divPermeability = parm("Division Inhibitor Permeability").toDouble();
+    for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
+        int labeln = indexAttr[vn].label;
+        Tissue::CellData& cDn = cellAttr[labeln];
+        for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, labeln)]) {
+            Tissue::EdgeData& eD = edgeAttr[e];
+            double diffusion = divPermeability * (cDn.divInhibitor - cD.divInhibitor) * 1. / (cD.area + cDn.area) * eD.length;
+            cD.divInhibitor += diffusion * Dt;
+            cDn.divInhibitor -= diffusion * Dt;
+        }
+    }
+    double divBase = parm("Division Inhibitor Basal Production Rate").toDouble();
+    double divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
+    double divKmax = parm("Division Inhibitor Max Auxin-induced Expression").toDouble();
+    double divKaux = parm("Division Inhibitor Half-max Auxin-induced K").toDouble();
+    int divNaux = parm("Division Inhibitor Half-max Auxin-induced n").toInt();
+    double divInduced = divKmax *
+                                    (
+                                     (pow(cD.auxin / cD.area, divNaux) / (pow(divKaux, divNaux) + pow(cD.auxin / cD.area, divNaux)))
+                                     //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
+                                    );
+    cD.divInhibitor += (divBase - divDecay + divInduced) * Dt;
+
     // AUXIN derivatives
     cD.auxinFluxes.clear();
     double permeability = parm("Auxin Cell Permeability").toDouble();
@@ -1852,7 +1876,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool manualCellDivision = parm("Manual Cell Division Enabled") == "True";
     double divisionProbHalfAuxin = parm("Division half-probability by Auxin Concentration").toDouble();
     double divisionProbHalfSize = parm("Division half-probability by Cell Size Ratio").toDouble();
-    double divisionProbSteep = parm("Division probability steepness by Auxin Concentration").toDouble();
+    double divisionProbHalfInhibitor = parm("Division half-probability by Inhibitor").toDouble();
+    double divisionProbSteep = parm("Division probability steepness").toDouble();
     double Dt = rootProcess->mechanicsProcess->Dt;
 
     // check if there are any cells to divide (depending on are or other clues)
@@ -1865,7 +1890,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         if(divisionProbSteep > 0) {
             double divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
             double divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
-            division = (rand() < RAND_MAX * (divProbSize + divProbAuxin * divProbSize)*0.5 * Dt);
+            double divProbInhibitor = 1 / (1. + exp(divisionProbSteep * (cD.divInhibitor/cD.area - divisionProbHalfInhibitor)));
+            division = (rand() < RAND_MAX * (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5 * Dt);
         } else
             division = true;
         if((manualCellDivision && cD.selected) ||
@@ -1886,7 +1912,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
 
                 double divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
                 double divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
-                cout << divProbAuxin << " " << divProbSize << " " << (divProbSize + divProbAuxin * divProbSize)*0.5 << endl;
+                double divProbInhibitor = 1 / (1. + exp(divisionProbSteep * (cD.divInhibitor/cD.area - divisionProbHalfInhibitor)));
+                cout << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;
 
             }
             // Skip division if division algoritm MF depending but cell has no polarity
@@ -2227,7 +2254,7 @@ bool Root::step() {
     // Execute tests
     executeTestProcess->step(stepCount);
 
-    // remove cells far away for the QC
+    // Find the center of QC
     Point3d  QCcm;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
@@ -2235,24 +2262,6 @@ bool Root::step() {
             QCcm += cD.centroid;
     }
     QCcm /= 2;
-    Point3d rootAxisX0 = Point3d(-BIG_VAL, QCcm[1], 0);
-    Point3d rootAxisX1 = Point3d(BIG_VAL, QCcm[1], 0);
-    double maxRootLength = tissueProcess->parm("Max Root Length").toDouble();
-    double substrateLength = tissueProcess->parm("Substrate Length").toDouble();
-    std::set<int> to_delete;
-    for(auto c : cellAttr) {
-        Tissue::CellData& cD = cellAttr[c.first];
-        double dist = DistancePtLine(rootAxisX0, rootAxisX1, cD.centroid);
-        if(cD.type == Tissue::Substrate && dist > maxRootLength)
-            to_delete.insert(cD.label);
-        if(cD.type != Tissue::Substrate && dist > (maxRootLength - substrateLength)) {
-            cD.setType(Tissue::Substrate, vMAttr);
-            cD.resetMechanics(faceAttr);
-            cD.resetChems();
-        }
-    }
-    for(int label : to_delete)
-        deleteProcess->deleteCell(label);
 
     // Find the center of vascular initials or substrate
     Point3d  VIcm, SUBcm;
@@ -3133,6 +3142,7 @@ bool PrintCellAttr::step() {
                     //<< " growth factor: " << cD.growthFactor << " " << " growth factor by area: " << cD.growthFactor/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
+                    << " Division Inhibitor: " << cD.divInhibitor << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
                     << " auxinProdRate: " << cD.auxinProdRate << " " << " auxinFluxVector: " << cD.auxinFluxVector
@@ -3154,7 +3164,8 @@ bool PrintCellAttr::step() {
                     << " (visuals)"
                     << " type : " << fD.type << " growthRate : " << fD.growthRate << " auxin : " << fD.auxin << " intercellularAuxin : " << fD.intercellularAuxin
                     << " Pin1Cyt : " << fD.Pin1Cyt << " Pin1Mem : " << fD.Pin1Mem
-                    << " Aux1Cyt : " << fD.Aux1Cyt << " Aux1Mem : " << fD.Aux1Mem << endl
+                    << " Aux1Cyt : " << fD.Aux1Cyt << " Aux1Mem : " << fD.Aux1Mem
+                    << endl
                     << endl;
             for(auto e : cs.incidentCells(f, 1)) {
                 Tissue::EdgeData& eD = edgeAttr[e];

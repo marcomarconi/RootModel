@@ -285,6 +285,13 @@ public:
         addParm("Aux1 Max Trafficking Rate", "Aux1 Max Trafficking Rate", "1");
         addParm("Aux1 Max Amount Edge", "Aux1 Max Amount Edge", "15");
         addParm("Aux1-auxin import rate", "Aux1-auxin import rate", "1");
+        addParm("Division Inhibitor", "Division Inhibitor", "");
+        addParm("Division Inhibitor Basal Production Rate", "Division Inhibitor Basal Production Rate", "0");
+        addParm("Division Inhibitor Max Auxin-induced Expression", "Division Inhibitor Max Auxin-induced Expression", "10");
+        addParm("Division Inhibitor Half-max Auxin-induced K", "Division Inhibitor Half-max Auxin-induced K", "1");
+        addParm("Division Inhibitor Half-max Auxin-induced n", "Division Inhibitor Half-max Auxin-induced n", "8");
+        addParm("Division Inhibitor Decay Rate", "Division Inhibitor Decay Rate", "0.08");
+        addParm("Division Inhibitor Permeability", "Division Inhibitor Permeability", "2");
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");
@@ -388,9 +395,12 @@ public:
         addParm("Division half-probability by Cell Size Ratio",
                 "Division half-probability by Cell Size Ratio",
                 "1.25" );
-        addParm("Division probability steepness by Auxin Concentration",
-                "Division probability steepness by Auxin Concentration",
-                "0" );
+        addParm("Division half-probability by Inhibitor",
+                "Division half-probability by Inhibitor",
+                "1.0" );
+        addParm("Division probability steepness",
+                "Division probability steepness",
+                "0" ); //20
         addParm("Root Process", "Name of the process for the Root", "Model/Root/01 Root");
         addParm("Remesh", "Remesh", "Model/Root/02 Remesh");
         addParm("Triangulate Faces Process", "Triangulate Faces", "Model/Root/Triangulate Faces");

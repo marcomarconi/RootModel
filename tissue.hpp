@@ -93,12 +93,6 @@ public:
         addParm("Draw PINs",
                 "Draw PINs",
                  "0.1");
-        addParm("Max Root Length",
-                "Max Root Length",
-                "600");
-        addParm("Substrate Length",
-                "Substrate Length",
-                "200");
         addParm("Verbose", "Verbose", "False",
                                                         QStringList() << "False"
                                                                       << "True");
@@ -345,6 +339,7 @@ public:
         double Aux1 = 0;
         double PINOID = 0;
         double PP2A = 0;
+        double divInhibitor = 0;
         double lifeTime = 0;
         double pressure = 1, pressureMax = -1;
         double auxinProdRate = -1;
@@ -566,6 +561,9 @@ public:
             auxin = 0;
             Pin1 = 0;
             Aux1 = 0;
+            PP2A = 0;
+            PINOID = 0;
+            divInhibitor = 0;
             auxinFluxes.clear();
             auxinFluxVector = Point3d(0, 0, 0);
         }
@@ -1198,7 +1196,7 @@ public:
         double pin1Sensitivity = 0, pin1SensitivityRaw = 0;
         Matrix3d E, G, V, dV, F = Matrix3d().identity(), R = Matrix3d().identity(), U = Matrix3d().identity(), Ev, F1, F2, sigmaA;
         Point3d divVector = Point3d(1., 0., 0.);
-        double auxin = 0, Aux1Cyt = 0, Pin1Cyt = 0,
+        double auxin = 0, Aux1Cyt = 0, Pin1Cyt = 0, divInhibitorCyt = 0,
                Aux1Mem = 0, Pin1Mem = 0, intercellularAuxin = 0, PINOIDMem = 0, PP2AMem = 0,
                growthRate = 0;
         CCIndex G_v0, G_v1, G_v2, G_e1, G_e2, a1_v1, a1_v2, a1_e, a2_v1, a2_v2, a2_e;

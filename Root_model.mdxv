@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 115.426
+Width: 115.542
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 115.426
+Width: 115.542
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 115.426
+Width: 115.542
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05595 1.05595 1.05595
+Size: 1.05648 1.05648 1.05648
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1155,7 +1155,7 @@ ParmString: Mesh/Structure/Split Edges
 ParmName: Polygonize
 ParmString: Tools/Cell Maker/Mesh 2D/Tools/Polygonize Triangles
 ProcessName: Model/Root/03 Cell Tissue
-NumParms: 14
+NumParms: 12
 ParmName: Dimension
 ParmString: 2
 ParmName: Tissue
@@ -1178,14 +1178,10 @@ ParmName: Draw PGD Rescale
 ParmString: 2
 ParmName: Draw PINs
 ParmString: 0.04
-ParmName: Max Root Length
-ParmString: 1000
-ParmName: Substrate Length
-ParmString: 20
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 19
+NumParms: 20
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1208,7 +1204,9 @@ ParmName: Division half-probability by Auxin Concentration
 ParmString: 0
 ParmName: Division half-probability by Cell Size Ratio
 ParmString: 1.25
-ParmName: Division probability steepness by Auxin Concentration
+ParmName: Division half-probability by Inhibitor
+ParmString: 1.0
+ParmName: Division probability steepness
 ParmString: 0
 ParmName: Root Process
 ParmString: Model/Root/01 Root
@@ -1311,7 +1309,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 71
+NumParms: 78
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1408,6 +1406,20 @@ ParmName: Aux1 Max Amount Edge
 ParmString: 15
 ParmName: Aux1-auxin import rate
 ParmString: 1
+ParmName: Division Inhibitor
+ParmString: 
+ParmName: Division Inhibitor Basal Production Rate
+ParmString: 0
+ParmName: Division Inhibitor Max Auxin-induced Expression
+ParmString: 50
+ParmName: Division Inhibitor Half-max Auxin-induced K
+ParmString: 1
+ParmName: Division Inhibitor Half-max Auxin-induced n
+ParmString: 8
+ParmName: Division Inhibitor Decay Rate
+ParmString: 0.08
+ParmName: Division Inhibitor Permeability
+ParmString: 20
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate

@@ -645,6 +645,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& auxinRatioSignal = mesh->signalAttr<double>("Chems: Auxin Transport");
     CCIndexDoubleAttr& auxinGradSignal = mesh->signalAttr<double>("Chems: Auxin Gradient");
     CCIndexDoubleAttr& auxinFluxImpactSignal = mesh->signalAttr<double>("Chems: Auxin Flux Impact");
+    CCIndexDoubleAttr& divInhibitorCytSignal = mesh->signalAttr<double>("Chems: Division Inhibitor by Area");
     CCIndexDoubleAttr& Pin1CytSignal = mesh->signalAttr<double>("Chems: Pin1 Cyt");
     CCIndexDoubleAttr& Pin1MemSignal = mesh->signalAttr<double>("Chems: Pin1 Mem");
     CCIndexDoubleAttr& pin1SensitivitySignal = mesh->signalAttr<double>("Chems: Pin Sensitivity");
@@ -675,6 +676,7 @@ bool Tissue::step(double Dt) {
     auxinFluxImpactSignal.clear();
     auxinRatioSignal.clear();
     auxinGradSignal.clear();
+    divInhibitorCytSignal.clear();
     Pin1CytSignal.clear();
     Pin1MemSignal.clear();
     pin1SensitivitySignal.clear();
@@ -853,6 +855,7 @@ bool Tissue::step(double Dt) {
         auxinByAreaSignal[f] = cD.auxin / cD.area;
         Aux1CytSignal[f] = fD.Aux1Cyt;
         Aux1MemSignal[f] = fD.Aux1Mem;
+        divInhibitorCytSignal[f] = cD.divInhibitor / cD.area;
         Pin1CytSignal[f] = cD.Pin1;
         Pin1MemSignal[f] = fD.Pin1Mem;
         PINOIDCytSignal[f] = cD.PINOID;
@@ -1064,6 +1067,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.Aux1 = Aux1 / 2;
     cD1.PINOID = PINOID / 2;
     cD1.PP2A = PP2A / 2;
+    cD1.divInhibitor = divInhibitor / 2;
 
     cD2.tissue = tissue;
     cD2.type = type2;
@@ -1094,6 +1098,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.Aux1 = Aux1 / 2;
     cD2.PINOID = PINOID / 2;
     cD2.PP2A = PP2A / 2;
+    cD2.divInhibitor = divInhibitor / 2;
 
     std::vector<CCIndex> edges;
     edges.insert(edges.end(), cD1.perimeterEdges.begin(), cD1.perimeterEdges.end());
