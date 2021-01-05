@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -0.956945 11.1245 -865.383 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 1.26582 113.291 -1393.52 1
 SceneRadius: 500
-CameraZoom: -1.536
+CameraZoom: -0.672
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 114.471
+Width: 118.002
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 114.471
+Width: 118.002
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 114.471
+Width: 118.002
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05439 1.05439 1.05439
+Size: 1.05746 1.05746 1.05746
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1047,7 +1047,7 @@ ParmString:
 ProcessName: Mesh/System/Save
 NumParms: 3
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxm
+ParmString: /home/marco/trabajo/MDX models/Root/test.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Mesh Id
@@ -1073,19 +1073,19 @@ ParmString: 1
 ParmName: Max Chemical Iterations
 ParmString: 30
 ParmName: Mechanics Enabled
-ParmString: False
+ParmString: True
 ParmName: Chemicals Enabled
 ParmString: True
 ParmName: Growth Enabled
-ParmString: False
+ParmString: True
 ParmName: Cell Division Enabled
-ParmString: False
+ParmString: True
 ParmName: Remesh at start
 ParmString: Soft
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 1
+ParmString: 10
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
@@ -1155,7 +1155,7 @@ ParmString: Mesh/Structure/Split Edges
 ParmName: Polygonize
 ParmString: Tools/Cell Maker/Mesh 2D/Tools/Polygonize Triangles
 ProcessName: Model/Root/03 Cell Tissue
-NumParms: 14
+NumParms: 12
 ParmName: Dimension
 ParmString: 2
 ParmName: Tissue
@@ -1178,14 +1178,10 @@ ParmName: Draw PGD Rescale
 ParmString: 2
 ParmName: Draw PINs
 ParmString: 0.04
-ParmName: Max Root Length
-ParmString: 1000
-ParmName: Substrate Length
-ParmString: 20
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 16
+NumParms: 20
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1204,6 +1200,14 @@ ParmName: Max Joining Distance
 ParmString: 1.5
 ParmName: Minimum Polarity Vector Norm
 ParmString: 0.05
+ParmName: Division half-probability by Auxin Concentration
+ParmString: 0
+ParmName: Division half-probability by Cell Size Ratio
+ParmString: 1.25
+ParmName: Division half-probability by Inhibitor
+ParmString: 0.1
+ParmName: Division probability steepness
+ParmString: 20
 ParmName: Root Process
 ParmString: Model/Root/01 Root
 ParmName: Remesh
@@ -1297,21 +1301,21 @@ ParmString: False
 ParmName: Zonation
 ParmString: 
 ParmName: Elongation Zone
-ParmString: 50
+ParmString: 0
 ParmName: Differentiation Zone
-ParmString: 100
+ParmString: 0
 ParmName: Mechanics Process
 ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 70
+NumParms: 78
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
 ParmString: 0.1
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Debug Steps
 ParmString: 10
 ParmName: Auxin
@@ -1356,6 +1360,8 @@ ParmName: Pin1-auxin export rate
 ParmString: 1.4
 ParmName: Pin1 Sensitivity Suppression by Auxin Amount
 ParmString: 400
+ParmName: Simulate PIN4
+ParmString: False
 ParmName: Columella Auto-Efflux
 ParmString: True
 ParmName: Pin1 Sensitivity MF K
@@ -1400,6 +1406,20 @@ ParmName: Aux1 Max Amount Edge
 ParmString: 15
 ParmName: Aux1-auxin import rate
 ParmString: 1
+ParmName: Division Inhibitor
+ParmString: 
+ParmName: Division Inhibitor Basal Production Rate
+ParmString: 0
+ParmName: Division Inhibitor Max Auxin-induced Expression
+ParmString: 50
+ParmName: Division Inhibitor Half-max Auxin-induced K
+ParmString: 1
+ParmName: Division Inhibitor Half-max Auxin-induced n
+ParmString: 8
+ParmName: Division Inhibitor Decay Rate
+ParmString: 0.08
+ParmName: Division Inhibitor Permeability
+ParmString: 20
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
@@ -2755,13 +2775,13 @@ NumParms: 0
 ProcessName: Tools/System/Load View
 NumParms: 1
 ParmName: File Name
-ParmString: Root_model.mdxv
+ParmString: test.mdxv
 ProcessName: Tools/System/Quick Save
 NumParms: 0
 ProcessName: Tools/System/Save View
 NumParms: 1
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxv
+ParmString: /home/marco/trabajo/MDX models/Root/test.mdxv
 ProcessName: Tools/System/Snapshot
 NumParms: 6
 ParmName: File Name

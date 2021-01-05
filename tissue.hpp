@@ -365,6 +365,7 @@ public:
         Matrix3d G, E, U, M, M0, S, F = Matrix3d().identity(), R = Matrix3d().identity();
         double gMax = 0, gMin = 0, gAngle = 0, sMax = 0, sMin = 0, sAngle = 0;
         bool divisionAllowed = true;
+        double divProb = 0;
         std::map<int, Point3d> auxinFluxes;
         Point3d auxinFluxVector;
         Point3d auxinGradientVector;

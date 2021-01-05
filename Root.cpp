@@ -709,7 +709,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         Tissue::CellData& cDn = cellAttr[labeln];
         for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, labeln)]) {
             Tissue::EdgeData& eD = edgeAttr[e];
-            double diffusion = divPermeability * (cDn.divInhibitor - cD.divInhibitor) * 1. / (cD.area + cDn.area) * eD.length;
+            double diffusion = 0.5 * divPermeability * (cDn.divInhibitor - cD.divInhibitor) * eD.length / (cD.area + cDn.area);
             cD.divInhibitor += diffusion * Dt;
             cDn.divInhibitor -= diffusion * Dt;
         }
@@ -1885,13 +1885,19 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool trigger_division = false;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
+        double divProbAuxin = 0;
+        double divProbSize = 0;
+        double divProbInhibitor = 0;
+        cD.divProb = 0;
+        double random = rand() ;
         // Auxin conc is ignored if divisionProbSteep is 0
         bool division = false;
         if(divisionProbSteep > 0) {
-            double divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
-            double divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
-            double divProbInhibitor = 1 / (1. + exp(divisionProbSteep * (cD.divInhibitor/cD.area - divisionProbHalfInhibitor)));
-            division = (rand() < RAND_MAX * (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5 * Dt);
+            divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
+            divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
+            divProbInhibitor = 1 / (1. + exp(divisionProbSteep * (cD.divInhibitor/cD.area - divisionProbHalfInhibitor)));
+            cD.divProb = (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5;
+            division = (random < RAND_MAX * cD.divProb * Dt);
         } else
             division = true;
         if((manualCellDivision && cD.selected) ||
@@ -1910,10 +1916,9 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                         <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision <<  endl;
 
-                double divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
-                double divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
-                double divProbInhibitor = 1 / (1. + exp(divisionProbSteep * (cD.divInhibitor/cD.area - divisionProbHalfInhibitor)));
-                cout << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;
+
+                cout << random << " " << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;
+                cout << (random < RAND_MAX * (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5 * Dt) << endl;
 
             }
             // Skip division if division algoritm MF depending but cell has no polarity

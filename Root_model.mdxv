@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 115.542
+Width: 115.6
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 115.542
+Width: 115.6
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 115.542
+Width: 115.6
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05648 1.05648 1.05648
+Size: 1.057 1.057 1.057
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1759,15 +1759,15 @@ ParmString: 70
 ParmName: LRC MF reorientation rate
 ParmString: -1
 ParmName: Substrate Wall EK
-ParmString: -1
+ParmString: 1
 ParmName: Substrate Wall CK
-ParmString: -1
+ParmString: 1
 ParmName: Substrate Shear EK
-ParmString: -1
+ParmString: 1
 ParmName: Substrate Shear CK
-ParmString: -1
+ParmString: 1
 ParmName: Substrate Turgor Pressure
-ParmString: -1
+ParmString: 0
 ParmName: Substrate Growth Factor
 ParmString: 0
 ParmName: Substrate MF reorientation rate

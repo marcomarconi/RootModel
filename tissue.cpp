@@ -646,6 +646,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& auxinGradSignal = mesh->signalAttr<double>("Chems: Auxin Gradient");
     CCIndexDoubleAttr& auxinFluxImpactSignal = mesh->signalAttr<double>("Chems: Auxin Flux Impact");
     CCIndexDoubleAttr& divInhibitorCytSignal = mesh->signalAttr<double>("Chems: Division Inhibitor by Area");
+    CCIndexDoubleAttr& divProbSignal = mesh->signalAttr<double>("Chems: Division Probability");
     CCIndexDoubleAttr& Pin1CytSignal = mesh->signalAttr<double>("Chems: Pin1 Cyt");
     CCIndexDoubleAttr& Pin1MemSignal = mesh->signalAttr<double>("Chems: Pin1 Mem");
     CCIndexDoubleAttr& pin1SensitivitySignal = mesh->signalAttr<double>("Chems: Pin Sensitivity");
@@ -677,6 +678,7 @@ bool Tissue::step(double Dt) {
     auxinRatioSignal.clear();
     auxinGradSignal.clear();
     divInhibitorCytSignal.clear();
+    divProbSignal.clear();
     Pin1CytSignal.clear();
     Pin1MemSignal.clear();
     pin1SensitivitySignal.clear();
@@ -856,6 +858,7 @@ bool Tissue::step(double Dt) {
         Aux1CytSignal[f] = fD.Aux1Cyt;
         Aux1MemSignal[f] = fD.Aux1Mem;
         divInhibitorCytSignal[f] = cD.divInhibitor / cD.area;
+        divProbSignal[f] = cD.divProb;
         Pin1CytSignal[f] = cD.Pin1;
         Pin1MemSignal[f] = fD.Pin1Mem;
         PINOIDCytSignal[f] = cD.PINOID;
