@@ -1892,6 +1892,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         double random = rand() ;
         // Auxin conc is ignored if divisionProbSteep is 0
         bool division = false;
+        /*
         if(divisionProbSteep > 0) {
             divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
             divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
@@ -1900,6 +1901,21 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             division = (random < RAND_MAX * cD.divProb * Dt);
         } else
             division = true;
+            */
+        if(divisionProbSteep > 0) {
+            if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
+                division = true;
+            else if(cD.area/cD.cellMaxArea < 1)
+                division = false;
+            else{
+                if(cD.divInhibitor/cD.area > divisionProbHalfInhibitor)
+                    division = false;
+                else
+                    division = true;
+            }
+        } else
+            division = true;
+
         if((manualCellDivision && cD.selected) ||
            (cD.divisionAllowed && cD.area > cD.cellMaxArea && cD.lastDivision > 1 && division)) {
             if(Verbose) {
@@ -1914,7 +1930,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                 QCcm /= 2;
                 mdxInfo << "CellDivision.step: Cell division triggered by " << cD.label << " of size " << cD.area
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
-                        <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision <<  endl;
+                        <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision << " division inhibitor: " << cD.divInhibitor/cD.area  <<endl;
 
 
                 cout << random << " " << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;

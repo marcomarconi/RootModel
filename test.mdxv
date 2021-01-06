@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 1.26582 113.291 -1393.52 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 4.18239 130.901 -1393.52 1
 SceneRadius: 500
-CameraZoom: -0.672
+CameraZoom: -0.384
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 118.002
+Width: 119.018
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 118.002
+Width: 119.018
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 118.002
+Width: 119.018
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1173,13 +1173,13 @@ ParmString: False
 ParmName: Draw Bounding Box
 ParmString: False
 ParmName: Draw Auxin-Flux Rescale
-ParmString: 10
+ParmString: 0
 ParmName: Draw PGD Rescale
-ParmString: 2
+ParmString: 0
 ParmName: Draw PINs
-ParmString: 0.04
+ParmString: 0
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ProcessName: Model/Root/04 Divide Cells
 NumParms: 20
 ParmName: Cell Max Area
@@ -1203,9 +1203,9 @@ ParmString: 0.05
 ParmName: Division half-probability by Auxin Concentration
 ParmString: 0
 ParmName: Division half-probability by Cell Size Ratio
-ParmString: 1.25
+ParmString: 1.50
 ParmName: Division half-probability by Inhibitor
-ParmString: 0.1
+ParmString: 1
 ParmName: Division probability steepness
 ParmString: 20
 ParmName: Root Process
@@ -1231,7 +1231,7 @@ ParmString: .1
 ParmName: Convergence Lag
 ParmString: 1
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Debug Steps
 ParmString: 10
 ParmName: Mass Spring Parameters
@@ -1275,7 +1275,7 @@ ParmString: Model/Root/07 PBD Engine
 ProcessName: Model/Root/052 Mechanical Growth
 NumParms: 17
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Polarity Method
 ParmString: Cell Axis
 ParmName: Strain Tensor
@@ -1411,7 +1411,7 @@ ParmString:
 ParmName: Division Inhibitor Basal Production Rate
 ParmString: 0
 ParmName: Division Inhibitor Max Auxin-induced Expression
-ParmString: 50
+ParmString: 200
 ParmName: Division Inhibitor Half-max Auxin-induced K
 ParmString: 1
 ParmName: Division Inhibitor Half-max Auxin-induced n
@@ -1469,7 +1469,7 @@ ParmString: Model/Root/061 Chemicals Solver
 ProcessName: Model/Root/07 PBD Engine
 NumParms: 19
 ParmName: Print Stats
-ParmString: True
+ParmString: False
 ParmName: Velocity Update
 ParmString: First Order
 ParmName: Max Velocity
