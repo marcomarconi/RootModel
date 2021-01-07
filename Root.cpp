@@ -2337,7 +2337,7 @@ bool Root::step() {
     // Save a snapshot of the simulation
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
-        std::set<QString> signals_set = {"Chems: Auxin By Area", "Mechs: Growth Rate"/*, "Cell Type"*/};
+        std::set<QString> signals_set = {"Chems: Division Inhibitor by Area", "Chems: Auxin By Area", "Mechs: Growth Rate"};
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
             mesh->drawParms("Tissue").setGroupVisible("Faces", true);
@@ -2356,7 +2356,7 @@ bool Root::step() {
                     indexAttr[cD.PDGmin_v2].pos[2] -= 10;
                 }
             }
-            else if(signalName == QString("Mechs: Growth Rate")) {
+            else if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor By Area")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
@@ -2412,7 +2412,7 @@ bool Root::step() {
                     indexAttr[cD.PDGmin_v2].pos[2] += 10;
                 }
             }
-            else if(signalName == QString("Mechs: Growth Rate")) {
+            else if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor By Area")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
