@@ -719,11 +719,13 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     double divKmax = parm("Division Inhibitor Max Auxin-induced Expression").toDouble();
     double divKaux = parm("Division Inhibitor Half-max Auxin-induced K").toDouble();
     int divNaux = parm("Division Inhibitor Half-max Auxin-induced n").toInt();
-    double divInduced = divKmax *
+    double divInduced = 0;
+    if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI)
+        divInduced = divKmax *
                                     (
                                      (pow(cD.auxin / cD.area, divNaux) / (pow(divKaux, divNaux) + pow(cD.auxin / cD.area, divNaux)))
                                      //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
-                                    );
+                                    );    
     cD.divInhibitor += (divBase - divDecay + divInduced) * Dt;
 
     // AUXIN derivatives
