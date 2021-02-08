@@ -2341,13 +2341,13 @@ bool Root::step() {
     // Save a snapshot of the simulation
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
-        std::set<QString> signals_set = {"Chems: Division Inhibitor by Area", "Chems: Division Time","Chems: Auxin By Area", "Mechs: Growth Rate"};
+        std::set<QString> signals_set = {"Chems: Division Inhibitor by Area", "Chems: Division Time","Chems: Auxin By Area", "Mechs: Growth Rate", "Cell Lineage"};
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
             mesh->drawParms("Tissue").setGroupVisible("Faces", true);
             mesh->drawParms("Tissue").setRenderChoice("Faces", signalName);
             // move unwanted visual back
-            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time") || signalName == QString("Cell Lineage")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
@@ -2360,7 +2360,7 @@ bool Root::step() {
                     indexAttr[cD.PDGmin_v2].pos[2] -= 10;
                 }
             }
-            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time") || signalName == QString("Cell Lineage")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
@@ -2403,7 +2403,7 @@ bool Root::step() {
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
             takeSnapshot(fileName, 1, 645*4, 780*4, 10, true);
             // restore unwanted visual forward
-            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time") || signalName == QString("Cell Lineage")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
@@ -2416,7 +2416,7 @@ bool Root::step() {
                     indexAttr[cD.PDGmin_v2].pos[2] += 10;
                 }
             }
-            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time") || signalName == QString("Cell Lineage")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
