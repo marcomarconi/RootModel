@@ -635,6 +635,7 @@ bool Tissue::step(double Dt) {
 
     CCIndexIntAttr& cellTypeSignal = mesh->signalAttr<int>("Cell Type");
     CCIndexIntAttr& cellLineageSignal = mesh->signalAttr<int>("Cell Lineage");
+    CCIndexDoubleAttr& divisionCountSignal = mesh->signalAttr<double>("Division Count");
     CCIndexDoubleAttr& auxinSignal = mesh->signalAttr<double>("Chems: Auxin");
     CCIndexDoubleAttr& auxinByAreaSignal = mesh->signalAttr<double>("Chems: Auxin By Area");
     CCIndexDoubleAttr& intercellularAuxinSignal = mesh->signalAttr<double>("Chems: Intercellular Auxin");
@@ -668,6 +669,7 @@ bool Tissue::step(double Dt) {
 
     cellTypeSignal.clear();
     cellLineageSignal.clear();
+    divisionCountSignal.clear();
     auxinSignal.clear();
     auxinByAreaSignal.clear();
     intercellularAuxinSignal.clear();
@@ -855,6 +857,7 @@ bool Tissue::step(double Dt) {
         // Signals
         cellTypeSignal[f] = cellAttr[indexAttr[f].label].type;
         cellLineageSignal[f] = cellAttr[indexAttr[f].label].lineage;
+        divisionCountSignal[f] = cellAttr[indexAttr[f].label].divisionCount;
         auxinSignal[f] = cD.auxin;
         auxinByAreaSignal[f] = cD.auxin / cD.area;
         Aux1CytSignal[f] = fD.Aux1Cyt;
@@ -1074,6 +1077,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.PINOID = PINOID / 2;
     cD1.PP2A = PP2A / 2;
     cD1.divInhibitor = divInhibitor / 2;
+    cD1.divisionCount = divisionCount+1;
 
     cD2.tissue = tissue;
     cD2.type = type2;
@@ -1105,6 +1109,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.PINOID = PINOID / 2;
     cD2.PP2A = PP2A / 2;
     cD2.divInhibitor = divInhibitor / 2;
+    cD2.divisionCount = divisionCount+1;
 
     std::vector<CCIndex> edges;
     edges.insert(edges.end(), cD1.perimeterEdges.begin(), cD1.perimeterEdges.end());

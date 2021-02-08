@@ -326,6 +326,7 @@ public:
         double mfRORate = -1;
         double growthFactor = 0;
         double lastDivision = 0;
+        double divisionCount = 0;
         Point3d axisMin, axisMax, prev_axisMin, prev_axisMax;
         bool periclinalDivision = false;
         int divAlg = -1;
