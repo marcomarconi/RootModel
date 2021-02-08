@@ -2347,7 +2347,7 @@ bool Root::step() {
             mesh->drawParms("Tissue").setGroupVisible("Faces", true);
             mesh->drawParms("Tissue").setRenderChoice("Faces", signalName);
             // move unwanted visual back
-            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area")|| signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
@@ -2360,7 +2360,7 @@ bool Root::step() {
                     indexAttr[cD.PDGmin_v2].pos[2] -= 10;
                 }
             }
-            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor By Area")|| signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
@@ -2403,7 +2403,7 @@ bool Root::step() {
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
             takeSnapshot(fileName, 1, 645*4, 780*4, 10, true);
             // restore unwanted visual forward
-            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area")|| signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Chems: Auxin By Area") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
@@ -2416,7 +2416,7 @@ bool Root::step() {
                     indexAttr[cD.PDGmin_v2].pos[2] += 10;
                 }
             }
-            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor By Area") || signalName == QString("Chems: Division Time")) {
+            if(signalName == QString("Mechs: Growth Rate") || signalName == QString("Chems: Division Inhibitor by Area") || signalName == QString("Chems: Division Time")) {
                 for(uint i = 0; i < cellAttr.size(); i++) {
                     auto it = cellAttr.begin();
                     advance(it, i);
