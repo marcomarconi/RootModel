@@ -1411,11 +1411,11 @@ ParmString:
 ParmName: Division Inhibitor Basal Production Rate
 ParmString: 0
 ParmName: Division Inhibitor Max Auxin-induced Expression
-ParmString: 50
+ParmString: 200
 ParmName: Division Inhibitor Half-max Auxin-induced K
 ParmString: 1
 ParmName: Division Inhibitor Half-max Auxin-induced n
-ParmString: 8
+ParmString: 4
 ParmName: Division Inhibitor Decay Rate
 ParmString: 0.08
 ParmName: Division Inhibitor Permeability
