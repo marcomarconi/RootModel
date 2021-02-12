@@ -2407,6 +2407,12 @@ bool Root::step() {
             }
 
             mesh->setSignal(signalName);
+            if(signalName == QString("Chems: Division Inhibitor by Area")) {
+                double divInhibitor = divideProcess->parm("Division half-probability by Inhibitor").toDouble();
+                if(divInhibitor > 1)divInhibitor=1;
+                if(divInhibitor < 0)divInhibitor=0;
+                mesh->setSignalBounds(Point2d(0, divInhibitor));
+            }
             mesh->updateAll();
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
             takeSnapshot(fileName, 1, 645*4, 780*4, 10, true);
