@@ -287,9 +287,9 @@ public:
         addParm("Aux1-auxin import rate", "Aux1-auxin import rate", "1");
         addParm("Division Inhibitor", "Division Inhibitor", "");
         addParm("Division Inhibitor Basal Production Rate", "Division Inhibitor Basal Production Rate", "0");
-        addParm("Division Inhibitor Max Auxin-induced Expression", "Division Inhibitor Max Auxin-induced Expression", "10");
+        addParm("Division Inhibitor Max Auxin-induced Expression", "Division Inhibitor Max Auxin-induced Expression", "200");
         addParm("Division Inhibitor Half-max Auxin-induced K", "Division Inhibitor Half-max Auxin-induced K", "1");
-        addParm("Division Inhibitor Half-max Auxin-induced n", "Division Inhibitor Half-max Auxin-induced n", "8");
+        addParm("Division Inhibitor Half-max Auxin-induced n", "Division Inhibitor Half-max Auxin-induced n", "4");
         addParm("Division Inhibitor Decay Rate", "Division Inhibitor Decay Rate", "0.08");
         addParm("Division Inhibitor Permeability", "Division Inhibitor Permeability", "2");
         addParm("Phosphorilation", "Phosphorilation", "");
