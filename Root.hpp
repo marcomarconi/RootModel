@@ -404,7 +404,7 @@ public:
                 "1");
         addParm("Division Promoter Level",
                 "Division Promoter Level",
-                "0.01" );
+                "0.05" );
         addParm("Division half-probability by Cell Size Ratio",
                 "Division half-probability by Cell Size Ratio",
                 "1.0" );

@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 115.771
+Width: 115.829
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 115.771
+Width: 115.829
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 115.771
+Width: 115.829
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1181,7 +1181,7 @@ ParmString: 0.04
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 21
+NumParms: 22
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1200,6 +1200,8 @@ ParmName: Max Joining Distance
 ParmString: 1.5
 ParmName: Minimum Polarity Vector Norm
 ParmString: 0.05
+ParmName: Max Division Time
+ParmString: 30
 ParmName: Division half-probability by Auxin Concentration
 ParmString: 0
 ParmName: Division Promoter Level
