@@ -396,6 +396,9 @@ public:
         addParm("Minimum Polarity Vector Norm",
                 "Minimum Polarity Vector Norm",
                 "0.05" );
+        addParm("Max Division Time",
+                "Division half-probability by Auxin Concentration",
+                "30");
         addParm("Division half-probability by Auxin Concentration",
                 "Division half-probability by Auxin Concentration",
                 "1");
@@ -404,10 +407,10 @@ public:
                 "0.01" );
         addParm("Division half-probability by Cell Size Ratio",
                 "Division half-probability by Cell Size Ratio",
-                "1.25" );
+                "1.0" );
         addParm("Division half-probability by Inhibitor",
                 "Division half-probability by Inhibitor",
-                "1.0" );
+                "0.03" );
         addParm("Division probability steepness",
                 "Division probability steepness",
                 "0" ); //20

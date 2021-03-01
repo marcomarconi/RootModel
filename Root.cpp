@@ -1902,6 +1902,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
 
     bool manualCellDivision = parm("Manual Cell Division Enabled") == "True";
     //double divisionProbHalfAuxin = parm("Division half-probability by Auxin Concentration").toDouble();
+    double divisionMaxTime = parm("Max Division Time").toDouble();
     double divisionProbHalfSize = parm("Division half-probability by Cell Size Ratio").toDouble();
     double divisionProbHalfInhibitor = parm("Division half-probability by Inhibitor").toDouble();
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
@@ -1933,7 +1934,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         if(divisionProbSteep > 0 && rootProcess->userTime > 24) {
             if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
                 if(cD.divPromoter/cD.area > divisionPromoterLevel) {
-                        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * 30;
+                        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime;
                         if(cD.lastDivision > cD.divProb )
                             cD.divisionAllowed = true;
                 }
