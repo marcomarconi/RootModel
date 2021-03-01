@@ -2432,6 +2432,10 @@ bool Root::step() {
                 double divInhibitor = divideProcess->parm("Division half-probability by Inhibitor").toDouble();
                 if(divInhibitor > 1)divInhibitor=1;
                 if(divInhibitor < 0)divInhibitor=0;
+                if(divInhibitor > 1)
+                    divInhibitor=10;
+                else
+                    divInhibitor=1;
                 mesh->setSignalBounds(Point2d(0, divInhibitor));
             }
             mesh->updateAll();
