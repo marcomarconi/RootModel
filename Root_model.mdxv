@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -25.7372 87.1915 -1156.48 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1156.48 1
 SceneRadius: 500
 CameraZoom: 0
 
@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 115.597
+Width: 115.771
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 115.597
+Width: 115.771
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 115.597
+Width: 115.771
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1181,7 +1181,7 @@ ParmString: 0.04
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 20
+NumParms: 21
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1202,12 +1202,14 @@ ParmName: Minimum Polarity Vector Norm
 ParmString: 0.05
 ParmName: Division half-probability by Auxin Concentration
 ParmString: 0
-ParmName: Division half-probability by Cell Size Ratio
-ParmString: 1.25
-ParmName: Division half-probability by Inhibitor
+ParmName: Division Promoter Level
 ParmString: 0.05
+ParmName: Division half-probability by Cell Size Ratio
+ParmString: 1
+ParmName: Division half-probability by Inhibitor
+ParmString: 0.03
 ParmName: Division probability steepness
-ParmString: 0
+ParmString: 20
 ParmName: Root Process
 ParmString: Model/Root/01 Root
 ParmName: Remesh
@@ -1309,7 +1311,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 78
+NumParms: 85
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1329,7 +1331,7 @@ ParmString: 0
 ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
-ParmString: 0
+ParmString: 10
 ParmName: Auxin Decay Rate
 ParmString: 0.0125
 ParmName: Auxin Max Decay Rate
@@ -1419,6 +1421,20 @@ ParmString: 4
 ParmName: Division Inhibitor Decay Rate
 ParmString: 0.08
 ParmName: Division Inhibitor Permeability
+ParmString: 20
+ParmName: Division Promoter
+ParmString: 
+ParmName: Division Promoter Basal Production Rate
+ParmString: 0
+ParmName: Division Promoter Max Auxin-induced Expression
+ParmString: 200
+ParmName: Division Promoter Half-max Auxin-induced K
+ParmString: 1
+ParmName: Division Promoter Half-max Auxin-induced n
+ParmString: 4
+ParmName: Division Promoter Decay Rate
+ParmString: 0.08
+ParmName: Division Promoter Permeability
 ParmString: 20
 ParmName: Phosphorilation
 ParmString: 

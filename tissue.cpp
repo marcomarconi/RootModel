@@ -647,6 +647,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& auxinGradSignal = mesh->signalAttr<double>("Chems: Auxin Gradient");
     CCIndexDoubleAttr& auxinFluxImpactSignal = mesh->signalAttr<double>("Chems: Auxin Flux Impact");
     CCIndexDoubleAttr& divInhibitorCytSignal = mesh->signalAttr<double>("Chems: Division Inhibitor by Area");
+    CCIndexDoubleAttr& divPromoterCytSignal = mesh->signalAttr<double>("Chems: Division Promoter by Area");
     CCIndexDoubleAttr& divProbSignal = mesh->signalAttr<double>("Chems: Division Probability");
     CCIndexDoubleAttr& divTimeSignal = mesh->signalAttr<double>("Chems: Division Time");
     CCIndexDoubleAttr& Pin1CytSignal = mesh->signalAttr<double>("Chems: Pin1 Cyt");
@@ -681,6 +682,7 @@ bool Tissue::step(double Dt) {
     auxinRatioSignal.clear();
     auxinGradSignal.clear();
     divInhibitorCytSignal.clear();
+    divPromoterCytSignal.clear();
     divProbSignal.clear();
     divTimeSignal.clear();
     Pin1CytSignal.clear();
@@ -863,6 +865,7 @@ bool Tissue::step(double Dt) {
         Aux1CytSignal[f] = fD.Aux1Cyt;
         Aux1MemSignal[f] = fD.Aux1Mem;
         divInhibitorCytSignal[f] = cD.divInhibitor / cD.area;
+        divPromoterCytSignal[f] = cD.divPromoter / cD.area;
         divProbSignal[f] = cD.divProb;
         divTimeSignal[f] = exp(-0.1*cD.lastDivision);
         Pin1CytSignal[f] = cD.Pin1;

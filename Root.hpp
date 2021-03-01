@@ -291,7 +291,14 @@ public:
         addParm("Division Inhibitor Half-max Auxin-induced K", "Division Inhibitor Half-max Auxin-induced K", "1");
         addParm("Division Inhibitor Half-max Auxin-induced n", "Division Inhibitor Half-max Auxin-induced n", "4");
         addParm("Division Inhibitor Decay Rate", "Division Inhibitor Decay Rate", "0.08");
-        addParm("Division Inhibitor Permeability", "Division Inhibitor Permeability", "2");
+        addParm("Division Inhibitor Permeability", "Division Inhibitor Permeability", "20");
+        addParm("Division Promoter", "Division Promoter", "");
+        addParm("Division Promoter Basal Production Rate", "Division Promoter Basal Production Rate", "0");
+        addParm("Division Promoter Max Auxin-induced Expression", "Division Promoter Max Auxin-induced Expression", "200");
+        addParm("Division Promoter Half-max Auxin-induced K", "Division Promoter Half-max Auxin-induced K", "1");
+        addParm("Division Promoter Half-max Auxin-induced n", "Division Promoter Half-max Auxin-induced n", "4");
+        addParm("Division Promoter Decay Rate", "Division Promoter Decay Rate", "0.08");
+        addParm("Division Promoter Permeability", "Division Promoter Permeability", "20");
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");
@@ -391,7 +398,10 @@ public:
                 "0.05" );
         addParm("Division half-probability by Auxin Concentration",
                 "Division half-probability by Auxin Concentration",
-                "1" );
+                "1");
+        addParm("Division Promoter Level",
+                "Division Promoter Level",
+                "0.01" );
         addParm("Division half-probability by Cell Size Ratio",
                 "Division half-probability by Cell Size Ratio",
                 "1.25" );
@@ -888,6 +898,7 @@ public:
     SaveViewFile* saveViewProcess = 0;
     MeshSave* saveMeshProcess = 0;
     std::vector<Process*> processes;
+    double userTime = 0;
 
 private:
     bool debugging = false;
@@ -899,7 +910,6 @@ private:
     bool chemicalsEnabled = true;
     bool growthEnabled = true;
     bool divisionEnabled = true;
-    double time = 0;
     int stepCount = 0, prevStepCount = 0;
     clock_t begin_clock, prev_clock;
     std::ofstream output_file;

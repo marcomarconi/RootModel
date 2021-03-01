@@ -340,7 +340,7 @@ public:
         double Aux1 = 0;
         double PINOID = 0;
         double PP2A = 0;
-        double divInhibitor = 0;
+        double divInhibitor = 0, divPromoter = 0;
         double lifeTime = 0;
         double pressure = 1, pressureMax = -1;
         double auxinProdRate = -1;

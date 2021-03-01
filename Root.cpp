@@ -548,8 +548,12 @@ bool MechanicalGrowth::step(double Dt) {
                 cD.pressureMax = 1;
         }
         // Growth rates, rest lengths....
+        // Disable growth update if this variable is zero, for debugging mostly
         if(cD.mfRORate == 0)
             continue;  ///
+        // Disable growth update if cell division is not allowed (Crisanto's root) and we have reached max cell size
+        if(!cD.divisionAllowed && cD.area > cD.cellMaxArea)
+            continue;
         if(cD.growthRate > growthRateThresh)
             //cD.restArea += cD.area * areaMaxGrowthRate * Dt;
             cD.restArea = cD.area;
@@ -593,7 +597,7 @@ bool MechanicalGrowth::step(double Dt) {
             if(synchronized)
                 cD.divisionAllowed = true;
             else
-                cD.divisionAllowed = true;  /////////
+                cD.divisionAllowed = true;  ///////// disabled
         }
     }
 
@@ -702,20 +706,24 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     if(cD.dualVertex.isPseudocell())
         return;
 
-    // Division Inhibitor
-    double divPermeability = parm("Division Inhibitor Permeability").toDouble();
+    // Division Inhibitor and Promoter
+    double divInhibitorPermeability = parm("Division Inhibitor Permeability").toDouble();
+    double divPromoterPermeability = parm("Division Promoter Permeability").toDouble();
     for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
         int labeln = indexAttr[vn].label;
         Tissue::CellData& cDn = cellAttr[labeln];
         for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, labeln)]) {
             Tissue::EdgeData& eD = edgeAttr[e];
-            double diffusion = 0.5 * divPermeability * (cDn.divInhibitor - cD.divInhibitor) * eD.length / (cD.area + cDn.area);
-            cD.divInhibitor += diffusion * Dt;
-            cDn.divInhibitor -= diffusion * Dt;
+            double inhibitorDiffusion = 0.5 * divInhibitorPermeability * (cDn.divInhibitor - cD.divInhibitor) * eD.length / (cD.area + cDn.area);
+            cD.divInhibitor += inhibitorDiffusion * Dt;
+            cDn.divInhibitor -= inhibitorDiffusion * Dt;
+            double promoterDiffusion = 0.5 * divPromoterPermeability * (cDn.divPromoter - cD.divPromoter) * eD.length / (cD.area + cDn.area);
+            cD.divPromoter += promoterDiffusion * Dt;
+            cDn.divPromoter -= promoterDiffusion * Dt;
         }
     }
+    // Inhibitor
     double divBase = parm("Division Inhibitor Basal Production Rate").toDouble();
-    double divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
     double divKmax = parm("Division Inhibitor Max Auxin-induced Expression").toDouble();
     double divKaux = parm("Division Inhibitor Half-max Auxin-induced K").toDouble();
     int divNaux = parm("Division Inhibitor Half-max Auxin-induced n").toInt();
@@ -727,8 +735,23 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
                                      (pow(cD.auxin / cD.area, divNaux) / (pow(divKaux, divNaux) + pow(cD.auxin / cD.area, divNaux)))
                                      //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
                                     );
-
+    double divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
     cD.divInhibitor += (divBase - divDecay + divInduced) * Dt;
+    // Promoter
+    divBase = parm("Division Promoter Basal Production Rate").toDouble();
+    divKmax = parm("Division Promoter Max Auxin-induced Expression").toDouble();
+    divKaux = parm("Division Promoter Half-max Auxin-induced K").toDouble();
+    divNaux = parm("Division Promoter Half-max Auxin-induced n").toInt();
+    divInduced = 0;
+    if(cD.divPromoter/cD.area < 5)
+        if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::Columella)
+            divInduced = divKmax *
+                                    (
+                                     (pow(cD.auxin / cD.area, divNaux) / (pow(divKaux, divNaux) + pow(cD.auxin / cD.area, divNaux)))
+                                     //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
+                                    );
+    divDecay = cD.divPromoter * parm("Division Promoter Decay Rate").toDouble();
+    cD.divPromoter += (divBase - divDecay + divInduced) * Dt;
 
     // AUXIN derivatives
     cD.auxinFluxes.clear();
@@ -1878,9 +1901,10 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
 
     bool manualCellDivision = parm("Manual Cell Division Enabled") == "True";
-    double divisionProbHalfAuxin = parm("Division half-probability by Auxin Concentration").toDouble();
+    //double divisionProbHalfAuxin = parm("Division half-probability by Auxin Concentration").toDouble();
     double divisionProbHalfSize = parm("Division half-probability by Cell Size Ratio").toDouble();
     double divisionProbHalfInhibitor = parm("Division half-probability by Inhibitor").toDouble();
+    double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
     double divisionProbSteep = parm("Division probability steepness").toDouble();
     double Dt = rootProcess->mechanicsProcess->Dt;
 
@@ -1895,7 +1919,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         cD.divProb = 0;
         double random = rand() ;
         // Auxin conc is ignored if divisionProbSteep is 0
-        bool division = false;
+        cD.divisionAllowed = false;
         /*
         if(divisionProbSteep > 0) {
             divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
@@ -1906,22 +1930,20 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         } else
             division = true;
             */
-        if(divisionProbSteep > 0) {
+        if(divisionProbSteep > 0 && rootProcess->userTime > 24) {
             if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
-                division = true;
-            else if(cD.area/cD.cellMaxArea < 1)
-                division = false;
-            else{
-                if(cD.divInhibitor/cD.area > divisionProbHalfInhibitor)
-                    division = false;
-                else
-                    division = true;
-            }
+                if(cD.divPromoter/cD.area > divisionPromoterLevel) {
+                        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * 30;
+                        if(cD.lastDivision > cD.divProb )
+                            cD.divisionAllowed = true;
+                }
         } else
-            division = true;
+            cD.divisionAllowed = true;
 
         if((manualCellDivision && cD.selected) ||
-           (cD.divisionAllowed && cD.area > cD.cellMaxArea && cD.lastDivision > 1 && division)) {
+            (cD.divisionAllowed == true &&
+             cD.area > cD.cellMaxArea &&
+             cD.lastDivision > 1)) {
             if(Verbose) {
 
                 // find the QC so we can print the distance (for plotting)
@@ -1934,7 +1956,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                 QCcm /= 2;
                 mdxInfo << "CellDivision.step: Cell division triggered by " << cD.label << " of size " << cD.area
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
-                        <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision << " division inhibitor: " << cD.divInhibitor/cD.area  <<endl;
+                        <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
+                        << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
 
 
                 cout << random << " " << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;
@@ -2206,7 +2229,7 @@ bool Root::rewind(QWidget* parent) {
         }
 
     }
-    time = 0;
+    userTime = 0;
     stepCount = 0;
     screenShotCount = 0;
     mechanicsProcess->rewind(parent);
@@ -2250,12 +2273,10 @@ bool Root::step() {
 
     // Update the mechanicals
     int i = 0;
-    double elapsedDt = 0;
     do{
         if(mechanicsEnabled)
             mechanicsProcessConverged= mechanicsProcess->step();
-        time += mechanicsProcess->Dt;
-        elapsedDt += mechanicsProcess->Dt;
+        userTime += mechanicsProcess->Dt;
         // Update the chemicals
         if(chemicalsEnabled)
             for(int j = 0; j < maxChemicalIter; j++)
@@ -2553,7 +2574,7 @@ bool Root::step() {
         }
         anisotropy_degree /= anisotropy_count;
 
-        output_file << stepCount << "," << time << "," << mechanicsProcess->realTime  << ","
+        output_file << stepCount << "," << userTime << "," << mechanicsProcess->realTime  << ","
                     << rootGR << "," << QCcm << "," << avg_pressure << "," << avg_sigma << ","
                     << avg_cell_growth << "," << avg_velocity << "," << avg_auxin << "," << std_auxin << ","
                     << avg_auxinInter << "," << avg_Pin1Cyt << "," << avg_Pin1Mem << "," << avg_Aux1Mem << ","
@@ -3189,7 +3210,7 @@ bool PrintCellAttr::step() {
                     //<< " growth factor: " << cD.growthFactor << " " << " growth factor by area: " << cD.growthFactor/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
-                    << " Division Inhibitor: " << cD.divInhibitor << " "
+                    << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
                     << " auxinProdRate: " << cD.auxinProdRate << " " << " auxinFluxVector: " << cD.auxinFluxVector
