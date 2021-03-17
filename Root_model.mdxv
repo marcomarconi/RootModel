@@ -73,13 +73,13 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1156.48 1
 SceneRadius: 500
-CameraZoom: -1.248
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 116.002
+Width: 116.06
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 116.002
+Width: 116.06
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 116.002
+Width: 116.06
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: false
+LoadMeshScaleUm: true
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -1085,9 +1085,9 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 10
+ParmString: 30
 ParmName: Snapshots Timer
-ParmString: 10
+ParmString: 30
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1095,11 +1095,11 @@ ParmString: True
 ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
-ParmString: 0,0
+ParmString: 0,220
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 10000
+ParmString: 15000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1211,7 +1211,7 @@ ParmString: 1
 ParmName: Division half-probability by Inhibitor
 ParmString: 0.03
 ParmName: Division Control
-ParmString: False
+ParmString: True
 ParmName: Root Process
 ParmString: Model/Root/01 Root
 ParmName: Remesh
@@ -1485,8 +1485,10 @@ ParmString: Model/Root/03 Cell Tissue
 ParmName: Chemicals Solver Process
 ParmString: Model/Root/061 Chemicals Solver
 ProcessName: Model/Root/07 PBD Engine
-NumParms: 19
+NumParms: 20
 ParmName: Print Stats
+ParmString: True
+ParmName: Substrate Fixed
 ParmString: True
 ParmName: Velocity Update
 ParmString: First Order

@@ -1073,7 +1073,7 @@ void PBD::solve() {
             CCIndex v = cs.vertices()[i];
             Tissue::VertexData& vD = vMAttr[v];
             indexAttr[v].pos[2] = 0;
-            if(vD.substrate || vD.source) {
+            if(parm("Substrate Fixed") == "True" && (vD.substrate || vD.source)) {
                 indexAttr[v].pos -= indexAttr[v].pos - vD.prevPos;
                 vD.corrections["substrate/source"] -= indexAttr[v].pos - vD.prevPos;
             }

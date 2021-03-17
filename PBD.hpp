@@ -35,6 +35,11 @@ public:
                 "True",
                 QStringList() << "True"
                               << "False");
+        addParm("Substrate Fixed",
+                "Substrate Fixed",
+                "True",
+                QStringList() << "True"
+                              << "False");
         addParm("Velocity Update",
                 "Solver Order",
                 "First Order",
