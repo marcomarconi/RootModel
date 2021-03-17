@@ -397,11 +397,11 @@ public:
                 "Minimum Polarity Vector Norm",
                 "0.05" );
         addParm("Max Division Time",
-                "Division half-probability by Auxin Concentration",
-                "30");
-        addParm("Division half-probability by Auxin Concentration",
-                "Division half-probability by Auxin Concentration",
-                "1");
+                "Max Division Time",
+                "50");
+        addParm("Division Meristem Size",
+                "Division Meristem Size",
+                "200");
         addParm("Division Promoter Level",
                 "Division Promoter Level",
                 "0.05" );
@@ -411,9 +411,11 @@ public:
         addParm("Division half-probability by Inhibitor",
                 "Division half-probability by Inhibitor",
                 "0.03" );
-        addParm("Division probability steepness",
-                "Division probability steepness",
-                "0" ); //20
+        addParm("Division Control",
+                "Division Control",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
         addParm("Root Process", "Name of the process for the Root", "Model/Root/01 Root");
         addParm("Remesh", "Remesh", "Model/Root/02 Remesh");
         addParm("Triangulate Faces Process", "Triangulate Faces", "Model/Root/Triangulate Faces");

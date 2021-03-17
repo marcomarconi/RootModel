@@ -1901,14 +1901,22 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
 
     bool manualCellDivision = parm("Manual Cell Division Enabled") == "True";
-    //double divisionProbHalfAuxin = parm("Division half-probability by Auxin Concentration").toDouble();
+    double divisionMeristemSize = parm("Division Meristem Size").toDouble();
     double divisionMaxTime = parm("Max Division Time").toDouble();
     double divisionProbHalfSize = parm("Division half-probability by Cell Size Ratio").toDouble();
     double divisionProbHalfInhibitor = parm("Division half-probability by Inhibitor").toDouble();
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
-    double divisionProbSteep = parm("Division probability steepness").toDouble();
+    bool divisionControl = parm("Division Control") == "True";
     double Dt = rootProcess->mechanicsProcess->Dt;
 
+    // find the QC so we can print the distance (for plotting)
+    Point3d  QCcm;
+    for(auto c : cellAttr) {
+        Tissue::CellData& cD = cellAttr[c.first];
+        if(cD.type == Tissue::QC)
+            QCcm += cD.centroid;
+    }
+    QCcm /= 2;
     // check if there are any cells to divide (depending on are or other clues)
     std::vector<Tissue::CellData> cDs;
     bool trigger_division = false;
@@ -1931,13 +1939,14 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         } else
             division = true;
             */
-        if(divisionProbSteep > 0 && rootProcess->userTime > 24) {
+        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime;
+        if(divisionControl && rootProcess->userTime > 24) {
             if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
-                if(cD.divPromoter/cD.area > divisionPromoterLevel) {
-                        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime;
+                if(norm(cD.centroid - QCcm) < divisionMeristemSize)
+                    if(cD.divPromoter/cD.area > divisionPromoterLevel) {
                         if(cD.lastDivision > cD.divProb )
                             cD.divisionAllowed = true;
-                }
+                    }
         } else
             cD.divisionAllowed = true;
 
@@ -1946,15 +1955,6 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
              cD.area > cD.cellMaxArea &&
              cD.lastDivision > 1)) {
             if(Verbose) {
-
-                // find the QC so we can print the distance (for plotting)
-                Point3d  QCcm;
-                for(auto c : cellAttr) {
-                    Tissue::CellData& cD = cellAttr[c.first];
-                    if(cD.type == Tissue::QC)
-                        QCcm += cD.centroid;
-                }
-                QCcm /= 2;
                 mdxInfo << "CellDivision.step: Cell division triggered by " << cD.label << " of size " << cD.area
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                         <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
@@ -3215,7 +3215,7 @@ bool PrintCellAttr::step() {
                     //<< " growth factor: " << cD.growthFactor << " " << " growth factor by area: " << cD.growthFactor/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
-                    << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "
+                    << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
                     << " auxinProdRate: " << cD.auxinProdRate << " " << " auxinFluxVector: " << cD.auxinFluxVector
