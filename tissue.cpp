@@ -948,7 +948,7 @@ bool Tissue::step(double Dt) {
 
 void Tissue::CellData::division(const CCStructure &cs,
                                 CellDataAttr& cellAttr, FaceDataAttr& faceAttr, EdgeDataAttr& edgeAttr,
-                                CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas) {
+                                CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas, bool ignoreCellType) {
 
     if(!tissue)
         throw(QString("Tissue::CellData::division: tissue not set"));
@@ -968,87 +968,88 @@ void Tissue::CellData::division(const CCStructure &cs,
     Point3d rootAxisX1 = Point3d(BIG_VAL, QCcm[1], 0);
     CellType type1 = type, type2 = type;
     bool periclinalDivision1 = false, periclinalDivision2 = false;
-    if(type == CEI) {
-        double dist1 = DistancePtLine(rootAxisX0, rootAxisX1, cD1.centroid);
-        double dist2 = DistancePtLine(rootAxisX0, rootAxisX1, cD2.centroid);
-        if(dist1 > dist2) {
-            type1 = CEID;
-            type2 = CEI;
-            periclinalDivision1 = true;
-            periclinalDivision2 = false;
-        } else {
-            type2 = CEID;
-            type1 = CEI;
-            periclinalDivision1 = false;
-            periclinalDivision2 = true;
-        }
-    } else if(type == VascularInitial) {
-        double dist1 = DistancePtLine(rootAxisX0, rootAxisX1, cD1.centroid);
-        double dist2 = DistancePtLine(rootAxisX0, rootAxisX1, cD2.centroid);
-        if(dist1 > dist2) {
-            type1 = Vascular;
-            type2 = VascularInitial;
-        } else {
-            type2 = Vascular;
-            type1 = VascularInitial;
-        }
-    } else if(type == CEID) {
-        double dist1 = DistancePtLine(rootAxisY0, rootAxisY1, cD1.centroid);
-        double dist2 = DistancePtLine(rootAxisY0, rootAxisY1, cD2.centroid);
-        if(dist1 > dist2) {
-            type1 = Cortex;
-            type2 = Endodermis;
-        } else {
-            type2 = Cortex;
-            type1 = Endodermis;
-        }
-    } else if(type == EpLrcInitial) {
-        CellType nextType;
-        if(periclinalDivision) {
-            nextType = LRC;
-            double dist1 = cD1.centroid.y();//norm(cD1.centroid - QCcm);
-            double dist2 = cD2.centroid.y();//norm(cD2.centroid - QCcm);
-            if(dist1 < dist2) {
-                type1 = nextType;
-                type2 = EpLrcInitial;
-                periclinalDivision1 = false;
-                periclinalDivision2 = !periclinalDivision;
-            }else  {
-                type2 = nextType;
-                type1 = EpLrcInitial;
-                periclinalDivision1 = !periclinalDivision;
-                periclinalDivision2 = false;
-            }
-        }
-        else {
-            nextType = Epidermis;
-            double dist1 = cD1.centroid.y();//norm(cD1.centroid - QCcm);
-            double dist2 = cD2.centroid.y();//norm(cD2.centroid - QCcm);
+    if(!ignoreCellType) {
+        if(type == CEI) {
+            double dist1 = DistancePtLine(rootAxisX0, rootAxisX1, cD1.centroid);
+            double dist2 = DistancePtLine(rootAxisX0, rootAxisX1, cD2.centroid);
             if(dist1 > dist2) {
-                type1 = nextType;
-                type2 = EpLrcInitial;
-                periclinalDivision1 = false;
-                periclinalDivision2 = !periclinalDivision;
-            }else  {
-                type2 = nextType;
-                type1 = EpLrcInitial;
-                periclinalDivision1 = !periclinalDivision;
+                type1 = CEID;
+                type2 = CEI;
+                periclinalDivision1 = true;
                 periclinalDivision2 = false;
+            } else {
+                type2 = CEID;
+                type1 = CEI;
+                periclinalDivision1 = false;
+                periclinalDivision2 = true;
             }
-        }
+        } else if(type == VascularInitial) {
+            double dist1 = DistancePtLine(rootAxisX0, rootAxisX1, cD1.centroid);
+            double dist2 = DistancePtLine(rootAxisX0, rootAxisX1, cD2.centroid);
+            if(dist1 > dist2) {
+                type1 = Vascular;
+                type2 = VascularInitial;
+            } else {
+                type2 = Vascular;
+                type1 = VascularInitial;
+            }
+        } else if(type == CEID) {
+            double dist1 = DistancePtLine(rootAxisY0, rootAxisY1, cD1.centroid);
+            double dist2 = DistancePtLine(rootAxisY0, rootAxisY1, cD2.centroid);
+            if(dist1 > dist2) {
+                type1 = Cortex;
+                type2 = Endodermis;
+            } else {
+                type2 = Cortex;
+                type1 = Endodermis;
+            }
+        } else if(type == EpLrcInitial) {
+            CellType nextType;
+            if(periclinalDivision) {
+                nextType = LRC;
+                double dist1 = cD1.centroid.y();//norm(cD1.centroid - QCcm);
+                double dist2 = cD2.centroid.y();//norm(cD2.centroid - QCcm);
+                if(dist1 < dist2) {
+                    type1 = nextType;
+                    type2 = EpLrcInitial;
+                    periclinalDivision1 = false;
+                    periclinalDivision2 = !periclinalDivision;
+                }else  {
+                    type2 = nextType;
+                    type1 = EpLrcInitial;
+                    periclinalDivision1 = !periclinalDivision;
+                    periclinalDivision2 = false;
+                }
+            }
+            else {
+                nextType = Epidermis;
+                double dist1 = cD1.centroid.y();//norm(cD1.centroid - QCcm);
+                double dist2 = cD2.centroid.y();//norm(cD2.centroid - QCcm);
+                if(dist1 > dist2) {
+                    type1 = nextType;
+                    type2 = EpLrcInitial;
+                    periclinalDivision1 = false;
+                    periclinalDivision2 = !periclinalDivision;
+                }else  {
+                    type2 = nextType;
+                    type1 = EpLrcInitial;
+                    periclinalDivision1 = !periclinalDivision;
+                    periclinalDivision2 = false;
+                }
+            }
 
-    } else if(type == ColumellaInitial) {
-        double dist1 = DistancePtLine(rootAxisX0, rootAxisX1, cD1.centroid);
-        double dist2 = DistancePtLine(rootAxisX0, rootAxisX1, cD2.centroid);
-        if(dist1 > dist2) {
-            type1 = Columella;
-            type2 = ColumellaInitial;
-        } else {
-            type2 = Columella;
-            type1 = ColumellaInitial;
+        } else if(type == ColumellaInitial) {
+            double dist1 = DistancePtLine(rootAxisX0, rootAxisX1, cD1.centroid);
+            double dist2 = DistancePtLine(rootAxisX0, rootAxisX1, cD2.centroid);
+            if(dist1 > dist2) {
+                type1 = Columella;
+                type2 = ColumellaInitial;
+            } else {
+                type2 = Columella;
+                type1 = ColumellaInitial;
+            }
         }
     }
-
 
     cD1.tissue = tissue;
     cD1.type = type1;

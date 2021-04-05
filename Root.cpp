@@ -1907,6 +1907,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     double divisionProbHalfInhibitor = parm("Division half-probability by Inhibitor").toDouble();
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
     bool divisionControl = parm("Division Control") == "True";
+    bool ignoreCellType = parm("Ignore Cell Type") == "True";
     double Dt = rootProcess->mechanicsProcess->Dt;
 
     // find the QC so we can print the distance (for plotting)
@@ -2054,7 +2055,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                 rootProcess->setGlobalAttrProcess->parm(QString(Tissue::ToString((Tissue::CellType)fooInt)) + " Max area").toInt();
     for(Tissue::CellData cD : cDs)
         if(daughters[cD.label].first > 0 && daughters[cD.label].second > 0)
-            cD.division(cs, cellAttr, faceAttr, edgeAttr, cellAttr[daughters[cD.label].first], cellAttr[daughters[cD.label].second], maxAreas);
+            cD.division(cs, cellAttr, faceAttr, edgeAttr,
+                        cellAttr[daughters[cD.label].first], cellAttr[daughters[cD.label].second], maxAreas, ignoreCellType);
 
     // Update mesh points, edges, surfaces
     mesh->updateAll();

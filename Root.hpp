@@ -416,6 +416,11 @@ public:
                 "False",
                                 QStringList() << "True"
                                               << "False");
+        addParm("Ignore Cell Type",
+                "Ignore Cell Type",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
         addParm("Root Process", "Name of the process for the Root", "Model/Root/01 Root");
         addParm("Remesh", "Remesh", "Model/Root/02 Remesh");
         addParm("Triangulate Faces Process", "Triangulate Faces", "Model/Root/Triangulate Faces");

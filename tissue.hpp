@@ -882,7 +882,7 @@ public:
         }
 
         void division(const CCStructure &cs, CellDataAttr& cellAttr,
-                       FaceDataAttr& faceAttr, EdgeDataAttr &edgeAttr, CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas) ;
+                       FaceDataAttr& faceAttr, EdgeDataAttr &edgeAttr, CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas, bool ignoreCellType=false) ;
 
 
     };
