@@ -1213,9 +1213,15 @@ bool Chemicals::update() {
                        eD.pin1SensitivityRaw[label] = 0;
                     // simulate PIN4, does not work if the root bends
                     if(parm("Simulate PIN4") == "True")
-                        if(cD.type == Tissue::QC || cD.type == Tissue::VascularInitial ||  cD.type == Tissue::CEI)
-                            if(norm(eD.midPoint - root_tip) > norm(cD.centroid - root_tip))
-                                eD.pin1SensitivityRaw[label] = 0;
+                        for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
+                            int labeln = indexAttr[vn].label;
+                            if(cellAttr.find(labeln) ==  cellAttr.end())
+                                continue;
+                            Tissue::CellData& cDn = cellAttr[labeln];
+                            if(cDn.type == Tissue::QC)
+                                if(norm(eD.midPoint - root_tip) > norm(cD.centroid - root_tip))
+                                    eD.pin1SensitivityRaw[label] = 0;
+                        }
                     // Sources have stronger directional flow
                     if(cD.type == Tissue::Source)
                        eD.pin1SensitivityRaw[label] = 10 * eD.MFImpact[label];
