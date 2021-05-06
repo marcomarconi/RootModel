@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1156.48 1
+CameraFrame: 0.999987 0.00379129 0.00331236 0 -0.0037452 0.999898 -0.0138104 0 -0.00336438 0.0137978 0.999899 0 -23.7772 90.0497 -556.933 1
 SceneRadius: 500
-CameraZoom: -0.96
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 115.829
+Width: 119.39
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 115.829
+Width: 119.39
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 115.829
+Width: 119.39
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: Root_model.mdxm
+MeshFile: test.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05751 1.05751 1.05751
+Size: 1.05784 1.05784 1.05784
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -965,7 +965,7 @@ ParmString: No
 ProcessName: Mesh/System/Load
 NumParms: 4
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxm
+ParmString: /home/marco/trabajo/MDX models/Root/test.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Add
@@ -1071,21 +1071,21 @@ NumParms: 32
 ParmName: Max Mechanical Iterations
 ParmString: 1
 ParmName: Max Chemical Iterations
-ParmString: 0
+ParmString: 30
 ParmName: Mechanics Enabled
-ParmString: True
+ParmString: False
 ParmName: Chemicals Enabled
 ParmString: True
 ParmName: Growth Enabled
-ParmString: True
+ParmString: False
 ParmName: Cell Division Enabled
-ParmString: True
+ParmString: False
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 10
+ParmString: 5
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
@@ -1181,7 +1181,7 @@ ParmString: 0.04
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 22
+NumParms: 23
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1212,6 +1212,8 @@ ParmName: Division half-probability by Inhibitor
 ParmString: 0.03
 ParmName: Division Control
 ParmString: True
+ParmName: Ignore Cell Type
+ParmString: False
 ParmName: Root Process
 ParmString: Model/Root/01 Root
 ParmName: Remesh
@@ -1313,7 +1315,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 85
+NumParms: 86
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1333,7 +1335,9 @@ ParmString: 0
 ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
-ParmString: 10
+ParmString: 0
+ParmName: Auxin SCN Basal Production Rate
+ParmString: 5
 ParmName: Auxin Decay Rate
 ParmString: 0.0125
 ParmName: Auxin Max Decay Rate
@@ -1365,7 +1369,7 @@ ParmString: 1.4
 ParmName: Pin1 Sensitivity Suppression by Auxin Amount
 ParmString: 400
 ParmName: Simulate PIN4
-ParmString: False
+ParmString: True
 ParmName: Columella Auto-Efflux
 ParmString: True
 ParmName: Pin1 Sensitivity MF K
@@ -1414,30 +1418,30 @@ ParmName: Division Inhibitor
 ParmString: 
 ParmName: Division Inhibitor Basal Production Rate
 ParmString: 0
-ParmName: Division Inhibitor Max Auxin-induced Expression
-ParmString: 200
-ParmName: Division Inhibitor Half-max Auxin-induced K
-ParmString: 1
-ParmName: Division Inhibitor Half-max Auxin-induced n
+ParmName: Division Inhibitor Max Promoter-induced Expression
+ParmString: 2
+ParmName: Division Inhibitor Half-max Promoter-induced K
+ParmString: 0.5
+ParmName: Division Inhibitor Half-max Promoter-induced n
 ParmString: 4
 ParmName: Division Inhibitor Decay Rate
-ParmString: 0.08
+ParmString: 0.01
 ParmName: Division Inhibitor Permeability
-ParmString: 20
+ParmString: 0
 ParmName: Division Promoter
 ParmString: 
 ParmName: Division Promoter Basal Production Rate
 ParmString: 0
 ParmName: Division Promoter Max Auxin-induced Expression
-ParmString: 200
+ParmString: 2
 ParmName: Division Promoter Half-max Auxin-induced K
-ParmString: 1
+ParmString: 0.5
 ParmName: Division Promoter Half-max Auxin-induced n
 ParmString: 4
 ParmName: Division Promoter Decay Rate
-ParmString: 0.08
+ParmString: 0.01
 ParmName: Division Promoter Permeability
-ParmString: 20
+ParmString: 0
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
@@ -1485,8 +1489,10 @@ ParmString: Model/Root/03 Cell Tissue
 ParmName: Chemicals Solver Process
 ParmString: Model/Root/061 Chemicals Solver
 ProcessName: Model/Root/07 PBD Engine
-NumParms: 19
+NumParms: 20
 ParmName: Print Stats
+ParmString: True
+ParmName: Substrate Fixed
 ParmString: True
 ParmName: Velocity Update
 ParmString: First Order

@@ -565,6 +565,7 @@ public:
             Aux1 = 0;
             PP2A = 0;
             PINOID = 0;
+            divPromoter = 0;
             divInhibitor = 0;
             auxinFluxes.clear();
             auxinFluxVector = Point3d(0, 0, 0);

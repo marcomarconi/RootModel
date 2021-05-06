@@ -722,36 +722,37 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             cDn.divPromoter -= promoterDiffusion * Dt;
         }
     }
-    // Inhibitor
-    double divBase = parm("Division Inhibitor Basal Production Rate").toDouble();
-    double divKmax = parm("Division Inhibitor Max Auxin-induced Expression").toDouble();
-    double divKaux = parm("Division Inhibitor Half-max Auxin-induced K").toDouble();
-    int divNaux = parm("Division Inhibitor Half-max Auxin-induced n").toInt();
-    double divInduced = 0;
-    if(cD.divInhibitor/cD.area < 5)
-        if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::Columella)
-            divInduced = divKmax *
-                                    (
-                                     (pow(cD.auxin / cD.area, divNaux) / (pow(divKaux, divNaux) + pow(cD.auxin / cD.area, divNaux)))
-                                     //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
-                                    );
-    double divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
-    cD.divInhibitor += (divBase - divDecay + divInduced) * Dt;
     // Promoter
-    divBase = parm("Division Promoter Basal Production Rate").toDouble();
-    divKmax = parm("Division Promoter Max Auxin-induced Expression").toDouble();
-    divKaux = parm("Division Promoter Half-max Auxin-induced K").toDouble();
-    divNaux = parm("Division Promoter Half-max Auxin-induced n").toInt();
-    divInduced = 0;
+    double divBase = parm("Division Promoter Basal Production Rate").toDouble();
+    double divKmax = parm("Division Promoter Max Auxin-induced Expression").toDouble();
+    double divK = parm("Division Promoter Half-max Auxin-induced K").toDouble();
+    int divN = parm("Division Promoter Half-max Auxin-induced n").toInt();
+    double divInduced = 0;
     if(cD.divPromoter/cD.area < 5)
-        if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::Columella)
+        //if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::Columella)
             divInduced = divKmax *
                                     (
-                                     (pow(cD.auxin / cD.area, divNaux) / (pow(divKaux, divNaux) + pow(cD.auxin / cD.area, divNaux)))
+                                     (pow(cD.auxin / cD.area, divN) / (pow(divK, divN) + pow(cD.auxin / cD.area, divN)))
                                      //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
                                     );
-    divDecay = cD.divPromoter * parm("Division Promoter Decay Rate").toDouble();
+    double divDecay = cD.divPromoter * parm("Division Promoter Decay Rate").toDouble();
     cD.divPromoter += (divBase - divDecay + divInduced) * Dt;
+    // Inhibitor
+    divBase = parm("Division Inhibitor Basal Production Rate").toDouble();
+    divKmax = parm("Division Inhibitor Max Promoter-induced Expression").toDouble();
+    divK = parm("Division Inhibitor Half-max Promoter-induced K").toDouble();
+    divN = parm("Division Inhibitor Half-max Promoter-induced n").toInt();
+    divInduced = 0;
+    if(cD.divInhibitor/cD.area < 5)
+        //if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::Columella)
+            divInduced = divKmax *
+                                    (
+                                     (pow(cD.divPromoter / cD.area, divN) / (pow(divK, divN) + pow(cD.divPromoter / cD.area, divN)))
+                                     //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
+                                    );
+    divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
+    cD.divInhibitor += (divBase - divDecay + divInduced) * Dt;
+
 
     // AUXIN derivatives
     cD.auxinFluxes.clear();
@@ -1246,8 +1247,14 @@ bool Chemicals::update() {
         advance(it, i);
         Tissue::CellData& cD = it->second;
         cD.auxinDecayRate = parm("Auxin Decay Rate").toDouble();
-        if(cD.type == Tissue::QC)
+        if(cD.type == Tissue::QC) {
             cD.auxinProdRate = parm("Auxin QC Basal Production Rate").toDouble();
+            for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
+                int labeln = indexAttr[vn].label;
+                Tissue::CellData& cDn = cellAttr[labeln];
+                cDn.auxinProdRate = parm("Auxin SCN Basal Production Rate").toDouble();
+            }
+        }
         if(cD.type == Tissue::Substrate)
             cD.auxin = 0;
         // negative check of chemicals

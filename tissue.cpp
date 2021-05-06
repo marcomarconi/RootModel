@@ -1080,7 +1080,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.Aux1 = Aux1 / 2;
     cD1.PINOID = PINOID / 2;
     cD1.PP2A = PP2A / 2;
-    cD1.divInhibitor = divInhibitor / 2;
+    cD1.divPromoter = divPromoter / 2;
     cD1.divisionCount = divisionCount+1;
 
     cD2.tissue = tissue;
@@ -1112,7 +1112,8 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.Aux1 = Aux1 / 2;
     cD2.PINOID = PINOID / 2;
     cD2.PP2A = PP2A / 2;
-    cD2.divInhibitor = divInhibitor / 2;
+    cD2.divInhibitor = 0; //divInhibitor / 2;
+    cD2.divPromoter = divPromoter / 2;
     cD2.divisionCount = divisionCount+1;
 
     std::vector<CCIndex> edges;
