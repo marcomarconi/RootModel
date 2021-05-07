@@ -255,7 +255,9 @@ public:
         addParm("Pin1 Max Amount Edge", "Pin1 Max Amount Edge( auxin per nm)", "15");
         addParm("Pin1-auxin export rate", "Pin1-auxin export rate", "1.4");
         addParm("Pin1 Sensitivity Suppression by Auxin Amount",
-                "Pin1 Sensitivity Suppression by Auxin Amount (auxin per nm squared)", "300"); //// be careful
+                "Pin1 Sensitivity Suppression by Auxin Amount (auxin per nm squared)", "400"); //// be careful
+        addParm("Pin1 Sensitivity Suppression by Auxin Max Cell",
+                "Pin1 Sensitivity Suppression by Auxin Max Cell (auxin per nm squared)", "True", QStringList() << "True" << "False" ); //// be careful
         addParm("Simulate PIN4", "Simulate PIN4", "False", QStringList() << "True" << "False" );
         addParm("Columella Auto-Efflux", "Columella Auto-Efflux", "True", QStringList() << "True" << "False" );
         addParm("Pin1 Sensitivity MF K", "Pin1 Sensitivity MF K", "0");

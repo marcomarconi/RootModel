@@ -1172,7 +1172,8 @@ bool Chemicals::update() {
                             auxinImpactValue =
                                 norm(cD.auxinFluxVector) * cD.auxinFluxVector/norm(cD.auxinFluxVector) * eD.outwardNormal[f] * eD.length;
                         if(auxinImpactValue < 0 || cD.auxin/cD.area > kauxinMaxCell)
-                            auxinImpactValue = 0;
+                                if(parm("Pin1 Sensitivity Suppression by Auxin Max Cell") == "True")
+                                    auxinImpactValue = 0;
                         eD.auxinFluxImpact[label] =
                             (pow(auxinImpactValue, 4) / (pow(KauxinFlux, 4) + pow(auxinImpactValue, 4))) ;
                     }
