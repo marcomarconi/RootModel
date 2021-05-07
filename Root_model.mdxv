@@ -73,13 +73,13 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1156.48 1
 SceneRadius: 500
-CameraZoom: -0.96
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 116.177
+Width: 116.112
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 116.177
+Width: 116.112
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 116.177
+Width: 116.112
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,14 +136,14 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: false
+LoadMeshScaleUm: true
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -0.375124 -215.322 0 1
 
 
 [Stack2]
@@ -1315,7 +1315,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 85
+NumParms: 87
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1336,6 +1336,8 @@ ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
 ParmString: 10
+ParmName: Auxin SCN Basal Production Rate
+ParmString: 0
 ParmName: Auxin Decay Rate
 ParmString: 0.0125
 ParmName: Auxin Max Decay Rate
@@ -1366,6 +1368,8 @@ ParmName: Pin1-auxin export rate
 ParmString: 1.4
 ParmName: Pin1 Sensitivity Suppression by Auxin Amount
 ParmString: 400
+ParmName: Pin1 Sensitivity Suppression by Auxin Max Cell
+ParmString: True
 ParmName: Simulate PIN4
 ParmString: False
 ParmName: Columella Auto-Efflux
@@ -1416,11 +1420,11 @@ ParmName: Division Inhibitor
 ParmString: 
 ParmName: Division Inhibitor Basal Production Rate
 ParmString: 0
-ParmName: Division Inhibitor Max Auxin-induced Expression
-ParmString: 200
-ParmName: Division Inhibitor Half-max Auxin-induced K
+ParmName: Division Inhibitor Max Promoter-induced Expression
+ParmString: 20
+ParmName: Division Inhibitor Half-max Promoter-induced K
 ParmString: 1
-ParmName: Division Inhibitor Half-max Auxin-induced n
+ParmName: Division Inhibitor Half-max Promoter-induced n
 ParmString: 4
 ParmName: Division Inhibitor Decay Rate
 ParmString: 0.01
