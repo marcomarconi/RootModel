@@ -1001,7 +1001,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     int divN = parm("Division Promoter Half-max Auxin-induced n").toInt();
     double divInduced = 0;
     if(cD.divPromoter/cD.area < 5)
-        //if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::Columella)
+        if(cD.type != Tissue::Substrate && cD.type != Tissue::Source)
             divInduced = divKmax *
                                     (
                                      (pow(cD.auxin / cD.area, divN) / (pow(divK, divN) + pow(cD.auxin / cD.area, divN)))
@@ -1016,7 +1016,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     divN = parm("Division Inhibitor Half-max Promoter-induced n").toInt();
     divInduced = 0;
     if(cD.divInhibitor/cD.area < 5)
-        //if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::Columella)
+        if(cD.type != Tissue::Substrate && cD.type != Tissue::Source)
             divInduced = divKmax *
                                     (
                                      (pow(cD.divPromoter / cD.area, divN) / (pow(divK, divN) + pow(cD.divPromoter / cD.area, divN)))
