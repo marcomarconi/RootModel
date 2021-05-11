@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999987 0.00379129 0.00331236 0 -0.0037452 0.999898 -0.0138104 0 -0.00336438 0.0137978 0.999899 0 -23.7772 90.0497 -556.933 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 1.04477 99.6048 -1156.48 1
 SceneRadius: 500
-CameraZoom: 0
+CameraZoom: -0.288
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 119.39
+Width: 116.267
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 119.39
+Width: 116.267
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 119.39
+Width: 116.267
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05784 1.05784 1.05784
+Size: 1.05751 1.05751 1.05751
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -278,6 +278,52 @@ ParmName: Axis Name
 ParmString: 
 ParmName: Width
 ParmString: 2.0
+ProcessName: Mesh/Cell Atlas 3D/A Analyze Cells 3D
+NumParms: 3
+ParmName: Surface Mesh
+ParmString: Surface Mesh
+ParmName: Volume Threshold
+ParmString: 0
+ParmName: Mode
+ParmString: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Centroids
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Property Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Create Contour Attr Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Export Nucleus Stress Data Steve
+NumParms: 3
+ParmName: Filename Contour Data
+ParmString: 
+ParmName: Filename Min Distance
+ParmString: 
+ParmName: Wall Type Min Distance
+ParmString: Side
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Cell Wall Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data2
+NumParms: 2
+ParmName: Filename
+ParmString: 
+ParmName: Histogram Bins
+ParmString: 20
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Cell Wall Labels
+NumParms: 1
+ParmName: Face Labeling
+ParmString: Face Type
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Volume Label
+NumParms: 1
+ParmName: Label
+ParmString: 1
+ProcessName: Mesh/Cell Atlas 3D/Tools/Collapse Bezier Points
+NumParms: 0
 ProcessName: Mesh/Cell Axis/Cell Axis Load
 NumParms: 2
 ParmName: Type
@@ -965,7 +1011,7 @@ ParmString: No
 ProcessName: Mesh/System/Load
 NumParms: 4
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/test.mdxm
+ParmString: /home/marco/trabajo/MDX models/RootModel/test.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Add
@@ -1085,7 +1131,7 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 5
+ParmString: 3
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
@@ -1099,7 +1145,7 @@ ParmString: 0,0
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 10000
+ParmString: 15000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1175,7 +1221,7 @@ ParmString: False
 ParmName: Draw Auxin-Flux Rescale
 ParmString: 10
 ParmName: Draw PGD Rescale
-ParmString: 0
+ParmString: 2
 ParmName: Draw PINs
 ParmString: 0.04
 ParmName: Verbose
@@ -1201,7 +1247,7 @@ ParmString: 1.5
 ParmName: Minimum Polarity Vector Norm
 ParmString: 0.05
 ParmName: Max Division Time
-ParmString: 30
+ParmString: 50
 ParmName: Division Meristem Size
 ParmString: 200
 ParmName: Division Promoter Level
@@ -1211,7 +1257,7 @@ ParmString: 1
 ParmName: Division half-probability by Inhibitor
 ParmString: 0.03
 ParmName: Division Control
-ParmString: True
+ParmString: False
 ParmName: Ignore Cell Type
 ParmString: False
 ParmName: Root Process
@@ -1243,7 +1289,7 @@ ParmString: 10
 ParmName: Mass Spring Parameters
 ParmString: 
 ParmName: Wall EK
-ParmString: 0
+ParmString: 1
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
@@ -1419,9 +1465,9 @@ ParmString:
 ParmName: Division Inhibitor Basal Production Rate
 ParmString: 0
 ParmName: Division Inhibitor Max Promoter-induced Expression
-ParmString: 2
+ParmString: 20
 ParmName: Division Inhibitor Half-max Promoter-induced K
-ParmString: 0.5
+ParmString: 1
 ParmName: Division Inhibitor Half-max Promoter-induced n
 ParmString: 4
 ParmName: Division Inhibitor Decay Rate
@@ -1433,9 +1479,9 @@ ParmString:
 ParmName: Division Promoter Basal Production Rate
 ParmString: 0
 ParmName: Division Promoter Max Auxin-induced Expression
-ParmString: 2
+ParmString: 200
 ParmName: Division Promoter Half-max Auxin-induced K
-ParmString: 0.5
+ParmString: 1
 ParmName: Division Promoter Half-max Auxin-induced n
 ParmString: 4
 ParmName: Division Promoter Decay Rate
@@ -2799,13 +2845,13 @@ NumParms: 0
 ProcessName: Tools/System/Load View
 NumParms: 1
 ParmName: File Name
-ParmString: test.mdxv
+ParmString: Root_model.mdxv
 ProcessName: Tools/System/Quick Save
 NumParms: 0
 ProcessName: Tools/System/Save View
 NumParms: 1
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/test.mdxv
+ParmString: /home/marco/trabajo/MDX models/RootModel/Root_model.mdxv
 ProcessName: Tools/System/Snapshot
 NumParms: 6
 ParmName: File Name
