@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999954 0.00338021 0.00895253 0 -0.0032267 0.999848 -0.0171072 0 -0.009009 0.0170775 0.999814 0 -5.47507 49.8931 -1560.74 1
+CameraFrame: 0.999954 0.00338021 0.00895253 0 -0.0032267 0.999848 -0.0171072 0 -0.009009 0.0170775 0.999814 0 -3.55271e-15 -3.55271e-15 -1156.48 1
 SceneRadius: 500
-CameraZoom: -1.344
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 104.858
+Width: 104.963
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 104.858
+Width: 104.963
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 104.858
+Width: 104.963
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05781 1.05781 1.05781
+Size: 1.05804 1.05804 1.05804
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -278,52 +278,6 @@ ParmName: Axis Name
 ParmString: 
 ParmName: Width
 ParmString: 2.0
-ProcessName: Mesh/Cell Atlas 3D/A Analyze Cells 3D
-NumParms: 3
-ParmName: Surface Mesh
-ParmString: Surface Mesh
-ParmName: Volume Threshold
-ParmString: 0
-ParmName: Mode
-ParmString: 0
-ProcessName: Mesh/Cell Atlas 3D/Cell Centroids
-NumParms: 0
-ProcessName: Mesh/Cell Atlas 3D/Cell Property Map
-NumParms: 0
-ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Create Contour Attr Map
-NumParms: 0
-ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Export Nucleus Stress Data Steve
-NumParms: 3
-ParmName: Filename Contour Data
-ParmString: 
-ParmName: Filename Min Distance
-ParmString: 
-ParmName: Wall Type Min Distance
-ParmString: Side
-ProcessName: Mesh/Cell Atlas 3D/Test/Export Cell Wall Data
-NumParms: 1
-ParmName: Filename
-ParmString: 
-ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data
-NumParms: 1
-ParmName: Filename
-ParmString: 
-ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data2
-NumParms: 2
-ParmName: Filename
-ParmString: 
-ParmName: Histogram Bins
-ParmString: 20
-ProcessName: Mesh/Cell Atlas 3D/Test/Set Cell Wall Labels
-NumParms: 1
-ParmName: Face Labeling
-ParmString: Face Type
-ProcessName: Mesh/Cell Atlas 3D/Test/Set Volume Label
-NumParms: 1
-ParmName: Label
-ParmString: 1
-ProcessName: Mesh/Cell Atlas 3D/Tools/Collapse Bezier Points
-NumParms: 0
 ProcessName: Mesh/Cell Axis/Cell Axis Load
 NumParms: 2
 ParmName: Type
@@ -1131,9 +1085,9 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 3
+ParmString: 30
 ParmName: Snapshots Timer
-ParmString: 0
+ParmString: 30
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1143,7 +1097,7 @@ ParmString: debug.csv
 ParmName: Frame fixed on QC
 ParmString: 0,0
 ParmName: Frame fixed on Substrate
-ParmString: 0,0
+ParmString: 0,220
 ParmName: Execution Time
 ParmString: 15000
 ParmName: Output Mesh
@@ -2853,7 +2807,7 @@ NumParms: 0
 ProcessName: Tools/System/Save View
 NumParms: 1
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/RootModel/Root_Crisanto.mdxv
+ParmString: /home/marco/trabajo/MDX models/Root/Root_Crisanto.mdxv
 ProcessName: Tools/System/Snapshot
 NumParms: 6
 ParmName: File Name
