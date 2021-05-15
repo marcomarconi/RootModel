@@ -832,7 +832,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             double decayedPin1 = eD.Pin1[label]
                     *  (pinCytDecayRate + (pinMemDecayRate - pinCytDecayRate) *
                         (
-                            (pow(1, 10) / (cD.auxin/cD.area, 10) +  pow(1, 10)) //// FIXME, wrong, but working
+                            (pow(1, 10) / (/*cD.auxin/cD.area, */10) +  pow(1, 10))
                           + (pow(0.01, 10) / (pow(eD.pin1Sensitivity[label], 10) +  pow(0.01, 10))) //// FIXME no regulated coefficient 0.01 here
                         )
                        );
@@ -2273,8 +2273,6 @@ bool Root::step() {
         mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
     Tissue::EdgeDataAttr& edgeAttr =
         mesh->attributes().attrMap<CCIndex, Tissue::EdgeData>("EdgeData");
-    Tissue::FaceDataAttr& faceAttr =
-        mesh->attributes().attrMap<CCIndex, Tissue::FaceData>("FaceData");
     Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
 
     stepCount++;
@@ -2609,11 +2607,12 @@ bool Root::step() {
 
 
         // positions, auxin and growth rate (for plotting)        
+        /*
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             if(cD.type != Tissue::Source && cD.type != Tissue::Substrate && cD.type != Tissue::QC )
-                ;//cerr <<  mechanicsProcess->userTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
-        }
+                cerr <<  mechanicsProcess->userTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
+        }*/
 
     }
 
