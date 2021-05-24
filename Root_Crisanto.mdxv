@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 105.201
+Width: 105.359
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 105.201
+Width: 105.359
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 105.201
+Width: 105.359
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05938 1.05938 1.05938
+Size: 1.06044 1.06044 1.06044
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1095,9 +1095,9 @@ ParmString: True
 ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
-ParmString: 0,0
+ParmString: 0,180
 ParmName: Frame fixed on Substrate
-ParmString: 0,220
+ParmString: 0,0
 ParmName: Execution Time
 ParmString: 14000
 ParmName: Output Mesh
@@ -1443,7 +1443,7 @@ ParmString: 4
 ParmName: Division Promoter Decay Rate
 ParmString: 0.01
 ParmName: Division Promoter Permeability
-ParmString: 10
+ParmString: 1
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate

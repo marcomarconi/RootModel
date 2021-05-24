@@ -986,10 +986,10 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         Tissue::CellData& cDn = cellAttr[labeln];
         for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, labeln)]) {
             Tissue::EdgeData& eD = edgeAttr[e];
-            double inhibitorDiffusion = 0.5 * divInhibitorPermeability * (cDn.divInhibitor - cD.divInhibitor) * eD.length / (cD.area + cDn.area);
+            double inhibitorDiffusion = 0.5 * divInhibitorPermeability * eD.length * (cDn.divInhibitor/cDn.area - cD.divInhibitor/cD.area)  ;
             cD.divInhibitor += inhibitorDiffusion * Dt;
             cDn.divInhibitor -= inhibitorDiffusion * Dt;
-            double promoterDiffusion = 0.5 * divPromoterPermeability * (cDn.divPromoter - cD.divPromoter) * eD.length / (cD.area + cDn.area);
+            double promoterDiffusion = 0.5 * divPromoterPermeability * eD.length * (cDn.divPromoter/cDn.area - cD.divPromoter/cD.area)   ;
             cD.divPromoter += promoterDiffusion * Dt;
             cDn.divPromoter -= promoterDiffusion * Dt;
         }
