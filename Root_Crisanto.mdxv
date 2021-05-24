@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999954 0.00338021 0.00895253 0 -0.0032267 0.999848 -0.0171072 0 -0.009009 0.0170775 0.999814 0 -3.55271e-15 -3.55271e-15 -1156.48 1
+CameraFrame: 0.999954 0.00338021 0.00895253 0 -0.0032267 0.999848 -0.0171072 0 -0.009009 0.0170775 0.999814 0 -1.77636e-15 0 -1002.14 1
 SceneRadius: 500
 CameraZoom: 0
 
@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 105.149
+Width: 105.201
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 105.149
+Width: 105.201
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 105.149
+Width: 105.201
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: false
+LoadMeshScaleUm: true
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.0591 1.0591 1.0591
+Size: 1.05938 1.05938 1.05938
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1073,13 +1073,13 @@ ParmString: 1
 ParmName: Max Chemical Iterations
 ParmString: 30
 ParmName: Mechanics Enabled
-ParmString: False
+ParmString: True
 ParmName: Chemicals Enabled
-ParmString: False
+ParmString: True
 ParmName: Growth Enabled
-ParmString: False
+ParmString: True
 ParmName: Cell Division Enabled
-ParmString: False
+ParmString: True
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
