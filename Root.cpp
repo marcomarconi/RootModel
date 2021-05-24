@@ -2384,6 +2384,7 @@ bool Root::step() {
             mesh->drawParms("Tissue").setRenderChoice("Faces", signalName);
             // move unwanted visual back
             if(signalName == QString("Chems: Auxin By Area") ||
+                    signalName == QString("Chems: Division Promoter by Area") ||
                     signalName == QString("Chems: Division Inhibitor by Area") ||
                     signalName == QString("Chems: Division Time") ||
                     signalName == QString("Chems: Division Probability") ||
@@ -2401,6 +2402,7 @@ bool Root::step() {
                 }
             }
             if(signalName == QString("Mechs: Growth Rate") ||
+                    signalName == QString("Chems: Division Promoter by Area") ||
                     signalName == QString("Chems: Division Inhibitor by Area") ||
                     signalName == QString("Chems: Division Time") ||
                     signalName == QString("Chems: Division Probability") ||
@@ -2458,6 +2460,7 @@ bool Root::step() {
             takeSnapshot(fileName, 1, 645*4, 780*4, 10, true);
             // restore unwanted visual forward
             if(signalName == QString("Chems: Auxin By Area") ||
+                    signalName == QString("Chems: Division Promoter by Area") ||
                     signalName == QString("Chems: Division Inhibitor by Area") ||
                     signalName == QString("Chems: Division Time") ||
                     signalName == QString("Chems: Division Probability") ||
@@ -2475,6 +2478,7 @@ bool Root::step() {
                 }
             }
             if(signalName == QString("Mechs: Growth Rate") ||
+                    signalName == QString("Chems: Division Promoter by Area") ||
                     signalName == QString("Chems: Division Inhibitor by Area") ||
                     signalName == QString("Chems: Division Time") ||
                     signalName == QString("Chems: Division Probability") ||

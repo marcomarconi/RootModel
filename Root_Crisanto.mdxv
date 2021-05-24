@@ -79,7 +79,7 @@ CameraZoom: 0
 [Clip1]
 Enable: false
 Grid: false
-Width: 104.963
+Width: 105.149
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 104.963
+Width: 105.149
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 104.963
+Width: 105.149
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05804 1.05804 1.05804
+Size: 1.0591 1.0591 1.0591
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1047,7 +1047,7 @@ ParmString:
 ProcessName: Mesh/System/Save
 NumParms: 3
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/RootModel/Root_Crisanto.mdxm
+ParmString: /home/marco/trabajo/MDX models/Root/Root_Crisanto.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Mesh Id
@@ -1073,13 +1073,13 @@ ParmString: 1
 ParmName: Max Chemical Iterations
 ParmString: 30
 ParmName: Mechanics Enabled
-ParmString: True
+ParmString: False
 ParmName: Chemicals Enabled
-ParmString: True
+ParmString: False
 ParmName: Growth Enabled
-ParmString: True
+ParmString: False
 ParmName: Cell Division Enabled
-ParmString: True
+ParmString: False
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
@@ -1099,7 +1099,7 @@ ParmString: 0,0
 ParmName: Frame fixed on Substrate
 ParmString: 0,220
 ParmName: Execution Time
-ParmString: 15000
+ParmString: 14000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1421,21 +1421,21 @@ ParmString:
 ParmName: Division Inhibitor Basal Production Rate
 ParmString: 0
 ParmName: Division Inhibitor Max Promoter-induced Expression
-ParmString: 10
+ParmString: 20
 ParmName: Division Inhibitor Half-max Promoter-induced K
 ParmString: 2
 ParmName: Division Inhibitor Half-max Promoter-induced n
-ParmString: 4
+ParmString: 2
 ParmName: Division Inhibitor Decay Rate
 ParmString: 0.01
 ParmName: Division Inhibitor Permeability
-ParmString: 5
+ParmString: 0
 ParmName: Division Promoter
 ParmString: 
 ParmName: Division Promoter Basal Production Rate
 ParmString: 0
 ParmName: Division Promoter Max Auxin-induced Expression
-ParmString: 10
+ParmString: 20
 ParmName: Division Promoter Half-max Auxin-induced K
 ParmString: 2
 ParmName: Division Promoter Half-max Auxin-induced n
@@ -1443,7 +1443,7 @@ ParmString: 4
 ParmName: Division Promoter Decay Rate
 ParmString: 0.01
 ParmName: Division Promoter Permeability
-ParmString: 5
+ParmString: 10
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
