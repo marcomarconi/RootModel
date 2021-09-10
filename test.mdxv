@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999973 0.000897157 -0.00729703 0 -0.000899444 1 -0.000310166 0 0.00729675 0.00031672 0.999973 0 8.88178e-16 -5.55112e-17 -1002.14 1
+CameraFrame: -2.22045e-16 1 1.68909e-16 0 -1 -2.22045e-16 3.04042e-17 0 3.04042e-17 -1.68909e-16 1 0 -288.235 -28.1962 -1156.48 1
 SceneRadius: 500
 CameraZoom: -0.864
 
@@ -79,7 +79,7 @@ CameraZoom: -0.864
 [Clip1]
 Enable: false
 Grid: false
-Width: 105.465
+Width: 113.365
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 105.465
+Width: 113.365
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 105.465
+Width: 113.365
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: Root_Crisanto.mdxm
+MeshFile: Root_model.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -143,7 +143,7 @@ CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -0.375124 -215.322 0 1
 
 
 [Stack2]
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06097 1.06097 1.06097
+Size: 1.05751 1.05751 1.05751
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -278,6 +278,52 @@ ParmName: Axis Name
 ParmString: 
 ParmName: Width
 ParmString: 2.0
+ProcessName: Mesh/Cell Atlas 3D/A Analyze Cells 3D
+NumParms: 3
+ParmName: Surface Mesh
+ParmString: Surface Mesh
+ParmName: Volume Threshold
+ParmString: 0
+ParmName: Mode
+ParmString: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Centroids
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Property Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Create Contour Attr Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Export Nucleus Stress Data Steve
+NumParms: 3
+ParmName: Filename Contour Data
+ParmString: 
+ParmName: Filename Min Distance
+ParmString: 
+ParmName: Wall Type Min Distance
+ParmString: Side
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Cell Wall Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data2
+NumParms: 2
+ParmName: Filename
+ParmString: 
+ParmName: Histogram Bins
+ParmString: 20
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Cell Wall Labels
+NumParms: 1
+ParmName: Face Labeling
+ParmString: Face Type
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Volume Label
+NumParms: 1
+ParmName: Label
+ParmString: 1
+ProcessName: Mesh/Cell Atlas 3D/Tools/Collapse Bezier Points
+NumParms: 0
 ProcessName: Mesh/Cell Axis/Cell Axis Load
 NumParms: 2
 ParmName: Type
@@ -965,7 +1011,7 @@ ParmString: No
 ProcessName: Mesh/System/Load
 NumParms: 4
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/RootModel/Root_model.mdxm
+ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Add
@@ -1047,7 +1093,7 @@ ParmString:
 ProcessName: Mesh/System/Save
 NumParms: 3
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/Root_Crisanto.mdxm
+ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxm
 ParmName: Transform
 ParmString: no
 ParmName: Mesh Id
@@ -1085,13 +1131,13 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 3
+ParmString: 30
 ParmName: Snapshots Timer
-ParmString: 0
+ParmString: 30
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
-ParmString: True
+ParmString: False
 ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
@@ -1099,7 +1145,7 @@ ParmString: 0,0
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 14000
+ParmString: 15000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1175,7 +1221,7 @@ ParmString: False
 ParmName: Draw Auxin-Flux Rescale
 ParmString: 10
 ParmName: Draw PGD Rescale
-ParmString: 0
+ParmString: 2
 ParmName: Draw PINs
 ParmString: 0.04
 ParmName: Verbose
@@ -1193,7 +1239,7 @@ ParmString: 0.2
 ParmName: Cell Max Pinch
 ParmString: 2
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Division Algorithm
 ParmString: 1
 ParmName: Max Joining Distance
@@ -1211,7 +1257,7 @@ ParmString: 1
 ParmName: Division half-probability by Inhibitor
 ParmString: 0.03
 ParmName: Division Control
-ParmString: True
+ParmString: False
 ParmName: Ignore Cell Type
 ParmString: False
 ParmName: Root Process
@@ -1319,9 +1365,9 @@ NumParms: 87
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
-ParmString: 0.001
+ParmString: 0.1
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Debug Steps
 ParmString: 10
 ParmName: Auxin
@@ -1335,9 +1381,9 @@ ParmString: 0
 ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
-ParmString: 0
+ParmString: 10
 ParmName: Auxin SCN Basal Production Rate
-ParmString: 5
+ParmString: 0
 ParmName: Auxin Decay Rate
 ParmString: 0.0125
 ParmName: Auxin Max Decay Rate
@@ -1371,7 +1417,7 @@ ParmString: 400
 ParmName: Pin1 Sensitivity Suppression by Auxin Max Cell
 ParmString: True
 ParmName: Simulate PIN4
-ParmString: True
+ParmString: False
 ParmName: Columella Auto-Efflux
 ParmString: True
 ParmName: Pin1 Sensitivity MF K
@@ -1379,9 +1425,9 @@ ParmString: 0
 ParmName: Pin1 Sensitivity Auxin-flux K
 ParmString: 3
 ParmName: Pin1 Sensitivity Geometry K
-ParmString: 2
+ParmString: 0
 ParmName: Pin1 Sensitivity MF+Auxin-flux K
-ParmString: 3
+ParmString: 0
 ParmName: Pin1 Sensitivity MF+Geometry K
 ParmString: 0
 ParmName: Pin1 Sensitivity Auxin-flux+Geometry K
@@ -1421,11 +1467,11 @@ ParmString:
 ParmName: Division Inhibitor Basal Production Rate
 ParmString: 0
 ParmName: Division Inhibitor Max Promoter-induced Expression
-ParmString: 20
+ParmString: 2
 ParmName: Division Inhibitor Half-max Promoter-induced K
-ParmString: 2
+ParmString: 0.5
 ParmName: Division Inhibitor Half-max Promoter-induced n
-ParmString: 2
+ParmString: 4
 ParmName: Division Inhibitor Decay Rate
 ParmString: 0.01
 ParmName: Division Inhibitor Permeability
@@ -1435,15 +1481,15 @@ ParmString:
 ParmName: Division Promoter Basal Production Rate
 ParmString: 0
 ParmName: Division Promoter Max Auxin-induced Expression
-ParmString: 20
-ParmName: Division Promoter Half-max Auxin-induced K
 ParmString: 2
+ParmName: Division Promoter Half-max Auxin-induced K
+ParmString: 0.5
 ParmName: Division Promoter Half-max Auxin-induced n
 ParmString: 4
 ParmName: Division Promoter Decay Rate
 ParmString: 0.01
 ParmName: Division Promoter Permeability
-ParmString: 10
+ParmString: 0
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
@@ -2807,7 +2853,7 @@ NumParms: 0
 ProcessName: Tools/System/Save View
 NumParms: 1
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/test.mdxv
+ParmString: /home/marco/trabajo/MDX models/RootModel/test.mdxv
 ProcessName: Tools/System/Snapshot
 NumParms: 6
 ParmName: File Name

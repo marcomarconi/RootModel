@@ -2377,7 +2377,14 @@ bool Root::step() {
     // Save a snapshot of the simulation
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
-        std::set<QString> signals_set = {"Chems: Division Inhibitor by Area", "Chems: Division Promoter by Area","Chems: Division Probability", "Mechs: Growth Rate", "Chems: Auxin By Area", "Division Count"};
+        std::set<QString> signals_set = {
+                                         /*"Chems: Division Inhibitor by Area",
+                                         "Chems: Division Promoter by Area",
+                                         "Chems: Division Probability",
+                                         "Division Count",*/
+                                         "Mechs: Growth Rate",
+                                         "Chems: Auxin By Area"
+                                        };
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
             mesh->drawParms("Tissue").setGroupVisible("Faces", true);
@@ -2457,7 +2464,8 @@ bool Root::step() {
             }
             mesh->updateAll();
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
-            takeSnapshot(fileName, 1, 645*4, 780*4, 10, true);
+            //takeSnapshot(fileName, 1, 645*4, 780*4, 10, true); // cluster?
+            takeSnapshot(fileName, 1, 2490*2, 1310*2, 100, true); // lab PC
             // restore unwanted visual forward
             if(signalName == QString("Chems: Auxin By Area") ||
                     signalName == QString("Chems: Division Promoter by Area") ||
