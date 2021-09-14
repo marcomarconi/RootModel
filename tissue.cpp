@@ -875,7 +875,8 @@ bool Tissue::step(double Dt) {
         PINOIDMemSignal[f] = fD.PINOIDMem;
         PP2AMemSignal[f] = fD.PP2AMem;
         pressureSignal[f] = cD.pressure;
-        sigmaASignal[f] = norm(fD.sigmaA);
+        //sigmaASignal[f] = norm(fD.sigmaA);
+        sigmaASignal[f] = norm(fD.a1) - norm(fD.a2);
 
         fD.auxin = cD.auxin;
         fD.intercellularAuxin = 0;

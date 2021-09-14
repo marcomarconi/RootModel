@@ -291,17 +291,17 @@ public:
         addParm("Division Inhibitor", "Division Inhibitor", "");
         addParm("Division Inhibitor Basal Production Rate", "Division Inhibitor Basal Production Rate", "0");
         addParm("Division Inhibitor Max Promoter-induced Expression", "Division Inhibitor Max Promoter-induced Expression", "20");
-        addParm("Division Inhibitor Half-max Promoter-induced K", "Division Inhibitor Half-max Promoter-induced K", "1");
-        addParm("Division Inhibitor Half-max Promoter-induced n", "Division Inhibitor Half-max Promoter-induced n", "4");
+        addParm("Division Inhibitor Half-max Promoter-induced K", "Division Inhibitor Half-max Promoter-induced K", "5"); // 20 or more for the mutant
+        addParm("Division Inhibitor Half-max Promoter-induced n", "Division Inhibitor Half-max Promoter-induced n", "2");
         addParm("Division Inhibitor Decay Rate", "Division Inhibitor Decay Rate", "0.01");
         addParm("Division Inhibitor Permeability", "Division Inhibitor Permeability", "0");
         addParm("Division Promoter", "Division Promoter", "");
         addParm("Division Promoter Basal Production Rate", "Division Promoter Basal Production Rate", "0");
         addParm("Division Promoter Max Auxin-induced Expression", "Division Promoter Max Auxin-induced Expression", "20");
-        addParm("Division Promoter Half-max Auxin-induced K", "Division Promoter Half-max Auxin-induced K", "1");
+        addParm("Division Promoter Half-max Auxin-induced K", "Division Promoter Half-max Auxin-induced K", "2");
         addParm("Division Promoter Half-max Auxin-induced n", "Division Promoter Half-max Auxin-induced n", "4");
         addParm("Division Promoter Decay Rate", "Division Promoter Decay Rate", "0.01");
-        addParm("Division Promoter Permeability", "Division Promoter Permeability", "0");
+        addParm("Division Promoter Permeability", "Division Promoter Permeability", "1"); // 1 for the data, 5 for the figure
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");
@@ -1406,17 +1406,20 @@ public:
 };
 
 
-class HighlightCell : public Process {
+class DumpSignalInfo : public Process {
 public:
-    HighlightCell(const Process& process)
+    DumpSignalInfo(const Process& process)
         : Process(process) {
-        setName("Model/Root/25 Highlight Cell");
-        setDesc("HighlightCell.");
-        addParm("Face Label", "", "0");
-
+        setName("Model/Root/26 Dump Signal Info");
+        setDesc("Dump Signal Info.");
+        addParm("Signal",
+                "Signal",
+                "Chems: Auxin By Area");
     }
+
     bool step();
 };
+
 
 
 
@@ -1635,6 +1638,19 @@ public:
             }
         return false;
     }
+};
+
+
+class HighlightCell : public Process {
+public:
+    HighlightCell(const Process& process)
+        : Process(process) {
+        setName("Model/Root/25 Highlight Cell");
+        setDesc("HighlightCell.");
+        addParm("Face Label", "", "0");
+
+    }
+    bool step();
 };
 
 

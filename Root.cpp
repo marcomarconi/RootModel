@@ -2626,6 +2626,17 @@ bool Root::step() {
                 cerr <<  mechanicsProcess->userTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
         }*/
 
+        // growth direction, rate and anisotropy (reviewer 2 from eLife)
+        for(auto c : cellAttr) {
+            Tissue::CellData& cD = cellAttr[c.first];
+            if(cD.type != Tissue::Source && cD.type != Tissue::Substrate && cD.type != Tissue::Undefined )
+                cerr << "Rev2 " <<  mechanicsProcess->userTime << "\t" << cD.growthRate << "\t"
+                     << norm(cD.axisMax) << "\t" <<  norm(cD.axisMin) <<  "\t"
+                     << cD.axisMax.normalized()*Point3d(0,-1,0) << "\t" <<  cD.axisMin.normalized()*Point3d(0,-1,0)
+                     << cD.a1.normalized()*Point3d(0,-1,0) << "\t" <<  cD.a2.normalized()*Point3d(0,-1,0)
+                     << "\t" << norm(cD.a1) << "\t" <<  norm(cD.a2) << "\t" <<  cD.a1*Point3d(0,-1,0)*(norm(cD.a1)-norm(cD.a2)) << endl;
+        }
+
     }
 
     // Calculate FPS
