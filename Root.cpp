@@ -2618,13 +2618,12 @@ bool Root::step() {
                     << flush;
 
 
-        // positions, auxin and growth rate (for plotting)        
-        /*
+        // positions, auxin and growth rate (for plotting)                
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             if(cD.type != Tissue::Source && cD.type != Tissue::Substrate && cD.type != Tissue::QC )
-                cerr <<  mechanicsProcess->userTime << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
-        }*/
+                cerr <<  mechanicsProcess->userTime << "," << cD.type << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
+        }
 
 
     }
