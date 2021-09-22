@@ -1342,7 +1342,7 @@ public:
                     cD.aux1InducedRate = 0;
                     for(CCIndex e : cD.perimeterEdges) {
                         Tissue::EdgeData& eD = edgeAttr[e];
-                        eD.Aux1[cD.label] /= 10;
+                        eD.Aux1[cD.label] /= 20;
                     }
                 }
                 AUX1_knockdown = true;
