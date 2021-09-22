@@ -1170,7 +1170,7 @@ bool Chemicals::update() {
                         double auxinImpactValue = 0;
                         if(norm(cD.auxinFluxVector) > 0)
                             auxinImpactValue =
-                                norm(cD.auxinFluxVector) * cD.auxinFluxVector/norm(cD.auxinFluxVector) * -eD.outwardNormal[f] * eD.length;
+                                norm(cD.auxinFluxVector) * cD.auxinFluxVector/norm(cD.auxinFluxVector) * eD.outwardNormal[f] * eD.length;
                         if(auxinImpactValue < 0 || cD.auxin/cD.area > kauxinMaxCell)
                                 if(parm("Pin1 Sensitivity Suppression by Auxin Max Cell") == "True")
                                     auxinImpactValue = 0;
@@ -1179,7 +1179,7 @@ bool Chemicals::update() {
                     }
                     else if (parm("Auxin Polarity Method") == "PINOID")
                          eD.auxinFluxImpact[label] =
-                             -(pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4) / (pow(Kpinoid, 4) + pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4))) ;
+                             (pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4) / (pow(Kpinoid, 4) + pow(eD.PINOID[label]/(KPINOIDMax*eD.length), 4))) ;
                     else
                         throw(QString("Choose a correct auxin flux method, you ass"));
                     // Calculate MF impact

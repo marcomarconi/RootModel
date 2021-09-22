@@ -71,9 +71,9 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: -2.22045e-16 1 0 0 -1 -2.22045e-16 -1.74315e-32 0 -1.74315e-32 0 1 0 -335.174 -34.376 -1156.48 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 11.7006 163.808 -1156.48 1
 SceneRadius: 500
-CameraZoom: -0.96
+CameraZoom: -0.48
 
 
 [Clip1]
@@ -1073,21 +1073,21 @@ ParmString: 1
 ParmName: Max Chemical Iterations
 ParmString: 30
 ParmName: Mechanics Enabled
-ParmString: False
+ParmString: True
 ParmName: Chemicals Enabled
 ParmString: True
 ParmName: Growth Enabled
-ParmString: False
+ParmString: True
 ParmName: Cell Division Enabled
-ParmString: False
+ParmString: True
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 30
+ParmString: 3
 ParmName: Snapshots Timer
-ParmString: 30
+ParmString: 0
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1247,7 +1247,7 @@ ParmString: 1
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
-ParmString: 0
+ParmString: 0.01
 ParmName: Shear CK
 ParmString: 1
 ParmName: Auxin-induced wall relaxation K1
@@ -1329,9 +1329,9 @@ ParmString:
 ParmName: Auxin Source
 ParmString: 10
 ParmName: Auxin Intercellular Diffusion
-ParmString: 10
-ParmName: Auxin Cell Permeability
 ParmString: 1
+ParmName: Auxin Cell Permeability
+ParmString: 0
 ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
@@ -1845,7 +1845,7 @@ ParmString: 0
 ParmName: PIN1 Knockdown Time
 ParmString: 0
 ParmName: AUX1 Knockdown Time
-ParmString: 0
+ParmString: 750
 ParmName: AUX1 Overexpression Time
 ParmString: 0
 ParmName: Strain Removal Time
@@ -2873,13 +2873,13 @@ NumParms: 0
 ProcessName: Tools/System/Load View
 NumParms: 1
 ParmName: File Name
-ParmString: test.mdxv
+ParmString: Root_model.mdxv
 ProcessName: Tools/System/Quick Save
 NumParms: 0
 ProcessName: Tools/System/Save View
 NumParms: 1
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/test.mdxv
+ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxv
 ProcessName: Tools/System/Snapshot
 NumParms: 6
 ParmName: File Name
