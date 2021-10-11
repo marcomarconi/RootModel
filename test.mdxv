@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 11.7006 163.808 -1156.48 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -35.717 215.878 -1156.48 1
 SceneRadius: 500
-CameraZoom: -0.48
+CameraZoom: -0.672
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 116.642
+Width: 116.701
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 116.642
+Width: 116.701
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 116.642
+Width: 116.701
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1085,21 +1085,21 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 3
+ParmString: 30
 ParmName: Snapshots Timer
-ParmString: 0
+ParmString: 30
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
-ParmString: False
+ParmString: True
 ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
-ParmString: 0,0
+ParmString: 0,220
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 15000
+ParmString: 10000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1845,7 +1845,7 @@ ParmString: 0
 ParmName: PIN1 Knockdown Time
 ParmString: 0
 ParmName: AUX1 Knockdown Time
-ParmString: 750
+ParmString: 0
 ParmName: AUX1 Overexpression Time
 ParmString: 0
 ParmName: Strain Removal Time

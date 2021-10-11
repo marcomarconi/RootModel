@@ -1340,7 +1340,7 @@ public:
                 if(cD.type != Tissue::Source && cD.type != Tissue::Substrate ) {
                     cD.Aux1 = 0;
                     cD.aux1InducedRate = 0;
-                    cD.aux1ProdRate /= 10;
+                    //cD.aux1ProdRate /= 10;
                     for(CCIndex e : cD.perimeterEdges) {
                         Tissue::EdgeData& eD = edgeAttr[e];
                         eD.Aux1[cD.label] /= 10;
