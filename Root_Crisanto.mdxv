@@ -73,13 +73,13 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: 0.999954 0.00338021 0.00895253 0 -0.0032267 0.999848 -0.0171072 0 -0.009009 0.0170775 0.999814 0 -1.77636e-15 0 -1002.14 1
 SceneRadius: 500
-CameraZoom: 0
+CameraZoom: -1.056
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 105.359
+Width: 105.465
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 105.359
+Width: 105.465
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 105.359
+Width: 105.465
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06044 1.06044 1.06044
+Size: 1.06097 1.06097 1.06097
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1423,7 +1423,7 @@ ParmString: 0
 ParmName: Division Inhibitor Max Promoter-induced Expression
 ParmString: 20
 ParmName: Division Inhibitor Half-max Promoter-induced K
-ParmString: 2
+ParmString: 5
 ParmName: Division Inhibitor Half-max Promoter-induced n
 ParmString: 2
 ParmName: Division Inhibitor Decay Rate
@@ -2084,6 +2084,74 @@ ParmName: Low Threshold
 ParmString: 1000
 ParmName: High Threshold
 ParmString: 0
+ProcessName: Stack/ITK/Filters/ITK Curvature Anisotropic Diffusion Image Filter
+NumParms: 3
+ParmName: Time Step
+ParmString: 0.03
+ParmName: Iterations
+ParmString: 5
+ParmName: Conductance
+ParmString: 9.0
+ProcessName: Stack/ITK/Filters/ITK Curvature Flow Image Filter
+NumParms: 2
+ParmName: Time Step
+ParmString: .0.0625
+ParmName: Steps
+ParmString: 10
+ProcessName: Stack/ITK/Filters/ITK Gradient Magnitude Recursive Gaussian Image Filter
+NumParms: 1
+ParmName: Sigma
+ParmString: 0.5
+ProcessName: Stack/ITK/Filters/ITK Sigmoid Image Filter
+NumParms: 2
+ParmName: Alpha
+ParmString: 1000.0
+ParmName: Beta
+ParmString: 2000.0
+ProcessName: Stack/ITK/Filters/ITK Smoothing Recursive Gaussian Image Filter
+NumParms: 1
+ParmName: Radius
+ParmString: 1.0
+ProcessName: Stack/ITK/Registration/ITK Demons Registration
+NumParms: 6
+ParmName: Deformation File
+ParmString: deformation.vtk
+ParmName: Threshold at Mean
+ParmString: Yes
+ParmName: Histogram Levels
+ParmString: 1024
+ParmName: Match Points
+ParmString: 7
+ParmName: Iterations
+ParmString: 150
+ParmName: Sigma
+ParmString: 1.0
+ProcessName: Stack/ITK/Segmentation/ITK Watershed
+NumParms: 2
+ParmName: Fully Connected
+ParmString: No
+ParmName: Mark Watershed Line
+ParmString: No
+ProcessName: Stack/ITK/Segmentation/ITK Watershed Auto Seeded
+NumParms: 3
+ParmName: Fully Connected
+ParmString: No
+ParmName: Mark Watershed Line
+ParmString: No
+ParmName: Level
+ParmString: 1500
+ProcessName: Stack/ITK/System/ITK Image Reader
+NumParms: 3
+ParmName: File Name
+ParmString: 
+ParmName: Store
+ParmString: Main
+ParmName: Stack Number
+ParmString: 0
+ProcessName: Stack/ITK/System/ITK VTK Writer
+NumParms: 1
+ParmName: File Name
+ParmString: 
 ProcessName: Stack/Mesh Interaction/Annihilate
 NumParms: 4
 ParmName: Fill
@@ -2160,6 +2228,10 @@ ParmName: Adapt Factor
 ParmString: 0.3
 ParmName: Fill Value
 ParmString: 30000
+ProcessName: Stack/Morphology/Edge Detect Angle
+NumParms: 1
+ParmName: Fill Holes
+ParmString: No
 ProcessName: Stack/Morphology/Erode
 NumParms: 5
 ParmName: X Radius

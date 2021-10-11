@@ -1976,8 +1976,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                         << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
 
 
-                cout << random << " " << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;
-                cout << (random < RAND_MAX * (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5 * Dt) << endl;
+                //cout << random << " " << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;
+                //cout << (random < RAND_MAX * (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5 * Dt) << endl;
 
             }
             // Skip division if division algoritm MF depending but cell has no polarity
