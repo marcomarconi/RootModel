@@ -73,13 +73,13 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: 0.999954 0.00338021 0.00895253 0 -0.0032267 0.999848 -0.0171072 0 -0.009009 0.0170775 0.999814 0 -1.77636e-15 0 -1002.14 1
 SceneRadius: 500
-CameraZoom: -1.056
+CameraZoom: 0
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 105.465
+Width: 105.57
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 105.465
+Width: 105.57
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 105.465
+Width: 105.57
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06097 1.06097 1.06097
+Size: 1.06203 1.06203 1.06203
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1203,7 +1203,7 @@ ParmString: 0.05
 ParmName: Max Division Time
 ParmString: 50
 ParmName: Division Meristem Size
-ParmString: 200
+ParmString: 300
 ParmName: Division Promoter Level
 ParmString: 0.05
 ParmName: Division half-probability by Cell Size Ratio
@@ -1247,7 +1247,7 @@ ParmString: 1
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
-ParmString: 0
+ParmString: 0.01
 ParmName: Shear CK
 ParmString: 1
 ParmName: Auxin-induced wall relaxation K1
