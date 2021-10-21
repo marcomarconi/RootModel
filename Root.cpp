@@ -1938,23 +1938,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool trigger_division = false;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
-        double divProbAuxin = 0;
-        double divProbSize = 0;
-        double divProbInhibitor = 0;
         cD.divProb = 0;
-        double random = rand() ;
-        // Auxin conc is ignored if divisionProbSteep is 0
         cD.divisionAllowed = false;
-        /*
-        if(divisionProbSteep > 0) {
-            divProbAuxin = 1 / (1. + exp(-divisionProbSteep * ((cD.auxin/cD.area) - divisionProbHalfAuxin)));
-            divProbSize = 1 / (1. + exp(-divisionProbSteep * (cD.area/cD.cellMaxArea - divisionProbHalfSize)));
-            divProbInhibitor = 1 / (1. + exp(divisionProbSteep * (cD.divInhibitor/cD.area - divisionProbHalfInhibitor)));
-            cD.divProb = (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5;
-            division = (random < RAND_MAX * cD.divProb * Dt);
-        } else
-            division = true;
-            */
         cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime + divisionMinTime;
         if(divisionControl && rootProcess->userTime > 24) {
             if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
