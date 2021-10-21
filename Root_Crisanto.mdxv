@@ -1319,7 +1319,7 @@ NumParms: 87
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
-ParmString: 0.001
+ParmString: 0.1
 ParmName: Verbose
 ParmString: True
 ParmName: Debug Steps

@@ -1917,6 +1917,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool manualCellDivision = parm("Manual Cell Division Enabled") == "True";
     double divisionMeristemSize = parm("Division Meristem Size").toDouble();
     double divisionMaxTime = parm("Max Division Time").toDouble();
+    double divisionMinTime = parm("Min Division Time").toDouble();
     double divisionProbHalfSize = parm("Division half-probability by Cell Size Ratio").toDouble();
     double divisionProbHalfInhibitor = parm("Division half-probability by Inhibitor").toDouble();
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
@@ -1954,7 +1955,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         } else
             division = true;
             */
-        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime;
+        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime + divisionMinTime;
         if(divisionControl && rootProcess->userTime > 24) {
             if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
                 if(norm(cD.centroid - QCcm) < divisionMeristemSize)

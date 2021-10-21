@@ -402,6 +402,9 @@ public:
         addParm("Max Division Time",
                 "Max Division Time",
                 "50");
+        addParm("Min Division Time",
+                "Min Division Time",
+                "2");
         addParm("Division Meristem Size",
                 "Division Meristem Size",
                 "200");
