@@ -832,7 +832,8 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             double decayedPin1 = eD.Pin1[label]
                     *  (pinCytDecayRate + (pinMemDecayRate - pinCytDecayRate) *
                         (
-                            (pow(1, 10) / (cD.auxin/cD.area, 10) +  pow(1, 10))
+                            //(1 / pow(cD.auxin/cD.area, 10) +  1))
+                            1 / (10 + 1)   //// FIXME no regulated coefficient 10 here
                           + (pow(0.01, 10) / (pow(eD.pin1Sensitivity[label], 10) +  pow(0.01, 10))) //// FIXME no regulated coefficient 0.01 here
                         )
                        );
@@ -1923,7 +1924,6 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
     bool divisionControl = parm("Division Control") == "True";
     bool ignoreCellType = parm("Ignore Cell Type") == "True";
-    double Dt = rootProcess->mechanicsProcess->Dt;
 
     // find the QC so we can print the distance (for plotting)
     Point3d  QCcm;
@@ -2605,12 +2605,13 @@ bool Root::step() {
 
 
         // positions, auxin and growth rate (for plotting)                
+        /*
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             if(cD.type != Tissue::Source && cD.type != Tissue::Substrate && cD.type != Tissue::QC )
-                ;//cerr <<  mechanicsProcess->userTime << "," << cD.type << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
+                cerr <<  mechanicsProcess->userTime << "," << cD.type << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
         }
-
+        */
 
     }
 
