@@ -934,12 +934,6 @@ void PBD::solve() {
                                     mdxInfo << "solvePBD: Failed initialization of strain constraint for face: " << f << endl;
                                     continue;
                 }
-                /*
-                if(!init_FEMTriangleConstraint(x0, x1, x2, fD.restAreaFace, fD.invRestMat)) {
-                    mdxInfo << "solvePBD: Failed initialization of strain constraint for face: " << f << endl;
-                    continue;
-                }
-                */
                 double m0 = vMAttr[vs[0]].invmass;
                 double m1 = vMAttr[vs[1]].invmass;
                 double m2 = vMAttr[vs[2]].invmass;
@@ -955,13 +949,6 @@ void PBD::solve() {
                     mdxInfo << "solvePBD: Failed solving strain constraint for face: " << f << endl;
                     continue;
                 }
-                /*
-                if(!solve_FEMTriangleConstraint(p0, m0, p1, m1, p2, m2, fD.restAreaFace, fD.invRestMat, stiffnessXX, stiffnessYY, stiffnessXY,
-0.01, 0.01,    corr0, corr1, corr2))   {
-                    mdxInfo << "solvePBD: Failed solving strain constraint for face: " << f << endl;
-                    continue;
-                }
-                */
                 double stiffness = PBDstrainStiffness;
                 if(stiffnessCorrection)
                     stiffness = 1 - pow(1 - stiffness, 1. / (inter + 1));
@@ -975,12 +962,9 @@ void PBD::solve() {
                 indexAttr[vs[1]].pos += corr1;
                 indexAttr[vs[2]].pos += corr2;
             }
-            //cout << avg_a1 / cs.faces().size() << " " << avg_a2 / cs.faces().size() << endl;
-
         }
         if(PBDshapeStiffness> 0) {
             // Shape matching constraint
-            ////#pragma omp parallel for schedule(static)
             for(uint i = 0; i < cellAttr.size(); i++) {
                 auto it = cellAttr.begin();
                 advance(it, i);
@@ -1021,7 +1005,6 @@ void PBD::solve() {
         }
         if(PBDbendingStiffness > 0) {
             // Bending constraint
-            ////#pragma omp parallel for
             for(uint i = 0; i < cellAttr.size(); i++) {
                 auto it = cellAttr.begin();
                 advance(it, i);
@@ -1068,7 +1051,6 @@ void PBD::solve() {
             }
         }
 
-        //#pragma omp parallel for
         for(uint i = 0; i < cs.vertices().size(); i++) {
             CCIndex v = cs.vertices()[i];
             Tissue::VertexData& vD = vMAttr[v];

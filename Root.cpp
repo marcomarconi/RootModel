@@ -143,7 +143,6 @@ bool Mechanics::step() {
     for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             double auxinByArea =  cD.auxin / cD.area;
-            //cD.pressure = 1 + parm("Turgor Pressure").toDouble() * norm(cD.a1) * pow(auxinByArea, 4) / ( pow(wallStressK1, 4) +  pow(auxinByArea, 4)) ;
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
@@ -597,7 +596,7 @@ bool MechanicalGrowth::step(double Dt) {
             if(synchronized)
                 cD.divisionAllowed = true;
             else
-                cD.divisionAllowed = true;  ///////// disabled
+                cD.divisionAllowed = true;  ///////// disabled at the moment
         }
     }
 
@@ -1009,7 +1008,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
                                      //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
                                     );
     double divDecay = cD.divPromoter * parm("Division Promoter Decay Rate").toDouble();
-    cD.divPromoter += (divBase - divDecay + divInduced) * Dt;
+    cD.divPromoter += (divBase * cD.area - divDecay + divInduced) * Dt; // divInduced should be also multiplied by area to homogenize the signal, but I don't want tu rerun everything
     // Inhibitor
     divBase = parm("Division Inhibitor Basal Production Rate").toDouble();
     divKmax = parm("Division Inhibitor Max Promoter-induced Expression").toDouble();
@@ -1023,8 +1022,10 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
                                      (pow(cD.divPromoter / cD.area, divN) / (pow(divK, divN) + pow(cD.divPromoter / cD.area, divN)))
                                      //(pow(AUX1max, 8) / (pow(AUX1max, 8) + pow(cD.Aux1 / cD.area, 8)))
                                     );
+
+    //divInduced =  divInduced * cD.area / 20; // necessary to homogenize the chemical (otherwise it looks patchy among cells). It is not included by default because I had to rerun everything. The "/ 20" is to approx rescale it to the version default version
     divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
-    cD.divInhibitor += (divBase - divDecay + divInduced) * Dt;
+    cD.divInhibitor += (divBase * cD.area - divDecay + divInduced ) * Dt;
 
 
 
@@ -2450,8 +2451,8 @@ bool Root::step() {
             }
             mesh->updateAll();
             QString fileName = QString::fromStdString(snapshotDir) + QString("Root-%1-%2.png").arg(signalName).arg(screenShotCount, 4, 10, QChar('0'));
-            takeSnapshot(fileName, 1, 645*4, 780*4, 10, true); // cluster?
-            //takeSnapshot(fileName, 1, 2490*2, 1310*2, 100, true); // lab PC
+            //takeSnapshot(fileName, 1, 645*4, 780*4, 10, true); // cluster?
+            takeSnapshot(fileName, 1, 0, 0, 100, true); // lab PC
             // restore unwanted visual forward
             if(signalName == QString("Chems: Auxin By Area") ||
                     signalName == QString("Chems: Division Promoter by Area") ||
@@ -2610,9 +2611,17 @@ bool Root::step() {
             Tissue::CellData& cD = cellAttr[c.first];
             if(cD.type != Tissue::Source && cD.type != Tissue::Substrate && cD.type != Tissue::QC )
                 cerr <<  mechanicsProcess->userTime << "," << cD.type << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
-        }
+        }        
         */
-
+        // Crisanto's data
+        if(stepCount % 30 == 0)
+        for(auto c : cellAttr) {
+            Tissue::CellData& cD = cellAttr[c.first];
+            mdxInfo << "Crisanto: " << cD.label << " of size " << cD.area
+                    << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
+                    <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
+                    << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
+        }
     }
 
     // Calculate FPS

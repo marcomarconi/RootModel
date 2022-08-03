@@ -646,8 +646,10 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& auxinRatioSignal = mesh->signalAttr<double>("Chems: Auxin Transport");
     CCIndexDoubleAttr& auxinGradSignal = mesh->signalAttr<double>("Chems: Auxin Gradient");
     CCIndexDoubleAttr& auxinFluxImpactSignal = mesh->signalAttr<double>("Chems: Auxin Flux Impact");
-    CCIndexDoubleAttr& divInhibitorCytSignal = mesh->signalAttr<double>("Chems: Division Inhibitor by Area");
-    CCIndexDoubleAttr& divPromoterCytSignal = mesh->signalAttr<double>("Chems: Division Promoter by Area");
+    CCIndexDoubleAttr& divInhibitorCytAreaSignal = mesh->signalAttr<double>("Chems: Division Inhibitor by Area");
+    CCIndexDoubleAttr& divInhibitorCytSignal = mesh->signalAttr<double>("Chems: Division Inhibitor");
+    CCIndexDoubleAttr& divPromoterCytAreaSignal = mesh->signalAttr<double>("Chems: Division Promoter by Area");
+    CCIndexDoubleAttr& divPromoterCytSignal = mesh->signalAttr<double>("Chems: Division Promoter");
     CCIndexDoubleAttr& divProbSignal = mesh->signalAttr<double>("Chems: Division Probability");
     CCIndexDoubleAttr& divTimeSignal = mesh->signalAttr<double>("Chems: Division Time");
     CCIndexDoubleAttr& Pin1CytSignal = mesh->signalAttr<double>("Chems: Pin1 Cyt");
@@ -683,6 +685,8 @@ bool Tissue::step(double Dt) {
     auxinGradSignal.clear();
     divInhibitorCytSignal.clear();
     divPromoterCytSignal.clear();
+    divInhibitorCytAreaSignal.clear();
+    divPromoterCytAreaSignal.clear();
     divProbSignal.clear();
     divTimeSignal.clear();
     Pin1CytSignal.clear();
@@ -864,8 +868,10 @@ bool Tissue::step(double Dt) {
         auxinByAreaSignal[f] = cD.auxin / cD.area;
         Aux1CytSignal[f] = fD.Aux1Cyt;
         Aux1MemSignal[f] = fD.Aux1Mem;
-        divInhibitorCytSignal[f] = cD.divInhibitor / cD.area;
-        divPromoterCytSignal[f] = cD.divPromoter / cD.area;
+        divInhibitorCytAreaSignal[f] = cD.divInhibitor / cD.area;
+        divPromoterCytAreaSignal[f] = cD.divPromoter / cD.area;
+        divInhibitorCytSignal[f] = cD.divInhibitor;
+        divPromoterCytSignal[f] = cD.divPromoter;
         divProbSignal[f] = cD.divProb;
         divTimeSignal[f] = exp(-0.1*cD.lastDivision);
         Pin1CytSignal[f] = cD.Pin1;
