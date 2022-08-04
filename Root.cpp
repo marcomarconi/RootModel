@@ -831,8 +831,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             double decayedPin1 = eD.Pin1[label]
                     *  (pinCytDecayRate + (pinMemDecayRate - pinCytDecayRate) *
                         (
-                            //(1 / pow(cD.auxin/cD.area, 10) +  1))
-                            1 / (10 + 1)   //// FIXME no regulated coefficient 10 here
+                            (pow(1, 10) / (cD.auxin/cD.area, 10) +  pow(1, 10)) //// FIXME no regulated coefficient 10 here
                           + (pow(0.01, 10) / (pow(eD.pin1Sensitivity[label], 10) +  pow(0.01, 10))) //// FIXME no regulated coefficient 0.01 here
                         )
                        );
