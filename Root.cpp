@@ -1763,7 +1763,6 @@ bool findCellDiv2dX(const CCStructure &cs, const CCIndexDataAttr &indexAttr, CCI
 CCIndex getClosestAvailableCutPoint(CCIndex v, Point3d& closest, const CCStructure &cs, const CCIndexDataAttr &indexAttr, CCIndex cell, double CellWallMin, double CellWallSample) {
 
     closest = Point3d(BIG_VAL, 0, 0);
-    cout << "finding closest point to " << v << endl;
     Point3d v_pos = indexAttr[v].pos;
     CCStructure::CellTuple ct(cs,cell);
     CCIndex edge;
@@ -1784,7 +1783,6 @@ CCIndex getClosestAvailableCutPoint(CCIndex v, Point3d& closest, const CCStructu
         }
         ct.flip(0,1);
     } while(ct[0] != firstV);
-    cout << "it's " << closest << " in " << edge << endl;
     return edge;
 }
 
