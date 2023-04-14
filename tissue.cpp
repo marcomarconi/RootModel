@@ -660,7 +660,6 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
     CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Chems: PP2A Mem");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
-    CCIndexDoubleAttr& sigmaASignal = mesh->signalAttr<double>("Mechs: Anisotropic Force");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
     CCIndexDoubleAttr& edgeStrainSignal = mesh->signalAttr<double>("Mechs: Edge Strain Rate");
     CCIndexDoubleAttr& growthRateSignal = mesh->signalAttr<double>("Mechs: Growth Rate");
@@ -697,7 +696,6 @@ bool Tissue::step(double Dt) {
     PINOIDMemSignal.clear();
     PP2AMemSignal.clear();
     pressureSignal.clear();
-    sigmaASignal.clear();
     edgeStrainSignal.clear();
     edgeStiffnessSignal.clear();
     growthRateSignal.clear();
@@ -770,15 +768,13 @@ bool Tissue::step(double Dt) {
     for(uint i = 0; i < cs.vertices().size(); i++) {
         CCIndex v = cs.vertices()[i];
         Tissue::VertexData& vD = vMAttr[v];
-        Point3d totalForce, sigmaForce;
+        Point3d totalForce;
         distanceConstrainSignal[v] = norm(vD.corrections["distance"]);
         bendingConstrainSignal[v] = norm(vD.corrections["bending"]);
         shapeConstrainSignal[v] = norm(vD.corrections["shape"]);
         strainConstrainSignal[v] = norm(vD.corrections["strain"]);
         pressureConstrainSignal[v] = norm(vD.corrections["pressure"]);
         for(auto m : vD.forces) {
-            if(std::get<1>(m) == QString("sigmaAY"))
-                sigmaForce += std::get<2>(m);
             totalForce += std::get<2>(m);
         }
         if(parm("Draw Velocity Rescale").toDouble() > 0) {
@@ -881,8 +877,6 @@ bool Tissue::step(double Dt) {
         PINOIDMemSignal[f] = fD.PINOIDMem;
         PP2AMemSignal[f] = fD.PP2AMem;
         pressureSignal[f] = cD.pressure;
-        //sigmaASignal[f] = norm(fD.sigmaA);
-        sigmaASignal[f] = norm(fD.a1) - norm(fD.a2);
 
         fD.auxin = cD.auxin;
         fD.intercellularAuxin = 0;

@@ -28,10 +28,6 @@ bool Mechanics::initialize(QWidget* parent) {
 
     PBDProcess->initialize(parent);
 
-    wallStress = parm("Wall stress").toDouble();
-    wallStressK1 = parm("Wall stress K1").toDouble();
-    wallStressK2 = parm("Wall stress K2").toDouble();
-
     // External Forces
     QStringList list = parm("Gravity Direction").split(QRegExp(","));
     gravity[0] = list[0].toDouble();
@@ -111,35 +107,14 @@ bool Mechanics::step() {
         mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
 
 
-    // Internal Growing Forces on faces (replaced by PBD)
-    for(uint i = 0; i < cs.faces().size(); i++) {
-        CCIndex f = cs.faces()[i];
-        Tissue::FaceData& fD = faceAttr[f];
-        if (fD.type != Tissue::Membrane)
-            continue;
-        Tissue::CellData& cD = cellAttr[(*indexAttr)[f].label];
 
-        cD.wallStress = wallStress;
-
-        double auxinByArea = cD.auxin / cD.area;
-
-        fD.stress = cD.wallStress *
-                        ((pow(auxinByArea, 4)) / (pow(auxinByArea, 4) + pow(wallStressK1, 4))) *
-                        ((pow(wallStressK2, 8)) / (pow(auxinByArea, 8) + pow(wallStressK2, 8)));
-
-        fD.sigmaA = fD.stress *
-                    (
-                        (norm(fD.a1) * OuterProduct(fD.a1/norm(fD.a1), fD.a1/norm(fD.a1))) +
-                        (norm(fD.a2) * OuterProduct(fD.a2/norm(fD.a2), fD.a2/norm(fD.a2)))
-                    );
-
-    }
 
     // Auxin relaxating effect on cell walls
     double baseWallEK = parm("Wall EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
+    double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
     for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             double auxinByArea =  cD.auxin / cD.area;
@@ -148,11 +123,14 @@ bool Mechanics::step() {
                 cD.pressure = cD.pressureMax;
             for(CCIndex e : cD.perimeterEdges) {
                 Tissue::EdgeData& eD = edgeAttr[e];
-                if(eD.type == Tissue::Wall)
+                if(eD.type == Tissue::Wall) {
                   if(auxinWallK1 > 0)
                         eD.eStiffness = baseWallEK *  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
                                                         pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
                                                         );
+                  if(quasimodoK > 0);
+
+                }
             }
 
     }
@@ -222,14 +200,6 @@ Point3d Mechanics::calcForcesFace(CCIndex f,
         eD.pressureForce = 0;
     */
 
-    // Viscous Forces
-    eD.sigmaForce = Point3d(0, 0, 0);
-    // viscosity only active on wall edges
-    if(eD.type == Tissue::Wall) {
-            eD.sigmaForce = fD.sigmaA * eD.outwardNormal[f] * eD.length;
-            vD.forces.push_back(make_tuple(cD.label, "sigmaAY", 0.5 * eD.sigmaForce));
-            dx += 0.5 * eD.sigmaForce;
-    }
     return dx;
 }
 
@@ -242,31 +212,7 @@ Point3d Mechanics::calcForcesEdge(
     if(!mesh)
         throw(QString("MechanicalGrowth::step No current mesh"));
 
-    Tissue::VertexDataAttr& vMAttr =
-        mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
-    Tissue::EdgeDataAttr& edgeAttr =
-        mesh->attributes().attrMap<CCIndex, Tissue::EdgeData>("EdgeData");
-
-    Tissue::EdgeData& eD = edgeAttr[e];
-    Tissue::VertexData& vD = vMAttr[v];
     Point3d dx;
-    auto eb = cs.edgeBounds(e);
-    Point3d vPos = indexAttr[v].pos, nPos;
-    if(eb.first == v)
-        nPos = indexAttr[eb.second].pos;
-    else
-        nPos = indexAttr[eb.first].pos;
-
-    // Mass Springs
-    Point3d sigmaEeforce = eD.sigmaEe * ((vPos - nPos) / eD.length);
-    vD.forces.push_back(make_tuple(label, "sigmaEe", sigmaEeforce));
-    dx += sigmaEeforce;
-
-    // Viscous Forces
-    Point3d sigmaEvforce = eD.sigmaEv * ((vPos - nPos) / eD.length);
-    vD.forces.push_back(make_tuple(label, "sigmaEv", sigmaEvforce));
-    dx += sigmaEvforce;
-
     return dx;
 }
 
@@ -523,28 +469,35 @@ bool MechanicalGrowth::step(double Dt) {
 
     }
 
-    // Find the highest LRC cell (used later for zonation, to see how fare the cells are from the QC)
+    // Find the highest LRC cell (used later for zonation, to see how far the cells are from the QC)
     double lrc = -BIG_VAL;
+    Point3d qc = Point3d(0,0,0);
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
             lrc = cD.centroid.y();
+        if(cD.type == Tissue::QC)
+            qc += cD.centroid;
     }
+    qc /= 2;
 
     // Zonation and Resting values update
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
     double wallsMaxGrowthRate = parm("Walls Growth Rate").toDouble();
     double elongationZone = parm("Elongation Zone").toDouble();
-    double differentatiationZone = parm("Differentiation Zone").toDouble();
+    double differentiationZone = parm("Differentiation Zone").toDouble();
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         cD.lifeTime += Dt;
         // Zonation
-        if(lrc != -BIG_VAL && elongationZone > 0 && differentatiationZone > 0 && elongationZone < differentatiationZone) {
+        if(lrc != -BIG_VAL && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
             if(cD.centroid.y() - lrc >  elongationZone)
-                cD.divisionAllowed = false;
-            if(cD.centroid.y() - lrc >  differentatiationZone)
-                cD.pressureMax = 1;
+                cD.stage = 1;
+            if(cD.centroid.y() - lrc >  differentiationZone) {
+                cD.stage = 2;
+                cD.pressureMax = 1; // move it to mechs
+            }
+
         }
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
@@ -1949,10 +1902,13 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         } else
             cD.divisionAllowed = true;
 
-        if((manualCellDivision && cD.selected) ||
+        if(
+            cD.stage == 0 &&
+            ((manualCellDivision && cD.selected) ||
             (cD.divisionAllowed == true &&
              cD.area > cD.cellMaxArea &&
-             cD.lastDivision > 1)) {
+             cD.lastDivision > 1))
+          ) {
             if(Verbose) {
                 mdxInfo << "CellDivision.step: Cell division triggered by " << cD.label << " of size " << cD.area
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
@@ -2076,8 +2032,6 @@ void write_debug_header(std::ofstream &output_file) {
                 << ","
                 << "Average Pressure"
                 << ","
-                << "Average Sigma"
-                << ","
                 << "Average Cell Growth"
                 << ","
                 << "Average Vertex Velocity"
@@ -2149,6 +2103,8 @@ bool Root::initialize(QWidget* parent) {
         throw(QString("Root::initialize Cannot make SaveMesh") + parm("SaveMesh"));
     if(!getProcess(parm("Remesh"), remeshProcess))
         throw(QString("Root::initialize Cannot make Remesh") + parm("Remesh"));
+    if(!getProcess(parm("RemeshCell"), remeshCellProcess))
+        throw(QString("Root::initialize Cannot make Remesh Cell") + parm("RemeshCell"));
 
     debugging = parm("Debug") == "True";
     maxMechanicsIter =  parm("Max Mechanical Iterations").toInt();
@@ -2299,17 +2255,8 @@ bool Root::step() {
     // Execute tests
     executeTestProcess->step(stepCount);
 
-    // Find the center of QC
-    Point3d  QCcm;
-    for(auto c : cellAttr) {
-        Tissue::CellData& cD = cellAttr[c.first];
-        if(cD.type == Tissue::QC)
-            QCcm += cD.centroid;
-    }
-    QCcm /= 2;
-
     // Find the center of vascular initials or substrate
-    Point3d  VIcm, SUBcm;
+    Point3d  QCcm,VIcm, SUBcm;
     int VIcount = 0;
     int SUBcount = 0;
     for(auto c : cellAttr) {
@@ -2322,7 +2269,10 @@ bool Root::step() {
             SUBcm += cD.centroid;
             SUBcount++;
         }
+        if(cD.type == Tissue::QC)
+            QCcm += cD.centroid;
     }
+    QCcm /= 2;
     VIcm /= VIcount;
     SUBcm /= SUBcount;
 
@@ -2351,8 +2301,21 @@ bool Root::step() {
     }
 
     // Check whether we should remesh
-    if(parm("Remesh during execution") == "True")
-        remeshProcess->check();
+    double remeshAvg = parm("Remesh during execution").toDouble();
+    if(remeshAvg > 0){
+        //remeshProcess->check();
+        for(auto c : cellAttr) {
+            Tissue::CellData& cD = cellAttr[c.first];
+            cD.remeshTime += mechanicsProcess->Dt;
+            int range = remeshAvg - 10 + 1;
+            int num = rand() % range + 1;
+            if(cD.stage > 0 && cD.remeshTime > num) {
+                remeshCellProcess->step(cD.label);
+                cD.remeshTime = 0;
+            }
+        }
+    }
+
 
     // Update the mesh
     if(stepCount % parm("Mesh Update Timer").toInt() == 0)
@@ -2524,15 +2487,12 @@ bool Root::step() {
         rootGR /= mechanicsProcess->growthRatesVector.size();
 
         double avg_pressure = 0;
-        double avg_sigma = 0;
         for(CCIndex e : cs.edges()) {
             Tissue::EdgeData eD = edgeAttr[e];
             avg_pressure += norm(eD.pressureForce);
-            avg_sigma += norm(eD.sigmaForce);
 
         }
         avg_pressure *= 1. / cs.edges().size();
-        avg_sigma *= 1. / cs.edges().size();
 
 
         double avg_velocity = 0;
@@ -2590,7 +2550,7 @@ bool Root::step() {
         anisotropy_degree /= anisotropy_count;
 
         output_file << stepCount << "," << userTime << "," << mechanicsProcess->realTime  << ","
-                    << rootGR << "," << QCcm << "," << avg_pressure << "," << avg_sigma << ","
+                    << rootGR << "," << QCcm << "," << avg_pressure << ","
                     << avg_cell_growth << "," << avg_velocity << "," << avg_auxin << "," << std_auxin << ","
                     << avg_auxinInter << "," << avg_Pin1Cyt << "," << avg_Pin1Mem << "," << avg_Aux1Mem << ","
                     << chemicalsProcess->debugs["Average Auxin Diffusion"] << ","
@@ -2611,6 +2571,7 @@ bool Root::step() {
         }        
         */
         // Crisanto's data
+        /*
         if(stepCount % 30 == 0)
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
@@ -2619,6 +2580,7 @@ bool Root::step() {
                     <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
                     << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
         }
+        */
     }
 
     // Calculate FPS
@@ -3219,11 +3181,11 @@ bool PrintCellAttr::step() {
                     << " invRestMat: " << cD.invRestMat << " "
                     << " restX0: ";
                     for(auto x : cD.restX0) mdxInfo << x << " ";
-                    mdxInfo << endl;
+                    mdxInfo << " shapeInit: " << cD.shapeInit << endl;
             mdxInfo << " a1: " << cD.a1 << " " << " a2: " << cD.a2 << " "
                     << " axisMin: " << cD.axisMin << " " << " axisMax: " << cD.axisMax << " " << " divVector " << cD.divVector << " MF reorientation: " << cD.mfRORate << endl
-                    << " periclinal division: " << cD.periclinalDivision <<  " division algorithm: " << cD.divAlg << " last division: " << cD.lastDivision << " division counts: " << cD.divisionCount << endl
-                    << " pressure: " << cD.pressure << " " << " pressureMax: " << cD.pressureMax << " " << " wallStress : " << cD.wallStress << endl;
+                    << " life time: " << cD.lifeTime << " periclinal division: " << cD.periclinalDivision <<  " division algorithm: " << cD.divAlg << " last division: " << cD.lastDivision << " division counts: " << cD.divisionCount << endl
+                    << " pressure: " << cD.pressure << " " << " pressureMax: " << cD.pressureMax << endl;
             mdxInfo << " strain rate on the edges: ";
                        for(auto e : cD.perimeterEdges) {
                            Tissue::EdgeData& eD = edgeAttr[e];
@@ -3253,7 +3215,6 @@ bool PrintCellAttr::step() {
                     << " E: " << fD.E << " " << " F: " << fD.F << " " << " R: " << fD.R << " " << " G: " << fD.G << " " << " V: " << fD.V << endl
                     //<< " F1: " << fD.F1 << " " << " F2: " << fD.F2 << endl
                     << " a1: " << fD.a1 << " " << " a2: " << fD.a2 << endl
-                    << " stress: " << fD.stress << " " << " sigmaA: " << fD.sigmaA << endl
                     << " (visuals)"
                     << " type : " << fD.type << " growthRate : " << fD.growthRate << " auxin : " << fD.auxin << " intercellularAuxin : " << fD.intercellularAuxin
                     << " Pin1Cyt : " << fD.Pin1Cyt << " Pin1Mem : " << fD.Pin1Mem
@@ -3273,7 +3234,6 @@ bool PrintCellAttr::step() {
                         << " prev_strain: " << eD.prev_strain
                         << " strain: " << eD.strain << " strainRate: " << eD.strainRate
                         //<< " cellAxis: " << eD.cellAxis
-                        << " sigmaEv: " << eD.sigmaEv << " sigmaEe: " << eD.sigmaEe << " sigmaForce: " << eD.sigmaForce
                         << " pressureForce: " << eD.pressureForce  << endl;
                  mdxInfo  << " intercellularAuxin: " << eD.intercellularAuxin << endl;
                  for(auto p : eD.auxinRatio)
@@ -3326,19 +3286,14 @@ bool PrintCellAttr::step() {
                         << " norm velocity: " << norm(vD.velocity)
                         << " dampedVelocity: " << norm(vD.dampedVelocity)
                         << " forces: " << vD.forces.size();
-                Point3d pressure, sigmaAY, sigmaEv, sigmaEe, totalForce;
+                Point3d pressure,  totalForce;
                 for(auto m : vD.forces) {
                     mdxInfo << " , " << std::get<0>(m) << " " << std::get<1>(m) << " "
                             << std::get<2>(m);
                     totalForce += std::get<2>(m);
                     if(std::get<1>(m) == QString("pressure"))
                         pressure += std::get<2>(m);
-                    else if(std::get<1>(m) == QString("sigmaAY"))
-                        sigmaAY += std::get<2>(m);
-                    else if(std::get<1>(m) == QString("sigmaEv"))
-                        sigmaEv += std::get<2>(m);
-                    else if(std::get<1>(m) == QString("sigmaEe"))
-                        sigmaEe += std::get<2>(m);
+
                     else if(std::get<1>(m) == QString("substrate") ||
                             std::get<1>(m) == QString("damping") ||
                             std::get<1>(m) == QString("friction"))
@@ -3349,10 +3304,7 @@ bool PrintCellAttr::step() {
                 }
                 mdxInfo << endl;
                 mdxInfo << " Total Force: " << totalForce << endl
-                        << "  Pressure: " << pressure
-                        << "  sigmaAY: " << sigmaAY
-                        << "  sigmaEv: " << sigmaEv
-                        << "  sigmaEe: " << sigmaEe << endl;;
+                        << "  Pressure: " << pressure << endl;;
                 Point3d totalCorrection;
                 for(auto c : vD.corrections)
                     totalCorrection += c.second;
@@ -3548,6 +3500,7 @@ REGISTER_PROCESS(PrintCellAttr);
 REGISTER_PROCESS(HighlightCell);
 REGISTER_PROCESS(DeleteCell);
 REGISTER_PROCESS(ExecuteTest);
+REGISTER_PROCESS(RemeshCell);
 REGISTER_PROCESS(ClearCells);
 REGISTER_PROCESS(TriangulateFacesX);
 REGISTER_PROCESS(PrintVertexAttr);

@@ -325,8 +325,11 @@ public:
         Point3d a1 = Point3d(0, EPS, 0), a2 = Point3d(EPS, 0, 0);
         double mfRORate = -1;
         double growthFactor = 0;
+        double lifeTime = 0;
+        double remeshTime = 0;
         double lastDivision = 0;
         double divisionCount = 0;
+        int stage = 0; // Meristem, elongation, differentiation
         Point3d axisMin, axisMax, prev_axisMin, prev_axisMax;
         bool periclinalDivision = false;
         int divAlg = -1;
@@ -341,7 +344,6 @@ public:
         double PINOID = 0;
         double PP2A = 0;
         double divInhibitor = 0, divPromoter = 0;
-        double lifeTime = 0;
         double pressure = 1, pressureMax = -1;
         double auxinProdRate = -1;
         double auxinDecayRate = 0;
@@ -357,7 +359,6 @@ public:
         Point3d divVector = Point3d(1., 0., 0.);
         bool mfDelete = false;
         double perimeter = 0;
-        double wallStress = -1;
         std::vector<Point3d> box;
         Point3d centroid;
         std::map<CCIndex, double> perimeterAngles;
@@ -579,7 +580,6 @@ public:
             shapeInit = false;
             invmassVertices = 1;            
             mfRORate = -1;
-            wallStress = -1;
             for(CCIndex f : *cellFaces){
                 FaceData &fD = faceAttr[f];
                 fD.resetMechanics();
@@ -657,14 +657,14 @@ public:
             if(lineage == 0)
                 lineage = label;
             // find my faces
-            uint old_cellFaces = cellFaces->size();
+            std::set<CCIndex> old_cellFaces = *cellFaces;
             cellFaces->clear();
             for(CCIndex f : cs.faces())
                 if(indexAttr[f].label == label) {
                     cellFaces->insert(f);
                     faceAttr[f].owner = this;
                 }
-            if(old_cellFaces != cellFaces->size())
+            if(old_cellFaces != *cellFaces)
                      shapeInit = false;
 
             // update the geometry
@@ -926,9 +926,6 @@ public:
         std::map<CCIndex, Point3d> outwardNormal;
         std::map<int, double> auxinFluxImpact, MFImpact, geomImpact;
         std::map<int, double> pin1Sensitivity, pin1SensitivityRaw;
-        double sigmaEv = 0, sigmaEe = 0;
-        Point3d sigmaForce = Point3d(0, 0, 0);
-        std::vector<Point3d> sigmaForces;
         Point3d pressureForce = Point3d(0, 0, 0);
 
         CCIndex pin_v1_1, pin_v2_1, pin_v3_1, pin_v4_1, pin_e1_1, pin_e2_1, pin_e3_1, pin_e4_1, pin_f_1;
@@ -1197,7 +1194,7 @@ public:
         double edgeStiffness = 0;
         double MFImpact = 0, auxinFluxImpact = 0, geomImpact = 0, auxinRatio = 0, auxinGrad = 0;
         double pin1Sensitivity = 0, pin1SensitivityRaw = 0;
-        Matrix3d E, G, V, dV, F = Matrix3d().identity(), R = Matrix3d().identity(), U = Matrix3d().identity(), Ev, F1, F2, sigmaA;
+        Matrix3d E, G, V, dV, F = Matrix3d().identity(), R = Matrix3d().identity(), U = Matrix3d().identity(), Ev, F1, F2;
         Point3d divVector = Point3d(1., 0., 0.);
         double auxin = 0, Aux1Cyt = 0, Pin1Cyt = 0, divInhibitorCyt = 0,
                Aux1Mem = 0, Pin1Mem = 0, intercellularAuxin = 0, PINOIDMem = 0, PP2AMem = 0,

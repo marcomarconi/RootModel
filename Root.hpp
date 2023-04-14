@@ -56,6 +56,7 @@ namespace ROOT
 // pre-definition
 class Root;
 class Remesh;
+class RemeshCell;
 class MechanicalGrowth;
 class SetGlobalAttr;
 class ClearCells;
@@ -88,9 +89,7 @@ public:
         addParm("Shear CK", "Compression Stiffness of the shear edge springs", "1");
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
         addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "3");
-        addParm("Wall stress", "Wall stress", "1");
-        addParm("Wall stress K1", "Wall stress K1", "0.01");
-        addParm("Wall stress K2", "Wall stress K2", "2");
+        addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");
@@ -130,7 +129,6 @@ private:
 
     CCIndexDataAttr* indexAttr = 0;
     Tissue* tissueProcess = 0;
-    double wallStress = 0, wallStressK1 = 0, wallStressK2 = 0;
     Point3d gravity;
     double convergeThresh = 1e-6;
     double convergenceLag = 0;
@@ -834,9 +832,7 @@ public:
                               << "None");
         addParm("Remesh during execution",
                 "Remesh during execution",
-                "True",
-                QStringList() << "True"
-                              << "False");
+                "0");
         addParm("Mesh Update Timer", "Mesh Update Timer", "1");
         addParm("Snapshots Timer",
                 "Time frames between snapshots",
@@ -881,6 +877,7 @@ public:
                 "Model/Root/23 Set Global Attr");
         addParm("Triangulate Faces", "Triangulate Faces", "Model/Root/Triangulate Faces");
         addParm("Remesh", "Remesh", "Model/Root/02 Remesh");
+        addParm("RemeshCell", "RemeshCell", "Model/Root/Remesh Cell");
         addParm("SplitEdges", "SplitEdges", "Mesh/Structure/Split Edges");
         addParm("SaveView", "SaveView", "Tools/System/Save View");
         addParm("SaveMesh", "SaveMesh", "Mesh/System/Save");
@@ -910,6 +907,7 @@ public:
     SetGlobalAttr* setGlobalAttrProcess = 0;
     TriangulateFacesX* triangulateProcess = 0;
     Remesh* remeshProcess = 0;
+    RemeshCell* remeshCellProcess = 0;
     Process* splitEdgesProcess = 0;
     SaveViewFile* saveViewProcess = 0;
     MeshSave* saveMeshProcess = 0;
@@ -1891,6 +1889,63 @@ public:
     }
 };
 
+
+
+class RemeshCell : public Process {
+public:
+    RemeshCell(const Process& process)
+        : Process(process) {
+        setName("Model/Root/Remesh Cell");
+        addParm("Root Process", "Name of the process for the Root", "Model/Root/01 Root");
+        addParm("Remesh", "Remesh", "Model/Root/02 Remesh");
+        addParm("Tissue Process", "Name of Tissue Process", "Model/Root/03 Cell Tissue");
+        addParm("Triangulate Faces Process", "Triangulate Faces", "Model/Root/Triangulate Faces");
+        addParm("ClearCells Process", "ClearCells", "Model/Root/ClearCells");
+
+    }
+
+    bool step(int label) {
+        Mesh* mesh = getMesh("Mesh 1");
+        if(!mesh or mesh->file().isEmpty())
+            throw(QString("Root::AddFace No current mesh"));
+
+        QString ccName = mesh->ccName();
+        if(ccName.isEmpty())
+            throw(QString("Root::AddFace Error, no cell complex selected"));
+
+        if(!getProcess(parm("Root Process"), rootProcess))
+            throw(QString("Root::initialize Cannot make root process"));
+        if(!getProcess(parm("Remesh"), remeshProcess))
+            throw(QString("Root::initialize Cannot make Remesh") + parm("Remesh"));
+        if(!getProcess(parm("Triangulate Faces Process"), triangulateProcess))
+            throw(QString("Root::initialize Cannot make Triangulate Faces Process") +
+                  parm("Triangulate Faces"));
+        if(!getProcess(parm("ClearCells Process"), clearCellsProcess))
+            throw(QString("Root::initialize Cannot make ClearCells") + parm("ClearCells Process"));
+        if(!getProcess(parm("Tissue Process"), tissueProcess))
+            throw(QString("Root::initialize Cannot make Tissue Process") + parm("Tissue Process"));
+
+        CCStructure& cs = mesh->ccStructure(ccName);
+        CCIndexDataAttr& indexAttr = mesh->indexAttr();
+        Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
+
+        Tissue::CellData& cD = cellAttr[label];
+        clearCellsProcess->clearCell(cD.label);
+        updateGeometry(cs, indexAttr);
+        indexAttr[*(cD.cellFaces)->begin()].selected = true;
+        triangulateProcess->step();
+        tissueProcess->initialize();
+        remeshProcess->step(true, false, true);
+        mesh->updateAll();
+
+        return false;
+    }
+    Root* rootProcess = 0;
+    Remesh* remeshProcess = 0;
+    ClearCells* clearCellsProcess = 0;
+    TriangulateFacesX* triangulateProcess = 0;
+    Tissue* tissueProcess = 0;
+};
 
 
 
