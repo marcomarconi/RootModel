@@ -1083,6 +1083,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.PP2A = PP2A / 2;
     cD1.divPromoter = divPromoter / 2;
     cD1.divisionCount = divisionCount+1;
+    cD1.divProb = 0;
 
     cD2.tissue = tissue;
     cD2.type = type2;
@@ -1116,6 +1117,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.divInhibitor = 0; //divInhibitor / 2;
     cD2.divPromoter = divPromoter / 2;
     cD2.divisionCount = divisionCount+1;
+    cD2.divProb = 0;
 
     std::vector<CCIndex> edges;
     edges.insert(edges.end(), cD1.perimeterEdges.begin(), cD1.perimeterEdges.end());

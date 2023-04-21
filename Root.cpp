@@ -484,6 +484,7 @@ bool MechanicalGrowth::step(double Dt) {
     // Zonation and Resting values update
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
     double wallsMaxGrowthRate = parm("Walls Growth Rate").toDouble();
+    bool preventElengation = parm("Prevent Cell Elongation") == "True";
     double elongationZone = parm("Elongation Zone").toDouble();
     double differentiationZone = parm("Differentiation Zone").toDouble();
     for(auto c : cellAttr) {
@@ -497,15 +498,15 @@ bool MechanicalGrowth::step(double Dt) {
                 cD.stage = 2;
                 cD.pressureMax = 1; // move it to mechs
             }
-
         }
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
         if(cD.mfRORate == 0)
             continue;  ///
         // Disable growth update if cell division is not allowed (Crisanto's root) and we have reached max cell size
-        if(!cD.divisionAllowed && cD.area > cD.cellMaxArea)
-            continue;
+        if(preventElengation)
+            if(!cD.divisionAllowed && cD.area > cD.cellMaxArea)
+                continue;
         if(cD.growthRate > growthRateThresh)
             //cD.restArea += cD.area * areaMaxGrowthRate * Dt;
             cD.restArea = cD.area;
@@ -1874,6 +1875,9 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     double divisionProbHalfInhibitor = parm("Division half-probability by Inhibitor").toDouble();
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
     bool divisionControl = parm("Division Control") == "True";
+    bool sabatiniControl = parm("Sabatini Control") == "True";
+    double lowerMaxTime = parm("Lower Division Time").toDouble();
+    double upperMaxTime = parm("Upper Division Time").toDouble();
     bool ignoreCellType = parm("Ignore Cell Type") == "True";
 
     // find the QC so we can print the distance (for plotting)
@@ -1889,10 +1893,10 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool trigger_division = false;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
-        cD.divProb = 0;
+        // Crisanto
         cD.divisionAllowed = false;
-        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime + divisionMinTime;
-        if(divisionControl && rootProcess->userTime > 24) {
+        if(divisionControl && rootProcess->userTime > 24) { // rootProcess->userTime > 24 is to avoid early divisions
+            cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime + divisionMinTime;
             if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
                 if(norm(cD.centroid - QCcm) < divisionMeristemSize)
                     if(cD.divPromoter/cD.area > divisionPromoterLevel) {
@@ -1901,7 +1905,17 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                     }
         } else
             cD.divisionAllowed = true;
-
+        // Sabatini
+        if(sabatiniControl) {
+            cD.divisionAllowed = false;
+            if(cD.divProb == 0) {
+                int range = upperMaxTime - lowerMaxTime + 1;
+                cD.divProb = rand() % range + lowerMaxTime;
+            }
+            if(cD.lastDivision > cD.divProb)
+                cD.divisionAllowed = true;
+        }
+        // Cell division
         if(
             cD.stage == 0 &&
             ((manualCellDivision && cD.selected) ||
@@ -1914,10 +1928,6 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                         <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
                         << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
-
-
-                //cout << random << " " << divProbAuxin << " " << divProbSize << " " << divProbInhibitor << " " << (divProbSize + divProbAuxin *divProbInhibitor* divProbSize)*0.5 << endl;
-                //cout << (random < RAND_MAX * (divProbSize + divProbAuxin * divProbSize * divProbInhibitor)*0.5 * Dt) << endl;
 
             }
             // Skip division if division algoritm MF depending but cell has no polarity
@@ -2307,9 +2317,11 @@ bool Root::step() {
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             cD.remeshTime += mechanicsProcess->Dt;
-            int range = remeshAvg - 10 + 1;
-            int num = rand() % range + 1;
-            if(cD.stage > 0 && cD.remeshTime > num) {
+            int minimum = 10;
+            int range = remeshAvg - minimum + 1;
+            int num = rand() % range + minimum;
+            if(cD.area > cD.cellMaxArea && cD.remeshTime > num) {
+                mdxInfo << "Remeshing Cell: " << cD.label << endl;
                 remeshCellProcess->step(cD.label);
                 cD.remeshTime = 0;
             }

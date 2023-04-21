@@ -189,6 +189,9 @@ public:
         addParm("MF Delete After Division", "MF Delete After Division","True",
                 QStringList() << "True"
                               << "False");
+        addParm("Prevent Cell Elongation", "The cell will stop growing when reaching max area if division is not allowed", "True",
+                QStringList() << "True"
+                              << "False");
         addParm("Zonation", "Zonation", "");
         addParm("Elongation Zone", "Elongation Zone", "50");
         addParm("Differentiation Zone", "Differentiation Zone", "100");
@@ -394,6 +397,28 @@ public:
                 "When using division algorithm 2, the closest existing division point will be used as \
                 joining point, up to this maximum distance",
                 "1" );
+        addParm("Sabatinis's parameters",
+                "",
+                "");
+        addParm("Sabatini Control",
+                "Sabatini Control",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
+        addParm("Lower Division Time",
+                "Lower Division Time",
+                "10");
+        addParm("Upper Division Time",
+                "Upper Division Time",
+                "30");
+        addParm("Crisanto's parameters",
+                "",
+                "");
+        addParm("Division Control",
+                "Division Control",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
         addParm("Minimum Polarity Vector Norm",
                 "Minimum Polarity Vector Norm",
                 "0.05" );
@@ -415,11 +440,7 @@ public:
         addParm("Division half-probability by Inhibitor",
                 "Division half-probability by Inhibitor",
                 "0.03" );
-        addParm("Division Control",
-                "Division Control",
-                "False",
-                                QStringList() << "True"
-                                              << "False");
+
         addParm("Ignore Cell Type",
                 "Ignore Cell Type",
                 "False",
