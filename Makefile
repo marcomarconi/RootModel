@@ -13,7 +13,7 @@ include $(shell mdx --resource)/MDXProcess.mk
 
 
 # Add extra compile flags here
-CXXFLAGS += -Wno-unused-local-typedefs -Wno-unused-parameter $(EXTRA) $(INC)
+CXXFLAGS += -Wno-deprecated-copy -Wno-unused-local-typedefs -Wno-unused-parameter $(EXTRA) $(INC)
 
 # Add extra libraries here
 #LIBS+=Root.cu.o -lcudart

@@ -122,6 +122,7 @@ bool Mechanics::step() {
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
             for(CCIndex e : cD.perimeterEdges) {
+                continue;
                 Tissue::EdgeData& eD = edgeAttr[e];
                 if(eD.type == Tissue::Wall) {
                   if(auxinWallK1 > 0)
@@ -129,7 +130,6 @@ bool Mechanics::step() {
                                                         pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
                                                         );
                   if(quasimodoK > 0);
-
                 }
             }
 
@@ -2317,7 +2317,7 @@ bool Root::step() {
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             cD.remeshTime += mechanicsProcess->Dt;
-            int minimum = 10;
+            int minimum = remeshAvg / 2;
             int range = remeshAvg - minimum + 1;
             int num = rand() % range + minimum;
             if(cD.area > cD.cellMaxArea && cD.remeshTime > num) {
