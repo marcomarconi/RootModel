@@ -521,7 +521,11 @@ bool MechanicalGrowth::step(double Dt) {
                     if(eD.strain >= growthRateThresh && cD.growthRate > growthRateThresh) {
                         //eD.restLength = eD.length;
                         double strainDiff = eD.strain - growthRateThresh;
-                        eD.restLength += wallsMaxGrowthRate * strainDiff * Dt;
+                        double wallsMaxGR = cD.wallsMaxGR;
+                        if(wallsMaxGR == -1)
+                            wallsMaxGR = wallsMaxGrowthRate;
+                        wallsMaxGR = wallsMaxGrowthRate;
+                        eD.restLength += wallsMaxGR * strainDiff * Dt;
                         if( eD.restLength > eD.length) {
                             mdxInfo << "WARNING: restLength is updated inmediately" << endl;
                             eD.restLength = eD.length;
@@ -3197,7 +3201,7 @@ bool PrintCellAttr::step() {
             mdxInfo << " a1: " << cD.a1 << " " << " a2: " << cD.a2 << " "
                     << " axisMin: " << cD.axisMin << " " << " axisMax: " << cD.axisMax << " " << " divVector " << cD.divVector << " MF reorientation: " << cD.mfRORate << endl
                     << " life time: " << cD.lifeTime << " periclinal division: " << cD.periclinalDivision <<  " division algorithm: " << cD.divAlg << " last division: " << cD.lastDivision << " division counts: " << cD.divisionCount << endl
-                    << " pressure: " << cD.pressure << " " << " pressureMax: " << cD.pressureMax << endl;
+                    << " pressure: " << cD.pressure << " " << " pressureMax: " << cD.pressureMax << " walls max GR: " << cD.wallsMaxGR  << endl;
             mdxInfo << " strain rate on the edges: ";
                        for(auto e : cD.perimeterEdges) {
                            Tissue::EdgeData& eD = edgeAttr[e];
@@ -3206,7 +3210,6 @@ bool PrintCellAttr::step() {
             mdxInfo << endl;
             mdxInfo
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
-                    //<< " growth factor: " << cD.growthFactor << " " << " growth factor by area: " << cD.growthFactor/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
@@ -3371,6 +3374,7 @@ bool SetGlobalAttr::step() {
         if(parm(QString(str + " Turgor Pressure")).toDouble() >= 0)
             cD.pressureMax = parm(QString(str + " Turgor Pressure")).toDouble();
         cD.growthFactor = parm(QString(str + " Growth Factor")).toDouble();
+        cD.wallsMaxGR = parm(QString(str + " Wall Max GR")).toDouble();
         if(parm(QString(str + " Max area")).toDouble() >= 0)
             cD.cellMaxArea = parm(QString(str + " Max area")).toDouble();
         else

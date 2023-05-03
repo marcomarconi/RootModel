@@ -1505,6 +1505,7 @@ public:
         addParm("Undefined Shear CK", "", "-1");
         addParm("Undefined Turgor Pressure", "", "-1");
         addParm("Undefined Growth Factor", "", "0");
+        addParm("Undefined Wall Max GR", "", "-1");
         addParm("Undefined Max area", "", "10000");
         addParm("Undefined MF reorientation rate", "", "0");
         addParm("QC Wall EK", "", "1");
@@ -1513,6 +1514,7 @@ public:
         addParm("QC Shear CK", "", "1");
         addParm("QC Turgor Pressure", "", "0");
         addParm("QC Growth Factor", "", "0");
+        addParm("QC Wall Max GR", "", "-1");
         addParm("QC Max area", "", "1000");
         addParm("QC MF reorientation rate", "", "0");
         addParm("ColumellaInitial Wall EK", "", "-1");
@@ -1520,6 +1522,7 @@ public:
         addParm("ColumellaInitial Shear EK", "", "-1");
         addParm("ColumellaInitial Shear CK", "", "-1");
         addParm("ColumellaInitial Growth Factor", "", "1");
+        addParm("ColumellaInitial Wall Max GR", "", "-1");
         addParm("ColumellaInitial Turgor Pressure", "", "1");
         addParm("ColumellaInitial Max area", "", "100");
         addParm("ColumellaInitial MF reorientation rate", "", "0");
@@ -1528,6 +1531,7 @@ public:
         addParm("Columella Shear EK", "", "-1");
         addParm("Columella Shear CK", "", "-1");
         addParm("Columella Growth Factor", "", "1");
+        addParm("Columella Wall Max GR", "", "-1");
         addParm("Columella Turgor Pressure", "", "1");
         addParm("Columella MF reorientation rate", "", "0");
         addParm("Columella Max area", "", "150");
@@ -1537,6 +1541,7 @@ public:
         addParm("VascularInitial Shear CK", "", "-1");
         addParm("VascularInitial Turgor Pressure", "", "-1");
         addParm("VascularInitial Growth Factor", "", "5");
+        addParm("VascularInitial Wall Max GR", "", "-1");
         addParm("VascularInitial MF reorientation rate", "", "-1");
         addParm("VascularInitial Max area", "", "70");
         addParm("Vascular Wall EK", "", "-1");
@@ -1545,6 +1550,7 @@ public:
         addParm("Vascular Shear CK", "", "-1");
         addParm("Vascular Turgor Pressure", "", "-1");
         addParm("Vascular Growth Factor", "", "5");
+        addParm("Vascular Wall Max GR", "", "-1");
         addParm("Vascular MF reorientation rate", "", "0");
         addParm("Vascular Max area", "", "100");
         addParm("Pericycle Wall EK", "", "-1");
@@ -1553,6 +1559,7 @@ public:
         addParm("Pericycle Shear CK", "", "-1");
         addParm("Pericycle Turgor Pressure", "", "-1");
         addParm("Pericycle Growth Factor", "", "1");
+        addParm("Pericycle Wall Max GR", "", "-1");
         addParm("Pericycle MF reorientation rate", "", "-1");
         addParm("Pericycle Max area", "", "75");
         addParm("Cortex Wall EK", "", "-1");
@@ -1561,6 +1568,7 @@ public:
         addParm("Cortex Shear CK", "", "-1");
         addParm("Cortex Turgor Pressure", "", "-1");
         addParm("Cortex Growth Factor", "", "1");
+        addParm("Cortex Wall Max GR", "", "-1");
         addParm("Cortex Max area", "", "75");
         addParm("Cortex MF reorientation rate", "", "-1");
         addParm("Endodermis Wall EK", "", "-1");
@@ -1569,6 +1577,7 @@ public:
         addParm("Endodermis Shear CK", "", "-1");
         addParm("Endodermis Turgor Pressure", "", "-1");
         addParm("Endodermis Growth Factor", "", "1");
+        addParm("Endodermis Wall Max GR", "", "-1");
         addParm("Endodermis Max area", "", "50");
         addParm("Endodermis MF reorientation rate", "", "-1");
         addParm("Epidermis Wall EK", "", "-1");
@@ -1577,6 +1586,7 @@ public:
         addParm("Epidermis Shear CK", "", "-1");
         addParm("Epidermis Turgor Pressure", "", "-1");
         addParm("Epidermis Growth Factor", "", "1");
+        addParm("Epidermis Wall Max GR", "", "-1");
         addParm("Epidermis Max area", "", "75");
         addParm("Epidermis MF reorientation rate", "", "-1");
         addParm("CEI Wall EK", "", "-1");
@@ -1585,6 +1595,7 @@ public:
         addParm("CEI Shear CK", "", "-1");
         addParm("CEI Turgor Pressure", "", "-1");
         addParm("CEI Growth Factor", "", "1");
+        addParm("CEI Wall Max GR", "", "-1");
         addParm("CEI Max area", "", "150");
         addParm("CEI MF reorientation rate", "", "-1");
         addParm("CEID Wall EK", "", "-1");
@@ -1593,6 +1604,7 @@ public:
         addParm("CEID Shear CK", "", "-1");
         addParm("CEID Turgor Pressure", "", "-1");
         addParm("CEID Growth Factor", "", "1");
+        addParm("CEID Wall Max GR", "", "-1");
         addParm("CEID Max area", "", "100");
         addParm("CEID MF reorientation rate", "", "-1");
         addParm("EpLrcInitial Wall EK", "", "-1");
@@ -1601,6 +1613,7 @@ public:
         addParm("EpLrcInitial Shear CK", "", "-1");
         addParm("EpLrcInitial Turgor Pressure", "", "-1");
         addParm("EpLrcInitial Growth Factor", "", "1");
+        addParm("EpLrcInitial Wall Max GR", "", "-1");
         addParm("EpLrcInitial Max area", "", "50");
         addParm("EpLrcInitial MF reorientation rate", "", "-1");
         addParm("LRC Wall EK", "", "-1");
@@ -1609,6 +1622,7 @@ public:
         addParm("LRC Shear CK", "", "-1");
         addParm("LRC Turgor Pressure", "", "-1");
         addParm("LRC Growth Factor", "", "1");
+        addParm("LRC Wall Max GR", "", "-1");
         addParm("LRC Max area", "", "75");
         addParm("LRC MF reorientation rate", "", "-1");
         addParm("Substrate Wall EK", "", "-1");
@@ -1617,6 +1631,7 @@ public:
         addParm("Substrate Shear CK", "", "-1");
         addParm("Substrate Turgor Pressure", "", "-1");
         addParm("Substrate Growth Factor", "", "0");
+        addParm("Substrate Wall Max GR", "", "-1");
         addParm("Substrate MF reorientation rate", "", "0");
         addParm("Substrate Max area", "", "1000");
         addParm("Source Wall EK", "", "1");
@@ -1625,6 +1640,7 @@ public:
         addParm("Source Shear CK", "", "1");
         addParm("Source Turgor Pressure", "", "-1");
         addParm("Source Growth Factor", "", "0");
+        addParm("Source Wall Max GR", "", "-1");
         addParm("Source MF reorientation rate", "", "0");
         addParm("Source Max area", "", "1000");
 

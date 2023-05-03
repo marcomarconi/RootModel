@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -6.00664 91.0573 -2312.95 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 5.18572 -3.39963 -2312.95 1
 SceneRadius: 500
-CameraZoom: -1.248
+CameraZoom: -2.208
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 301.497
+Width: 263.538
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 301.497
+Width: 263.538
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 301.497
+Width: 263.538
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05872 1.05872 1.05872
+Size: 1.05919 1.05919 1.05919
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1139,7 +1139,7 @@ ParmString: True
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
-ParmString: 40
+ParmString: 0
 ParmName: Mesh Update Timer
 ParmString: 2
 ParmName: Snapshots Timer
@@ -1317,7 +1317,7 @@ ParmString: 10
 ParmName: Mass Spring Parameters
 ParmString: 
 ParmName: Wall EK
-ParmString: 0.25
+ParmString: 0.01
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
@@ -1633,21 +1633,21 @@ ParmString: Model/Root/052 Mechanical Growth
 ParmName: Divide Process
 ParmString: Model/Root/04 Divide Cells
 ParmName: Undefined Wall EK
-ParmString: 1
+ParmString: 0
 ParmName: Undefined Wall CK
-ParmString: 1
+ParmString: 0
 ParmName: Undefined Shear EK
-ParmString: 1
+ParmString: 0
 ParmName: Undefined Shear CK
-ParmString: 1
+ParmString: 0
 ParmName: Undefined Turgor Pressure
 ParmString: 0
 ParmName: Undefined Growth Factor
 ParmString: 0
 ParmName: Undefined Max area
-ParmString: 70
+ParmString: 1000
 ParmName: Undefined MF reorientation rate
-ParmString: -1
+ParmString: 0
 ParmName: QC Wall EK
 ParmString: 1
 ParmName: QC Wall CK
