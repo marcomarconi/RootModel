@@ -405,12 +405,15 @@ public:
                 "False",
                                 QStringList() << "True"
                                               << "False");
-        addParm("Lower Division Time",
-                "Lower Division Time",
+        addParm("Division Coefficient Rate",
+                "Division Coefficient Rate",
                 "10");
-        addParm("Upper Division Time",
-                "Upper Division Time",
-                "30");
+        addParm("Minimum Area Percentage",
+                "Minimum Area Percentage",
+                "0.75");
+        addParm("Maximum Area Percentage",
+                "Maximum Area Percentage",
+                "1.5");
         addParm("Crisanto's parameters",
                 "",
                 "");

@@ -71,9 +71,9 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -16.3439 124.927 -2312.95 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -11.0774 146.301 -2312.95 1
 SceneRadius: 500
-CameraZoom: -1.056
+CameraZoom: -0.96
 
 
 [Clip1]
@@ -1139,7 +1139,7 @@ ParmString: True
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
-ParmString: 50
+ParmString: 30
 ParmName: Mesh Update Timer
 ParmString: 2
 ParmName: Snapshots Timer

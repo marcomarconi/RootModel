@@ -1880,8 +1880,9 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
     bool divisionControl = parm("Division Control") == "True";
     bool sabatiniControl = parm("Sabatini Control") == "True";
-    double lowerMaxTime = parm("Lower Division Time").toDouble();
-    double upperMaxTime = parm("Upper Division Time").toDouble();
+    double divisionCoefficientRate = parm("Division Coefficient Rate").toDouble();
+    double minimumAreaPerc = parm("Minimum Area Percentage").toDouble();
+    double maximumAreaPerc = parm("Maximum Area Percentage").toDouble();
     bool ignoreCellType = parm("Ignore Cell Type") == "True";
 
     // find the QC so we can print the distance (for plotting)
@@ -1912,12 +1913,21 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         // Sabatini
         if(sabatiniControl) {
             cD.divisionAllowed = false;
+            /*
             if(cD.divProb == 0) {
                 int range = upperMaxTime - lowerMaxTime + 1;
                 cD.divProb = rand() % range + lowerMaxTime;
             }
             if(cD.lastDivision > cD.divProb)
                 cD.divisionAllowed = true;
+            */
+            double stiffness = 0;
+            for(CCIndex e : cD.perimeterEdges)
+                stiffness += edgeAttr[e].eStiffness;
+            stiffness /= cD.perimeterEdges.size();
+            cD.divProb = minimumAreaPerc*cD.cellMaxArea + (maximumAreaPerc*cD.cellMaxArea) / (1 + exp(divisionCoefficientRate * stiffness));
+            if(cD.area > cD.divProb)
+                cD.divisionAllowed = true;;
         }
         // Cell division
         if(
@@ -2327,6 +2337,7 @@ bool Root::step() {
             if(cD.area > cD.cellMaxArea && cD.remeshTime > num) {
                 mdxInfo << "Remeshing Cell: " << cD.label << endl;
                 remeshCellProcess->step(cD.label);
+                cD.pressure = 0;
                 cD.remeshTime = 0;
             }
         }
@@ -3200,7 +3211,7 @@ bool PrintCellAttr::step() {
                     mdxInfo << " shapeInit: " << cD.shapeInit << endl;
             mdxInfo << " a1: " << cD.a1 << " " << " a2: " << cD.a2 << " "
                     << " axisMin: " << cD.axisMin << " " << " axisMax: " << cD.axisMax << " " << " divVector " << cD.divVector << " MF reorientation: " << cD.mfRORate << endl
-                    << " life time: " << cD.lifeTime << " periclinal division: " << cD.periclinalDivision <<  " division algorithm: " << cD.divAlg << " last division: " << cD.lastDivision << " division counts: " << cD.divisionCount << endl
+                    << " stage: " << cD.stage << " life time: " << cD.lifeTime << " periclinal division: " << cD.periclinalDivision <<  " division algorithm: " << cD.divAlg << " last division: " << cD.lastDivision << " division counts: " << cD.divisionCount << endl
                     << " pressure: " << cD.pressure << " " << " pressureMax: " << cD.pressureMax << " walls max GR: " << cD.wallsMaxGR  << endl;
             mdxInfo << " strain rate on the edges: ";
                        for(auto e : cD.perimeterEdges) {

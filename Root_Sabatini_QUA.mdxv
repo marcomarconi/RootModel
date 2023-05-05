@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -16.3439 124.927 -2312.95 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -12.1782 128.714 -2312.95 1
 SceneRadius: 500
 CameraZoom: -1.056
 
@@ -1797,7 +1797,7 @@ ParmString: 70
 ParmName: Endodermis MF reorientation rate
 ParmString: -1
 ParmName: Epidermis Wall EK
-ParmString: 0.01
+ParmString: -1
 ParmName: Epidermis Wall CK
 ParmString: -1
 ParmName: Epidermis Shear EK
@@ -1869,7 +1869,7 @@ ParmString: 60
 ParmName: EpLrcInitial MF reorientation rate
 ParmString: -1
 ParmName: LRC Wall EK
-ParmString: -1
+ParmString: 0.05
 ParmName: LRC Wall CK
 ParmString: -1
 ParmName: LRC Shear EK
