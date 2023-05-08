@@ -122,17 +122,28 @@ bool Mechanics::step() {
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
             for(CCIndex e : cD.perimeterEdges) {
-                continue;
+                continue; //////////////////////////////////////////////////ZZ
                 Tissue::EdgeData& eD = edgeAttr[e];
                 if(eD.type == Tissue::Wall) {
                   if(auxinWallK1 > 0)
+                        // this is wrong, it should take the mean from all neighbour cells, as this will simply get the last one
                         eD.eStiffness = baseWallEK *  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
                                                         pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
                                                         );
-                  if(quasimodoK > 0);
                 }
             }
-
+    }
+    if(quasimodoK)    {
+        for(CCIndex e: cs.edges()) {
+                Tissue::EdgeData& eD = edgeAttr[e];
+            double stiffness = 0;
+            for(CCIndex f : cs.incidentCells(e, 2)){
+                Tissue::CellData& cD = cellAttr[(*indexAttr)[f].label];
+                stiffness += eD.eStiffness * exp(-quasimodoK * cD.quasimodo);
+            }
+            stiffness /= cs.incidentCells(e, 2).size();
+            eD.eStiffness = stiffness;
+        }
     }
 
     // Apply external/internal forces on vertices
@@ -984,7 +995,11 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
     cD.divInhibitor += (divBase * cD.area - divDecay + divInduced ) * Dt;
 
-
+    // Quasimodo
+    if(cD.type == Tissue::Epidermis) {
+        cD.quasimodo += (parm("Quasimodo Basal Production Rate").toDouble() - cD.quasimodo * parm("Quasimodo Decay Rate").toDouble()) * Dt;
+        cD.quasimodo = 1;
+    }
 
     if(cD.selected) {
         for(CCIndex f : *cD.cellFaces)
@@ -2352,12 +2367,14 @@ bool Root::step() {
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
-                                         "Chems: Division Inhibitor by Area",
-                                         "Chems: Division Promoter by Area",
+                                         //"Chems: Division Inhibitor by Area",
+                                         //"Chems: Division Promoter by Area",
+                                         "Chems: Auxin By Area",
                                          "Chems: Division Probability",
-                                         "Division Count",
-                                         "Mechs: Growth Rate",
-                                         "Chems: Auxin By Area"
+                                         //"Division Count",
+                                         "Mechs: Growth Rate"
+
+                                         //"Chems: Auxin By Area"
                                         };
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
@@ -3222,7 +3239,7 @@ bool PrintCellAttr::step() {
             mdxInfo
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
-                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
+                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "

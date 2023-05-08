@@ -303,6 +303,8 @@ public:
         addParm("Division Promoter Half-max Auxin-induced n", "Division Promoter Half-max Auxin-induced n", "4");
         addParm("Division Promoter Decay Rate", "Division Promoter Decay Rate", "0.01");
         addParm("Division Promoter Permeability", "Division Promoter Permeability", "1"); // 1 for the data, 5 for the figure
+        addParm("Quasimodo Basal Production Rate", "Quasimodo Basal Production Rate", "1");
+        addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");

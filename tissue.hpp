@@ -345,6 +345,7 @@ public:
         double PINOID = 0;
         double PP2A = 0;
         double divInhibitor = 0, divPromoter = 0;
+        double quasimodo = 0;
         double pressure = 1, pressureMax = -1;
         double auxinProdRate = -1;
         double auxinDecayRate = 0;
@@ -569,6 +570,7 @@ public:
             PINOID = 0;
             divPromoter = 0;
             divInhibitor = 0;
+            quasimodo = 0;
             auxinFluxes.clear();
             auxinFluxVector = Point3d(0, 0, 0);
         }

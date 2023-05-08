@@ -655,6 +655,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& Pin1CytSignal = mesh->signalAttr<double>("Chems: Pin1 Cyt");
     CCIndexDoubleAttr& Pin1MemSignal = mesh->signalAttr<double>("Chems: Pin1 Mem");
     CCIndexDoubleAttr& pin1SensitivitySignal = mesh->signalAttr<double>("Chems: Pin Sensitivity");
+    CCIndexDoubleAttr& quasimodoCytSignal = mesh->signalAttr<double>("Chems: Quasimodo");
     CCIndexDoubleAttr& PINOIDCytSignal = mesh->signalAttr<double>("Chems: PINOID Cyt");
     CCIndexDoubleAttr& PP2ACytSignal = mesh->signalAttr<double>("Chems: PP2A Cyt");
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
@@ -686,6 +687,7 @@ bool Tissue::step(double Dt) {
     divPromoterCytSignal.clear();
     divInhibitorCytAreaSignal.clear();
     divPromoterCytAreaSignal.clear();
+    quasimodoCytSignal.clear();
     divProbSignal.clear();
     divTimeSignal.clear();
     Pin1CytSignal.clear();
@@ -876,6 +878,7 @@ bool Tissue::step(double Dt) {
         PP2ACytSignal[f] = cD.PP2A;
         PINOIDMemSignal[f] = fD.PINOIDMem;
         PP2AMemSignal[f] = fD.PP2AMem;
+        quasimodoCytSignal[f] = cD.quasimodo;
         pressureSignal[f] = cD.pressure;
 
         fD.auxin = cD.auxin;
@@ -1083,6 +1086,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.PINOID = PINOID / 2;
     cD1.PP2A = PP2A / 2;
     cD1.divPromoter = divPromoter / 2;
+    cD1.quasimodo = quasimodo / 2;
     cD1.divisionCount = divisionCount+1;
     cD1.divProb = 0;
 
@@ -1118,6 +1122,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.PP2A = PP2A / 2;
     cD2.divInhibitor = 0; //divInhibitor / 2;
     cD2.divPromoter = divPromoter / 2;
+    cD2.quasimodo = quasimodo / 2;
     cD2.divisionCount = divisionCount+1;
     cD2.divProb = 0;
 
