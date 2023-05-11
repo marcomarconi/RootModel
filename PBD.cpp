@@ -708,9 +708,14 @@ bool PBD::initialize(QWidget* parent) {
             for(CCIndex f : *cD.cellFaces) {
                 Tissue::FaceData &fD = faceAttr[f];
                 std::vector<CCIndex> vs = faceVertices(cs, f);
-                fD.restPos[0] = indexAttr[vs[0]].pos;
-                fD.restPos[1] = indexAttr[vs[1]].pos;
-                fD.restPos[2] = indexAttr[vs[2]].pos;
+                /// I do not update restpos that already exist, this seems to ease the "exploding" bug after division/remesh
+                /// Not updating restpos avoid the bug, but it creates crashes
+                //if(fD.restPos[0] == Point3d(0,0,0))
+                    fD.restPos[0] = indexAttr[vs[0]].pos;
+                //if(fD.restPos[1] == Point3d(0,0,0))
+                    fD.restPos[1] = indexAttr[vs[1]].pos;
+                //if(fD.restPos[2] == Point3d(0,0,0))
+                    fD.restPos[2] = indexAttr[vs[2]].pos;
             }
             shape_init_n++;
             labels.push_back(cD.label);
@@ -755,7 +760,7 @@ void PBD::momentumPreservation(const CCStructure& cs, const CCIndexDataAttr &ind
   const CCIndexVec &vertices = cs.vertices();
   Point3d com, v_com, P_pbd, P_r, L_r, L_pbd, L;
   Matrix3d I;
-  ////#pragma omp parallel for
+  //#pragma omp parallel for
   for (uint i = 0; i < vertices.size(); i++) {
     CCIndex v = vertices[i];
     com += indexAttr[v].pos;
@@ -763,7 +768,7 @@ void PBD::momentumPreservation(const CCStructure& cs, const CCIndexDataAttr &ind
   }
   com /= vertices.size();
   v_com /= vertices.size();
-  ////#pragma omp parallel for
+  //#pragma omp parallel for
   for (uint i = 0; i < vertices.size(); i++) {
     CCIndex v = vertices[i];
     Point3d r = indexAttr[v].pos - com;
@@ -778,7 +783,7 @@ void PBD::momentumPreservation(const CCStructure& cs, const CCIndexDataAttr &ind
     L_r += (indexAttr[v].pos - com) * vMAttr[v].velocity ;
   }
   Point3d omega_cor = inverse(I) * L_pbd;
-  ////#pragma omp parallel for
+  //#pragma omp parallel for
   for (uint i = 0; i < vertices.size(); i++) {
     CCIndex v = vertices[i];
     Point3d delta_v =
@@ -835,7 +840,7 @@ void PBD::solve() {
     CCStructure& cs = mesh->ccStructure("Tissue");
 
     // Update proposal positions and initialize constrain corrections
-    ////#pragma omp parallel for
+    //#pragma omp parallel for
     for(uint i = 0; i < cs.vertices().size(); i++) {
         CCIndex v = cs.vertices()[i];
         Tissue::VertexData& vD = vMAttr[v];
@@ -857,7 +862,7 @@ void PBD::solve() {
     for(int inter = 0; inter < PBDiterations; inter++) {
         // Pressure constraint
         if(PBDpressureStiffness > 0) {
-            ////#pragma omp parallel for
+            //#pragma omp parallel for
             for(uint i = 0; i < cellAttr.size(); i++) {
                 auto it = cellAttr.begin();
                 advance(it, i);
@@ -882,7 +887,7 @@ void PBD::solve() {
 
         if(PBDdistanceStiffness > 0) {
             // Distance constraint
-            ////#pragma omp parallel for shared(lockr, lockw)
+            //#pragma omp parallel for shared(lockr, lockw)
             for(uint i = 0; i < cs.edges().size(); i++) {
                 CCIndex e = cs.edges()[i];
                 Tissue::EdgeData& eD = edgeAttr[e];
@@ -918,7 +923,7 @@ void PBD::solve() {
 
         if(PBDstrainStiffness > 0) {
             // Strains Constraint
-            ////#pragma omp parallel for schedule(static)
+            //#pragma omp parallel for schedule(static)
             for(uint i = 0; i < cs.faces().size(); i++) {
                 CCIndex f = cs.faces()[i];
                 Tissue::FaceData& fD = faceAttr[f];
@@ -1026,8 +1031,7 @@ void PBD::solve() {
                                 e2 = e;
                         }
                     if(e1.isPseudocell() || e2.isPseudocell())
-                        throw(QString("Somwthing wrong here"));
-                    //double restAngle = fmod(cD.perimeterAngles[v]-M_PI, M_PI);
+                        throw(QString("Something wrong here"));
                     double restAngle = fmod(vMAttr[v].angle[make_pair(e1, e2)]-M_PI, M_PI);
                     if(restAngle < 0)
                         restAngle *= -1;

@@ -995,10 +995,22 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
     cD.divInhibitor += (divBase * cD.area - divDecay + divInduced ) * Dt;
 
+
+    // find the QC so we can print the distance (for plotting)
+    /*
+    Point3d  QCcm;
+    for(auto c : cellAttr) {
+        Tissue::CellData& cD = cellAttr[c.first];
+        if(cD.type == Tissue::QC)
+            QCcm += cD.centroid;
+    }
+    QCcm /= 2;
+    */
+
     // Quasimodo
     if(cD.type == Tissue::Epidermis) {
-        cD.quasimodo += (parm("Quasimodo Basal Production Rate").toDouble() - cD.quasimodo * parm("Quasimodo Decay Rate").toDouble()) * Dt;
-        cD.quasimodo = 1;
+            cD.quasimodo += (parm("Quasimodo Basal Production Rate").toDouble() - cD.quasimodo * parm("Quasimodo Decay Rate").toDouble()) * Dt;
+            cD.quasimodo = 1;
     }
 
     if(cD.selected) {
@@ -1382,7 +1394,7 @@ void Tissue::Subdivide::splitCellUpdate(Dimension dim,
                 }
             // What to do with PIN? For gradient it gets recalculated at every step.
 
-            // set them as daugheters for later
+            // set them as daughters for later
             CellData& pCD = (*cellAttr)[(*indexAttr)[ss.parent].label];
             pCD.daughters =
                 std::make_pair((*indexAttr)[ss.childP].label, (*indexAttr)[ss.childN].label);
@@ -2370,6 +2382,7 @@ bool Root::step() {
                                          //"Chems: Division Inhibitor by Area",
                                          //"Chems: Division Promoter by Area",
                                          "Chems: Auxin By Area",
+                                         "Chems: Quasimodo",
                                          "Chems: Division Probability",
                                          //"Division Count",
                                          "Mechs: Growth Rate"

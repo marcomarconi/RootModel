@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999651 -0.00207765 0.026347 0 0.00194032 0.999984 0.00523684 0 -0.0263575 -0.00518389 0.999639 0 4.07433 146.499 -2307.69 1
+CameraFrame: 0.999651 -0.00207765 0.026347 0 0.00194032 0.999984 0.00523684 0 -0.0263575 -0.00518389 0.999639 0 -1.08976 156.834 -2307.69 1
 SceneRadius: 500
-CameraZoom: -1.056
+CameraZoom: -0.96
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 243.764
+Width: 263.538
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 243.764
+Width: 263.538
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 243.764
+Width: 263.538
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: false
+LoadMeshScaleUm: true
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -1143,7 +1143,7 @@ ParmString: 40
 ParmName: Mesh Update Timer
 ParmString: 10
 ParmName: Snapshots Timer
-ParmString: 10
+ParmString: 0
 ParmName: Snapshots Directory
 ParmString: Test_WT
 ParmName: Debug
@@ -1873,7 +1873,7 @@ ParmString: 60
 ParmName: EpLrcInitial MF reorientation rate
 ParmString: -1
 ParmName: LRC Wall EK
-ParmString: 0.1
+ParmString: 0.05
 ParmName: LRC Wall CK
 ParmString: -1
 ParmName: LRC Shear EK

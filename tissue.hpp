@@ -1242,7 +1242,7 @@ public:
             area = indexAttr[f].measure;
             growthRate = owner->growthRate;
             std::vector<CCIndex> vs = faceVertices(cs, f);
-            Point3d x_p[3] = {vMAttr[vs[0]].prevPos,vMAttr[vs[1]].prevPos,vMAttr[vs[2]].prevPos}; ////// NW
+            Point3d x_p[3] = {vMAttr[vs[0]].prevPos,vMAttr[vs[1]].prevPos,vMAttr[vs[2]].prevPos};
             Point3d X_p[3] = {indexAttr[vs[0]].pos, indexAttr[vs[1]].pos, indexAttr[vs[2]].pos};
             F = DefGradient(x_p, X_p);
             F[2][2] = 1;
