@@ -255,8 +255,7 @@ public:
         addParm("Pin1 Max Trafficking Rate", "Pin1 Max Trafficking Rate", "1");
         addParm("Pin1 Max Amount Edge", "Pin1 Max Amount Edge( auxin per nm)", "15");
         addParm("Pin1-auxin export rate", "Pin1-auxin export rate", "1.4");
-        addParm("Pin1 Sensitivity Suppression by Auxin Amount",
-                "Pin1 Sensitivity Suppression by Auxin Amount (auxin per nm squared)", "400"); //// be careful
+        addParm("Pin Lateralization", "Pin spillover to adjecient membranes", "0");
         addParm("Pin1 Sensitivity Suppression by Auxin Max Cell",
                 "Pin1 Sensitivity Suppression by Auxin Max Cell (auxin per nm squared)", "True", QStringList() << "True" << "False" ); //// be careful
         addParm("Simulate PIN4", "Simulate PIN4", "False", QStringList() << "True" << "False" );
@@ -305,6 +304,29 @@ public:
         addParm("Division Promoter Permeability", "Division Promoter Permeability", "1"); // 1 for the data, 5 for the figure
         addParm("Quasimodo Basal Production Rate", "Quasimodo Basal Production Rate", "1");
         addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
+        addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
+        addParm("Quasimodo Tissue",
+                "Quasimodo Tissue",
+                "None",
+                QStringList()
+                               << "None"
+                              << "Undefined"
+                              << "QC"
+                              << "Columella"
+                              << "ColumellaInitial"
+                              << "CEI"
+                              << "CEID"
+                              << "Cortex"
+                              << "Endodermis"
+                              << "VascularInitial"
+                              << "Vascular"
+                              << "Pericycle"
+                              << "EpLrcInitial"
+                              << "Epidermis"
+                              << "LRC"
+                              << "Columella"
+                              << "Substrate"
+                              << "Source");
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");

@@ -117,12 +117,12 @@ bool Mechanics::step() {
     double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
     for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
-            double auxinByArea =  cD.auxin / cD.area;
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
+            continue; //////////////////////////////////////////////////ZZ
+            /*
             for(CCIndex e : cD.perimeterEdges) {
-                continue; //////////////////////////////////////////////////ZZ
                 Tissue::EdgeData& eD = edgeAttr[e];
                 if(eD.type == Tissue::Wall) {
                   if(auxinWallK1 > 0)
@@ -132,18 +132,27 @@ bool Mechanics::step() {
                                                         );
                 }
             }
+            */
     }
-    if(quasimodoK)    {
-        for(CCIndex e: cs.edges()) {
-                Tissue::EdgeData& eD = edgeAttr[e];
-            double stiffness = 0;
-            for(CCIndex f : cs.incidentCells(e, 2)){
-                Tissue::CellData& cD = cellAttr[(*indexAttr)[f].label];
-                stiffness += eD.eStiffness * exp(-quasimodoK * cD.quasimodo);
-            }
-            stiffness /= cs.incidentCells(e, 2).size();
-            eD.eStiffness = stiffness;
+    for(CCIndex e: cs.edges()) {
+        Tissue::EdgeData& eD = edgeAttr[e];
+        if(eD.type != Tissue::Wall)
+            continue;
+        double stiffness = 0;
+        for(CCIndex f : cs.incidentCells(e, 2)){
+            Tissue::CellData& cD = cellAttr[(*indexAttr)[f].label];
+            double auxinByArea =  cD.auxin / cD.area;
+            double face_stiffness = eD.eStiffness;
+            if(auxinWallK1 > 0)
+                face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
+                                                                    pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
+                                                                    );
+            if(quasimodoK > 0)
+                face_stiffness *= exp(-quasimodoK * cD.quasimodo);
+            stiffness += face_stiffness;
         }
+        stiffness /= cs.incidentCells(e, 2).size();
+        eD.eStiffness = stiffness;
     }
 
     // Apply external/internal forces on vertices
@@ -790,6 +799,8 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     double pinCytDecayRate = parm("Pin1 Cytoplasmic Decay Rate").toDouble();
     double pinMemDecayRate = parm("Pin1 Membrane Max Decay Rate").toDouble();
     double pinMaxEdge = parm("Pin1 Max Amount Edge").toDouble();
+    double pinLateralization = parm("Pin Lateralization").toDouble();
+    double lateralized_pins = 0;
     for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
         for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, indexAttr[vn].label)]) {
     //for(CCIndex e : cD.perimeterEdges){{
@@ -800,12 +811,24 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             double decayedPin1 = eD.Pin1[label]
                     *  (pinCytDecayRate + (pinMemDecayRate - pinCytDecayRate) *
                         (
-                            (pow(1, 10) / (cD.auxin/cD.area, 10) +  pow(1, 10)) //// FIXME no regulated coefficient 10 here
+                            (1 + 0.1)
                           + (pow(0.01, 10) / (pow(eD.pin1Sensitivity[label], 10) +  pow(0.01, 10))) //// FIXME no regulated coefficient 0.01 here
                         )
                        );
             eD.Pin1[label] += (traffickedPin1 - decayedPin1) * Dt;
             cD.Pin1 -= traffickedPin1 * Dt;
+            // Lateralization
+            if(pinLateralization && cD.type != Tissue::Source)
+                    for(CCIndex en : getBoundEdges(cs, e)) {
+                        Tissue::EdgeData& eDn = edgeAttr[en];
+                        if(eDn.type == Tissue::Wall && !cs.onBorder(en)) {
+                            double lateralizedPin = pinLateralization * (eD.Pin1[label] - eDn.Pin1[label]) * Dt;
+                            eD.Pin1[label] -= lateralizedPin;
+                            eDn.Pin1[label] += lateralizedPin;
+                            lateralized_pins += lateralizedPin;
+                        }
+                    }
+
             debugs["Average PIN1 Trafficking"] += traffickedPin1 * Dt;
         }
     }
@@ -1008,10 +1031,14 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     */
 
     // Quasimodo
-    if(cD.type == Tissue::Epidermis) {
-            cD.quasimodo += (parm("Quasimodo Basal Production Rate").toDouble() - cD.quasimodo * parm("Quasimodo Decay Rate").toDouble()) * Dt;
-            cD.quasimodo = 1;
+    QString quasimodo_tissue = parm("Quasimodo Tissue");
+    if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") &&(Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
+            cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
     }
+    if( quasimodo_tissue == "All" && (cD.type != Tissue::QC && cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) )
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
+
 
     if(cD.selected) {
         for(CCIndex f : *cD.cellFaces)
@@ -1137,7 +1164,6 @@ bool Chemicals::update() {
         double Kpinoid = parm("PINOID Impact Half-max").toDouble();
         double Kmf = parm("MF Impact Half-max").toDouble();
         double Kgeom = parm("Geometry Impact Half-max").toDouble();
-        double KpinSuppAuxin = parm("Pin1 Sensitivity Suppression by Auxin Amount").toDouble();
         double KPin1MF = parm("Pin1 Sensitivity MF K").toDouble();
         double KPin1auxinflux = parm("Pin1 Sensitivity Auxin-flux K").toDouble();
         double KPin1geom = parm("Pin1 Sensitivity Geometry K").toDouble();
@@ -1185,8 +1211,7 @@ bool Chemicals::update() {
                     // Calculate raw Pin sensitivity
                     eD.pin1SensitivityRaw[label] =
                               //eD.length *
-                              (pow(KpinSuppAuxin, 10) / (pow(cD.auxin/cD.area, 10) + pow(KpinSuppAuxin, 10)))
-                            *   (
+                               (
                                 (KPin1MF * eD.MFImpact[label])
                             +   (KPin1auxinflux * eD.auxinFluxImpact[label])
                             +   (KPin1geom * eD.geomImpact[label])
@@ -3373,11 +3398,14 @@ bool PrintCellAttr::step() {
         }
     }
     mdxInfo << "Total cells: " << cellAttr.size() << endl;
-    /*mdxInfo << "Cell set: " << endl;
+    // Get meristem size in number of cells
+    int meristem_size = 0;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
-        mdxInfo << "Label: " << cD.label << " pos: " << cD.centroid << endl;
-    }*/
+        if (cD.type == Tissue::Cortex && cD.stage == 0)
+            meristem_size ++;
+    }
+    mdxInfo << "Meristem size in cells: " << round(meristem_size / 2) << endl;
     return false;
 }
 

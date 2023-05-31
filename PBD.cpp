@@ -710,11 +710,11 @@ bool PBD::initialize(QWidget* parent) {
                 std::vector<CCIndex> vs = faceVertices(cs, f);
                 /// I do not update restpos that already exist, this seems to ease the "exploding" bug after division/remesh
                 /// Not updating restpos avoid the bug, but it creates crashes
-                //if(fD.restPos[0] == Point3d(0,0,0))
+                if(fD.restPos[0] == Point3d(0,0,0))
                     fD.restPos[0] = indexAttr[vs[0]].pos;
-                //if(fD.restPos[1] == Point3d(0,0,0))
+                if(fD.restPos[1] == Point3d(0,0,0))
                     fD.restPos[1] = indexAttr[vs[1]].pos;
-                //if(fD.restPos[2] == Point3d(0,0,0))
+                if(fD.restPos[2] == Point3d(0,0,0))
                     fD.restPos[2] = indexAttr[vs[2]].pos;
             }
             shape_init_n++;

@@ -71,9 +71,9 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999651 -0.00207765 0.026347 0 0.00194032 0.999984 0.00523684 0 -0.0263575 -0.00518389 0.999639 0 -1.08976 156.834 -2307.69 1
+CameraFrame: 0.998372 0.000404643 0.0570346 0 0.000955517 0.999716 -0.0238187 0 -0.0570281 0.0238344 0.998088 0 1.97142 186.644 -2307.69 1
 SceneRadius: 500
-CameraZoom: -0.96
+CameraZoom: -0.768
 
 
 [Clip1]
@@ -1141,7 +1141,7 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: 40
 ParmName: Mesh Update Timer
-ParmString: 10
+ParmString: 5
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
@@ -1327,7 +1327,7 @@ ParmString: 0.01
 ParmName: Shear CK
 ParmString: 1
 ParmName: Auxin-induced wall relaxation K1
-ParmString: 0.05
+ParmString: 0
 ParmName: Auxin-induced wall relaxation K2
 ParmString: 3
 ParmName: Quasimodo wall relaxation K
@@ -1389,13 +1389,13 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 89
+NumParms: 90
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
-ParmString: 0.1
+ParmString: 0
 ParmName: Verbose
-ParmString: False
+ParmString: True
 ParmName: Debug Steps
 ParmString: 10
 ParmName: Auxin
@@ -1440,8 +1440,8 @@ ParmName: Pin1 Max Amount Edge
 ParmString: 15
 ParmName: Pin1-auxin export rate
 ParmString: 1.4
-ParmName: Pin1 Sensitivity Suppression by Auxin Amount
-ParmString: 400
+ParmName: Pin Lateralization
+ParmString: 0.25
 ParmName: Pin1 Sensitivity Suppression by Auxin Max Cell
 ParmString: True
 ParmName: Simulate PIN4
@@ -1521,7 +1521,9 @@ ParmString: 0
 ParmName: Quasimodo Basal Production Rate
 ParmString: 1
 ParmName: Quasimodo Decay Rate
-ParmString: 0.1
+ParmString: 1
+ParmName: Quasimodo Tissue
+ParmString: Epidermis
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
@@ -1599,7 +1601,7 @@ ParmString: 1
 ParmName: PBD distance alpha
 ParmString: 0
 ParmName: PBD bending stiffness
-ParmString: 0.4
+ParmString: 0.1
 ParmName: PBD strain stiffness
 ParmString: 1
 ParmName: PBD strain shear stiffness

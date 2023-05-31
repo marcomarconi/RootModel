@@ -1,7 +1,7 @@
 // Parameters for MorphoDynamX
 [Main]
 MDXVersion: 2.0
-MDXRevision: 2-613-g46128500-dirty
+MDXRevision: 2-793
 ClearColor: 0
 SurfOffset: 0.01
 Slices: 1024
@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1156.48 1
+CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -19.5967 189.979 -1156.48 1
 SceneRadius: 500
-CameraZoom: 0
+CameraZoom: -1.056
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 116.642
+Width: 116.652
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 116.642
+Width: 116.652
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 116.642
+Width: 116.652
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05751 1.05751 1.05751
+Size: 1.0576 1.0576 1.0576
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -362,6 +362,16 @@ ProcessName: Mesh/Heat Map/Measures2D/Geometry/Area
 NumParms: 1
 ParmName: Heat Name
 ParmString: Area
+ProcessName: Mesh/Heat Map/Measures2D/Geometry/Junction Distance
+NumParms: 4
+ParmName: Heat Name
+ParmString: Junction Distance
+ParmName: Mode
+ParmString: Min
+ParmName: Only Direct Junctions
+ParmString: No
+ParmName: Ignore Border Cells
+ParmString: Yes
 ProcessName: Mesh/Heat Map/Measures2D/Geometry/Neighbors
 NumParms: 1
 ParmName: Heat Name
@@ -424,6 +434,14 @@ ParmName: Heat Name
 ParmString: Average
 ParmName: Signal
 ParmString: 
+ProcessName: Mesh/Heat Map/Measures3D/Signal/Percentile
+NumParms: 3
+ParmName: Heat Name
+ParmString: Percentile
+ParmName: Signal
+ParmString: 
+ParmName: Percentile
+ParmString: 0.95
 ProcessName: Mesh/Heat Map/Measures3D/Signal/Total
 NumParms: 2
 ParmName: Heat Name
@@ -590,6 +608,8 @@ ParmName: Nhbd Size
 ParmString: 0.2
 ParmName: Nhbd Offset
 ParmString: 0.01
+ProcessName: Mesh/Misc/Fix Global Orientation
+NumParms: 0
 ProcessName: Mesh/Misc/Print Flip Table
 NumParms: 1
 ParmName: File Name
@@ -660,19 +680,19 @@ ParmName: Label Start
 ParmString: 1
 ParmName: Label Step
 ParmString: 1
-ProcessName: Mesh/Segmentation/Set Face Label
-NumParms: 1
-ParmName: Label
-ParmString: 0
-ProcessName: Mesh/Segmentation/Set Face Labeling
-NumParms: 3
+ProcessName: Mesh/Segmentation/Set Label
+NumParms: 4
 ParmName: Label
 ParmString: 0
 ParmName: Labeling
 ParmString: 
 ParmName: Label Name
 ParmString: 
+ParmName: Dimension
+ParmString: All
 ProcessName: Mesh/Segmentation/Vertex Labels From Faces
+NumParms: 0
+ProcessName: Mesh/Segmentation/Vertex Labels From Volumes
 NumParms: 0
 ProcessName: Mesh/Segmentation/Watershed Segmentation
 NumParms: 3
@@ -692,6 +712,12 @@ ProcessName: Mesh/Selection/Clear Selection
 NumParms: 0
 ProcessName: Mesh/Selection/Copy Selection
 NumParms: 0
+ProcessName: Mesh/Selection/Extend face selection by Normal and Distance
+NumParms: 2
+ParmName: Angle range
+ParmString: 30.0
+ParmName: Euclidean Distance
+ParmString: 40.0
 ProcessName: Mesh/Selection/Invert Selection
 NumParms: 1
 ParmName: Dimension
@@ -706,6 +732,10 @@ ProcessName: Mesh/Selection/Save Selection
 NumParms: 1
 ParmName: File Name
 ParmString: Selection.txt
+ProcessName: Mesh/Selection/Select Adjacent Cells
+NumParms: 1
+ParmName: Dimension
+ParmString: Vertices
 ProcessName: Mesh/Selection/Select All
 NumParms: 0
 ProcessName: Mesh/Selection/Select Border
@@ -731,7 +761,15 @@ NumParms: 0
 ProcessName: Mesh/Selection/Select Faces of Volumes
 NumParms: 0
 ProcessName: Mesh/Selection/Select Incident Cells
-NumParms: 0
+NumParms: 2
+ParmName: Cell Dimension
+ParmString: Faces
+ParmName: Select Dimension
+ParmString: Vertices
+ProcessName: Mesh/Selection/Select Margin for Wege-Mesh
+NumParms: 1
+ParmName: Dimension
+ParmString: Vertices
 ProcessName: Mesh/Selection/Select Vertices Extend
 NumParms: 1
 ParmName: Distance
@@ -762,6 +800,12 @@ ParmName: Signal 2
 ParmString: 
 ParmName: Operation
 ParmString: Addition
+ProcessName: Mesh/Signal/Delete Signal
+NumParms: 2
+ParmName: Signal Name
+ParmString: 
+ParmName: Mesh Id
+ParmString: 
 ProcessName: Mesh/Signal/Difference of Gaussians
 NumParms: 3
 ParmName: Radius 1
@@ -809,12 +853,12 @@ ParmString: 1.0
 ParmName: Signal
 ParmString: 
 ProcessName: Mesh/Signal/Project Mesh Curvature
-NumParms: 10
+NumParms: 11
 ParmName: Type
 ParmString: Gaussian
 ParmName: Neighborhood
 ParmString: 5.0
-ParmName: AutoScale
+ParmName: Auto Scale
 ParmString: Yes
 ParmName: Min Curv
 ParmString: -50.0
@@ -830,6 +874,8 @@ ParmName: Select Nhbd
 ParmString: No
 ParmName: Do Axis
 ParmString: Yes
+ParmName: Update Normals
+ParmString: Yes
 ProcessName: Mesh/Signal/Project Signal
 NumParms: 6
 ParmName: Min Dist
@@ -844,6 +890,12 @@ ParmName: Max Signal
 ParmString: 60000.0
 ParmName: Signal
 ParmString: Signal
+ProcessName: Mesh/Signal/Rename Signal
+NumParms: 2
+ParmName: Signal Name
+ParmString: 
+ParmName: Mesh Id
+ParmString: 
 ProcessName: Mesh/Signal/Rescale Signal
 NumParms: 5
 ParmName: Zero Ref
@@ -856,12 +908,6 @@ ParmName: Maximum
 ParmString: 1.0
 ParmName: Signal
 ParmString: 
-ProcessName: Mesh/Signal/Scale Signals
-NumParms: 2
-ParmName: Signal
-ParmString: 
-ParmName: Operation
-ParmString: Inverse
 ProcessName: Mesh/Signal/Set Mesh Signal
 NumParms: 3
 ParmName: Value
@@ -880,6 +926,12 @@ ParmName: Passes
 ParmString: 3
 ParmName: Signal
 ParmString: 
+ProcessName: Mesh/Signal/Transform Signal
+NumParms: 2
+ParmName: Signal
+ParmString: 
+ParmName: Operation
+ParmString: Invert
 ProcessName: Mesh/Signal/Trim Signal
 NumParms: 2
 ParmName: Lower Threshold
@@ -932,14 +984,18 @@ ParmName: Angle
 ParmString: 0.0
 ParmName: Scale
 ParmString: 0.5
+ProcessName: Mesh/Structure/Transform Mesh by frame
+NumParms: 0
 ProcessName: Mesh/System/Delete Cell Complex
 NumParms: 1
 ParmName: Cell Complex Name
 ParmString: Tissue
 ProcessName: Mesh/System/Delete Selection
-NumParms: 1
+NumParms: 2
 ParmName: Delete Dangling Cells
 ParmString: Yes
+ParmName: Dimension
+ParmString: All
 ProcessName: Mesh/System/Export
 NumParms: 4
 ParmName: File Name
@@ -1067,7 +1123,7 @@ NumParms: 1
 ParmName: File Name
 ParmString: 
 ProcessName: Model/Root/01 Root
-NumParms: 32
+NumParms: 33
 ParmName: Max Mechanical Iterations
 ParmString: 1
 ParmName: Max Chemical Iterations
@@ -1085,9 +1141,9 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: False
 ParmName: Mesh Update Timer
-ParmString: 30
+ParmString: 3
 ParmName: Snapshots Timer
-ParmString: 30
+ParmString: 0
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1126,6 +1182,8 @@ ParmName: Triangulate Faces
 ParmString: Model/Root/Triangulate Faces
 ParmName: Remesh
 ParmString: Model/Root/02 Remesh
+ParmName: RemeshCell
+ParmString: Model/Root/Remesh Cell
 ParmName: SplitEdges
 ParmString: Mesh/Structure/Split Edges
 ParmName: SaveView
@@ -1181,7 +1239,7 @@ ParmString: 0.04
 ParmName: Verbose
 ParmString: True
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 23
+NumParms: 32
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1192,16 +1250,36 @@ ParmName: Cell Pinch
 ParmString: 0.2
 ParmName: Cell Max Pinch
 ParmString: 2
+ParmName: Center Noise
+ParmString: 0.0
+ParmName: Wall Noise
+ParmString: 0.0
 ParmName: Verbose
 ParmString: True
 ParmName: Division Algorithm
 ParmString: 1
 ParmName: Max Joining Distance
 ParmString: 1.5
+ParmName: Sabatinis's parameters
+ParmString: 
+ParmName: Sabatini Control
+ParmString: False
+ParmName: Division Coefficient Rate
+ParmString: 10
+ParmName: Minimum Area Percentage
+ParmString: 0.75
+ParmName: Maximum Area Percentage
+ParmString: 1.5
+ParmName: Crisanto's parameters
+ParmString: 
+ParmName: Division Control
+ParmString: False
 ParmName: Minimum Polarity Vector Norm
 ParmString: 0.05
 ParmName: Max Division Time
 ParmString: 50
+ParmName: Min Division Time
+ParmString: 2
 ParmName: Division Meristem Size
 ParmString: 200
 ParmName: Division Promoter Level
@@ -1210,8 +1288,6 @@ ParmName: Division half-probability by Cell Size Ratio
 ParmString: 1
 ParmName: Division half-probability by Inhibitor
 ParmString: 0.03
-ParmName: Division Control
-ParmString: False
 ParmName: Ignore Cell Type
 ParmString: False
 ParmName: Root Process
@@ -1229,7 +1305,7 @@ ParmString: True
 ParmName: Manual Cell Division Enabled
 ParmString: True
 ProcessName: Model/Root/05 Mechanics
-NumParms: 24
+NumParms: 22
 ParmName: Dt
 ParmString: 0.03
 ParmName: Converge Threshold
@@ -1254,12 +1330,8 @@ ParmName: Auxin-induced wall relaxation K1
 ParmString: 0.05
 ParmName: Auxin-induced wall relaxation K2
 ParmString: 3
-ParmName: Wall stress
+ParmName: Quasimodo wall relaxation K
 ParmString: 0
-ParmName: Wall stress K1
-ParmString: 0.01
-ParmName: Wall stress K2
-ParmString: 2
 ParmName: Hydrostatic Parameters
 ParmString: 
 ParmName: Turgor Pressure
@@ -1279,7 +1351,7 @@ ParmString: Model/Root/03 Cell Tissue
 ParmName: PBD Engine
 ParmString: Model/Root/07 PBD Engine
 ProcessName: Model/Root/052 Mechanical Growth
-NumParms: 17
+NumParms: 18
 ParmName: Verbose
 ParmString: True
 ParmName: Polarity Method
@@ -1304,6 +1376,8 @@ ParmName: MF Degradation
 ParmString: 0.01
 ParmName: MF Delete After Division
 ParmString: False
+ParmName: Prevent Cell Elongation
+ParmString: True
 ParmName: Zonation
 ParmString: 
 ParmName: Elongation Zone
@@ -1315,7 +1389,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 87
+NumParms: 89
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1444,6 +1518,10 @@ ParmName: Division Promoter Decay Rate
 ParmString: 0.01
 ParmName: Division Promoter Permeability
 ParmString: 0
+ParmName: Quasimodo Basal Production Rate
+ParmString: 1
+ParmName: Quasimodo Decay Rate
+ParmString: 0.1
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
@@ -1553,7 +1631,7 @@ ParmString: 0,-1,0
 ParmName: Microfibril 2
 ParmString: 0.01,0,0
 ProcessName: Model/Root/23 Set Global Attr
-NumParms: 131
+NumParms: 147
 ParmName: Mechanics Process
 ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Growth Process
@@ -1572,6 +1650,8 @@ ParmName: Undefined Turgor Pressure
 ParmString: 0
 ParmName: Undefined Growth Factor
 ParmString: 0
+ParmName: Undefined Wall Max GR
+ParmString: -1
 ParmName: Undefined Max area
 ParmString: 70
 ParmName: Undefined MF reorientation rate
@@ -1588,6 +1668,8 @@ ParmName: QC Turgor Pressure
 ParmString: 0
 ParmName: QC Growth Factor
 ParmString: 0
+ParmName: QC Wall Max GR
+ParmString: -1
 ParmName: QC Max area
 ParmString: 1000
 ParmName: QC MF reorientation rate
@@ -1602,6 +1684,8 @@ ParmName: ColumellaInitial Shear CK
 ParmString: -1
 ParmName: ColumellaInitial Growth Factor
 ParmString: 0
+ParmName: ColumellaInitial Wall Max GR
+ParmString: -1
 ParmName: ColumellaInitial Turgor Pressure
 ParmString: -1
 ParmName: ColumellaInitial Max area
@@ -1617,6 +1701,8 @@ ParmString: -1
 ParmName: Columella Shear CK
 ParmString: -1
 ParmName: Columella Growth Factor
+ParmString: -1
+ParmName: Columella Wall Max GR
 ParmString: -1
 ParmName: Columella Turgor Pressure
 ParmString: 1
@@ -1636,6 +1722,8 @@ ParmName: VascularInitial Turgor Pressure
 ParmString: -1
 ParmName: VascularInitial Growth Factor
 ParmString: 5
+ParmName: VascularInitial Wall Max GR
+ParmString: -1
 ParmName: VascularInitial MF reorientation rate
 ParmString: -1
 ParmName: VascularInitial Max area
@@ -1652,6 +1740,8 @@ ParmName: Vascular Turgor Pressure
 ParmString: -1
 ParmName: Vascular Growth Factor
 ParmString: 4
+ParmName: Vascular Wall Max GR
+ParmString: -1
 ParmName: Vascular MF reorientation rate
 ParmString: -1
 ParmName: Vascular Max area
@@ -1668,6 +1758,8 @@ ParmName: Pericycle Turgor Pressure
 ParmString: -1
 ParmName: Pericycle Growth Factor
 ParmString: 2
+ParmName: Pericycle Wall Max GR
+ParmString: -1
 ParmName: Pericycle MF reorientation rate
 ParmString: -1
 ParmName: Pericycle Max area
@@ -1684,6 +1776,8 @@ ParmName: Cortex Turgor Pressure
 ParmString: -1
 ParmName: Cortex Growth Factor
 ParmString: 0
+ParmName: Cortex Wall Max GR
+ParmString: -1
 ParmName: Cortex Max area
 ParmString: 70
 ParmName: Cortex MF reorientation rate
@@ -1700,6 +1794,8 @@ ParmName: Endodermis Turgor Pressure
 ParmString: -1
 ParmName: Endodermis Growth Factor
 ParmString: 0
+ParmName: Endodermis Wall Max GR
+ParmString: -1
 ParmName: Endodermis Max area
 ParmString: 70
 ParmName: Endodermis MF reorientation rate
@@ -1716,6 +1812,8 @@ ParmName: Epidermis Turgor Pressure
 ParmString: -1
 ParmName: Epidermis Growth Factor
 ParmString: 0
+ParmName: Epidermis Wall Max GR
+ParmString: -1
 ParmName: Epidermis Max area
 ParmString: 80
 ParmName: Epidermis MF reorientation rate
@@ -1732,6 +1830,8 @@ ParmName: CEI Turgor Pressure
 ParmString: -1
 ParmName: CEI Growth Factor
 ParmString: 1
+ParmName: CEI Wall Max GR
+ParmString: -1
 ParmName: CEI Max area
 ParmString: 70
 ParmName: CEI MF reorientation rate
@@ -1748,6 +1848,8 @@ ParmName: CEID Turgor Pressure
 ParmString: -1
 ParmName: CEID Growth Factor
 ParmString: 0
+ParmName: CEID Wall Max GR
+ParmString: -1
 ParmName: CEID Max area
 ParmString: 70
 ParmName: CEID MF reorientation rate
@@ -1764,6 +1866,8 @@ ParmName: EpLrcInitial Turgor Pressure
 ParmString: -1
 ParmName: EpLrcInitial Growth Factor
 ParmString: 1
+ParmName: EpLrcInitial Wall Max GR
+ParmString: -1
 ParmName: EpLrcInitial Max area
 ParmString: 60
 ParmName: EpLrcInitial MF reorientation rate
@@ -1779,6 +1883,8 @@ ParmString: -1
 ParmName: LRC Turgor Pressure
 ParmString: -1
 ParmName: LRC Growth Factor
+ParmString: -1
+ParmName: LRC Wall Max GR
 ParmString: -1
 ParmName: LRC Max area
 ParmString: 70
@@ -1796,6 +1902,8 @@ ParmName: Substrate Turgor Pressure
 ParmString: 0
 ParmName: Substrate Growth Factor
 ParmString: 0
+ParmName: Substrate Wall Max GR
+ParmString: -1
 ParmName: Substrate MF reorientation rate
 ParmString: 0
 ParmName: Substrate Max area
@@ -1812,6 +1920,8 @@ ParmName: Source Turgor Pressure
 ParmString: -1
 ParmName: Source Growth Factor
 ParmString: 0
+ParmName: Source Wall Max GR
+ParmString: -1
 ParmName: Source MF reorientation rate
 ParmString: 0
 ParmName: Source Max area
@@ -1876,6 +1986,18 @@ ProcessName: Model/Root/Create Edge
 NumParms: 0
 ProcessName: Model/Root/Delete Edges
 NumParms: 0
+ProcessName: Model/Root/Remesh Cell
+NumParms: 5
+ParmName: Root Process
+ParmString: Model/Root/01 Root
+ParmName: Remesh
+ParmString: Model/Root/02 Remesh
+ParmName: Tissue Process
+ParmString: Model/Root/03 Cell Tissue
+ParmName: Triangulate Faces Process
+ParmString: Model/Root/Triangulate Faces
+ParmName: ClearCells Process
+ParmString: Model/Root/ClearCells
 ProcessName: Model/Root/Reverse Cell
 NumParms: 0
 ProcessName: Model/Root/Triangulate Faces
@@ -2084,74 +2206,6 @@ ParmName: Low Threshold
 ParmString: 1000
 ParmName: High Threshold
 ParmString: 0
-ProcessName: Stack/ITK/Filters/ITK Curvature Anisotropic Diffusion Image Filter
-NumParms: 3
-ParmName: Time Step
-ParmString: 0.03
-ParmName: Iterations
-ParmString: 5
-ParmName: Conductance
-ParmString: 9.0
-ProcessName: Stack/ITK/Filters/ITK Curvature Flow Image Filter
-NumParms: 2
-ParmName: Time Step
-ParmString: .0.0625
-ParmName: Steps
-ParmString: 10
-ProcessName: Stack/ITK/Filters/ITK Gradient Magnitude Recursive Gaussian Image Filter
-NumParms: 1
-ParmName: Sigma
-ParmString: 0.5
-ProcessName: Stack/ITK/Filters/ITK Sigmoid Image Filter
-NumParms: 2
-ParmName: Alpha
-ParmString: 1000.0
-ParmName: Beta
-ParmString: 2000.0
-ProcessName: Stack/ITK/Filters/ITK Smoothing Recursive Gaussian Image Filter
-NumParms: 1
-ParmName: Radius
-ParmString: 1.0
-ProcessName: Stack/ITK/Registration/ITK Demons Registration
-NumParms: 6
-ParmName: Deformation File
-ParmString: deformation.vtk
-ParmName: Threshold at Mean
-ParmString: Yes
-ParmName: Histogram Levels
-ParmString: 1024
-ParmName: Match Points
-ParmString: 7
-ParmName: Iterations
-ParmString: 150
-ParmName: Sigma
-ParmString: 1.0
-ProcessName: Stack/ITK/Segmentation/ITK Watershed
-NumParms: 2
-ParmName: Fully Connected
-ParmString: No
-ParmName: Mark Watershed Line
-ParmString: No
-ProcessName: Stack/ITK/Segmentation/ITK Watershed Auto Seeded
-NumParms: 3
-ParmName: Fully Connected
-ParmString: No
-ParmName: Mark Watershed Line
-ParmString: No
-ParmName: Level
-ParmString: 1500
-ProcessName: Stack/ITK/System/ITK Image Reader
-NumParms: 3
-ParmName: File Name
-ParmString: 
-ParmName: Store
-ParmString: Main
-ParmName: Stack Number
-ParmString: 0
-ProcessName: Stack/ITK/System/ITK VTK Writer
-NumParms: 1
-ParmName: File Name
-ParmString: 
 ProcessName: Stack/Mesh Interaction/Annihilate
 NumParms: 4
 ParmName: Fill
@@ -2186,7 +2240,7 @@ ParmName: Mode
 ParmString: Normal
 ParmName: Threshold
 ParmString: 0
-ProcessName: Stack/Morphology/Close by label
+ProcessName: Stack/Morphology/Close by Label
 NumParms: 4
 ParmName: X Radius
 ParmString: 1
@@ -2228,10 +2282,6 @@ ParmName: Adapt Factor
 ParmString: 0.3
 ParmName: Fill Value
 ParmString: 30000
-ProcessName: Stack/Morphology/Edge Detect Angle
-NumParms: 1
-ParmName: Fill Holes
-ParmString: No
 ProcessName: Stack/Morphology/Erode
 NumParms: 5
 ParmName: X Radius
@@ -2242,6 +2292,16 @@ ParmName: Z Radius
 ParmString: 1
 ParmName: Auto Resize
 ParmString: No
+ParmName: Round Nhbd
+ParmString: No
+ProcessName: Stack/Morphology/Erode by Label
+NumParms: 4
+ParmName: X Radius
+ParmString: 1
+ParmName: Y Radius
+ParmString: 1
+ParmName: Z Radius
+ParmString: 1
 ParmName: Round Nhbd
 ParmString: No
 ProcessName: Stack/Morphology/Fill Holes
@@ -2256,7 +2316,7 @@ ParmName: Depth
 ParmString: 0
 ParmName: Fill Value
 ParmString: 30000
-ProcessName: Stack/Morphology/Open by label
+ProcessName: Stack/Morphology/Open by Label
 NumParms: 4
 ParmName: X Radius
 ParmString: 1
@@ -2336,6 +2396,12 @@ ParmName: Start Label
 ParmString: 2
 ParmName: Min Color
 ParmString: 10000
+ProcessName: Stack/Segmentation/Relabel
+NumParms: 2
+ParmName: Start Label
+ParmString: 1
+ParmName: Step
+ParmString: 1
 ProcessName: Stack/Segmentation/Watershed3D
 NumParms: 0
 ProcessName: Stack/System/Clear Main Stack
@@ -2662,7 +2728,17 @@ ParmName: Stagger
 ParmString: 0
 ParmName: Labeling
 ParmString: Cells
-ProcessName: Tools/Cell Maker/Mesh 3D/Shapes/Create Sphere
+ProcessName: Tools/Cell Maker/Mesh 3D/Marching Cubes/Mesh
+NumParms: 4
+ParmName: Cube Size
+ParmString: 5.0
+ParmName: Radius
+ParmString: 15.0
+ParmName: Use Lines
+ParmString: Yes
+ParmName: Verbose
+ParmString: No
+ProcessName: Tools/Cell Maker/Mesh 3D/Marching Cubes/Sphere
 NumParms: 3
 ParmName: Cube Size
 ParmString: 5.0
@@ -2723,12 +2799,14 @@ ParmString:
 ParmName: CC Out
 ParmString: 
 ProcessName: Tools/Cell Maker/Mesh 3D/Tools/Separate 3D Cells
-NumParms: 3
+NumParms: 4
 ParmName: CC Name
 ParmString: 
 ParmName: CC Out
 ParmString: 
 ParmName: 2D Mesh
+ParmString: No
+ParmName: Use Face Selection
 ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 3D/Voronoi/Create Voronoi Cells
 NumParms: 9
@@ -2808,6 +2886,8 @@ ProcessName: Tools/Cell Maker/Point Cloud/Point Cloud Add
 NumParms: 1
 ParmName: Point Cloud Mesh
 ParmString: CC
+ProcessName: Tools/Cell Maker/Point Cloud/Point Cloud From Stack
+NumParms: 0
 ProcessName: Tools/Cell Maker/Point Cloud/Point Cloud Radial 2D
 NumParms: 3
 ParmName: Nr of Points
