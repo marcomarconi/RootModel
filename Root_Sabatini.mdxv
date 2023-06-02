@@ -79,7 +79,7 @@ CameraZoom: -0.768
 [Clip1]
 Enable: false
 Grid: false
-Width: 263.538
+Width: 263.407
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 263.538
+Width: 263.407
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 263.538
+Width: 263.407
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1601,7 +1601,7 @@ ParmString: 1
 ParmName: PBD distance alpha
 ParmString: 0
 ParmName: PBD bending stiffness
-ParmString: 0.1
+ParmString: 0.4
 ParmName: PBD strain stiffness
 ParmString: 1
 ParmName: PBD strain shear stiffness
