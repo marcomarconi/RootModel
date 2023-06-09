@@ -110,30 +110,24 @@ bool Mechanics::step() {
 
 
     // Auxin relaxating effect on cell walls
-    double baseWallEK = parm("Wall EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
+    double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
+    double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
     double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
+    // Cell-wise updates
     for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
+            if(cD.stage == 2)
+                cD.pressureMax = 1;
+            else if(cD.stage == 1)
+                cD.pressureMax = pressureMax * pressureKred;
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
-            continue; //////////////////////////////////////////////////ZZ
-            /*
-            for(CCIndex e : cD.perimeterEdges) {
-                Tissue::EdgeData& eD = edgeAttr[e];
-                if(eD.type == Tissue::Wall) {
-                  if(auxinWallK1 > 0)
-                        // this is wrong, it should take the mean from all neighbour cells, as this will simply get the last one
-                        eD.eStiffness = baseWallEK *  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
-                                                        pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
-                                                        );
-                }
-            }
-            */
     }
+    // Edge-wise updates
     for(CCIndex e: cs.edges()) {
         Tissue::EdgeData& eD = edgeAttr[e];
         if(eD.type != Tissue::Wall)
@@ -514,10 +508,9 @@ bool MechanicalGrowth::step(double Dt) {
         if(lrc != -BIG_VAL && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
             if(cD.centroid.y() - lrc >  elongationZone)
                 cD.stage = 1;
-            if(cD.centroid.y() - lrc >  differentiationZone) {
+            if(cD.centroid.y() - lrc >  differentiationZone)
                 cD.stage = 2;
-                cD.pressureMax = 1; // move it to mechs
-            }
+
         }
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
