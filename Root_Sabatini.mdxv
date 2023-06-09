@@ -79,7 +79,7 @@ CameraZoom: -0.864
 [Clip1]
 Enable: false
 Grid: false
-Width: 263.776
+Width: 263.942
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.99995 -0.00998078 -0.000235337 0 0.00998065 0.99995 -0.000571525 0 0.00
 [Clip2]
 Enable: false
 Grid: false
-Width: 263.776
+Width: 263.942
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 263.776
+Width: 263.942
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -139,7 +139,7 @@ Scale:1.73205
 LoadMeshScaleUm: true
 LoadMeshTransform: false
 MeshShift: 0
-CCName: Polygon
+CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05993 1.05993 1.05993
+Size: 1.06015 1.06015 1.06015
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
