@@ -962,6 +962,7 @@ public:
     MeshSave* saveMeshProcess = 0;
     std::vector<Process*> processes;
     double userTime = 0;
+    int stepCount = 0, prevStepCount = 0;
 
 private:
     bool debugging = false;
@@ -973,7 +974,6 @@ private:
     bool chemicalsEnabled = true;
     bool growthEnabled = true;
     bool divisionEnabled = true;
-    int stepCount = 0, prevStepCount = 0;
     clock_t begin_clock, prev_clock;
     std::ofstream output_file;
     int maxMechanicsIter = 0, maxChemicalIter = 0;

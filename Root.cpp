@@ -1945,8 +1945,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         Tissue::CellData& cD = cellAttr[c.first];
         // Crisanto
         cD.divisionAllowed = false;
+        cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime + divisionMinTime;
         if(divisionControl && rootProcess->userTime > 24) { // rootProcess->userTime > 24 is to avoid early divisions
-            cD.divProb = (2 / (1 + exp(-divisionProbHalfInhibitor * cD.divInhibitor*100/cD.area)) - 1) * divisionMaxTime + divisionMinTime;
             if(cD.area/cD.cellMaxArea > divisionProbHalfSize)
                 if(norm(cD.centroid - QCcm) < divisionMeristemSize)
                     if(cD.divPromoter/cD.area > divisionPromoterLevel) {
@@ -1986,7 +1986,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                 mdxInfo << "CellDivision.step: Cell division triggered by " << cD.label << " of size " << cD.area
                         << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                         <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
-                        << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
+                        << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb << " time: " << rootProcess->stepCount << endl;
 
             }
             // Skip division if division algoritm MF depending but cell has no polarity
@@ -2397,15 +2397,13 @@ bool Root::step() {
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
-                                         //"Chems: Division Inhibitor by Area",
-                                         //"Chems: Division Promoter by Area",
+                                         "Chems: Division Inhibitor by Area",
+                                         "Chems: Division Promoter by Area",
                                          "Chems: Auxin By Area",
-                                         "Chems: Quasimodo",
+                                         //"Chems: Quasimodo",
                                          "Chems: Division Probability",
-                                         //"Division Count",
-                                         "Mechs: Growth Rate"
-
-                                         //"Chems: Auxin By Area"
+                                         "Division Count",
+                                         "Mechs: Growth Rate"                                         
                                         };
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
@@ -2646,16 +2644,16 @@ bool Root::step() {
         }        
         */
         // Crisanto's data
-        /*
-        if(stepCount % 30 == 0)
+
+        if(stepCount % 5 == 0)
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
-            mdxInfo << "Crisanto: " << cD.label << " of size " << cD.area
+            mdxInfo << "Crisanto: " <<  " time " << stepCount << " label " << cD.label << " of size " << cD.area
                     << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                     <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
                     << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
         }
-        */
+
     }
 
     // Calculate FPS

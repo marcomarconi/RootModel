@@ -974,9 +974,6 @@ void PBD::solve() {
                 auto it = cellAttr.begin();
                 advance(it, i);
                 Tissue::CellData& cD = it->second;
-                // to prevent the "exploding" bug after remesh
-                if(cD.lifeTime > 1 && cD.remeshTime < 1)
-                    continue;
                 std::vector<Point3d> X;
                 std::vector<double> invMasses;
                 for(CCIndex v : cD.cellVertices) {

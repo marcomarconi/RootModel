@@ -79,7 +79,7 @@ CameraZoom: -1.056
 [Clip1]
 Enable: false
 Grid: false
-Width: 116.652
+Width: 116.714
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 116.652
+Width: 116.714
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 116.652
+Width: 116.714
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.0576 1.0576 1.0576
+Size: 1.05763 1.05763 1.05763
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1139,7 +1139,7 @@ ParmString: True
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
-ParmString: False
+ParmString: 0
 ParmName: Mesh Update Timer
 ParmString: 3
 ParmName: Snapshots Timer
@@ -1305,7 +1305,7 @@ ParmString: True
 ParmName: Manual Cell Division Enabled
 ParmString: True
 ProcessName: Model/Root/05 Mechanics
-NumParms: 22
+NumParms: 23
 ParmName: Dt
 ParmString: 0.03
 ParmName: Converge Threshold
@@ -1336,6 +1336,8 @@ ParmName: Hydrostatic Parameters
 ParmString: 
 ParmName: Turgor Pressure
 ParmString: 2
+ParmName: Turgor Pressure non-Meristem Reduction
+ParmString: 0.25
 ParmName: Turgor Pressure Rate
 ParmString: 0.5
 ParmName: External Forces
@@ -1389,7 +1391,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 89
+NumParms: 90
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1440,8 +1442,8 @@ ParmName: Pin1 Max Amount Edge
 ParmString: 15
 ParmName: Pin1-auxin export rate
 ParmString: 1.4
-ParmName: Pin1 Sensitivity Suppression by Auxin Amount
-ParmString: 400
+ParmName: Pin Lateralization
+ParmString: 0
 ParmName: Pin1 Sensitivity Suppression by Auxin Max Cell
 ParmString: True
 ParmName: Simulate PIN4
@@ -1522,6 +1524,8 @@ ParmName: Quasimodo Basal Production Rate
 ParmString: 1
 ParmName: Quasimodo Decay Rate
 ParmString: 0.1
+ParmName: Quasimodo Tissue
+ParmString: None
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
