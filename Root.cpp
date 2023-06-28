@@ -122,7 +122,7 @@ bool Mechanics::step() {
             if(cD.stage == 2)
                 cD.pressureMax = 1;
             else if(cD.stage == 1)
-                cD.pressureMax = pressureMax * pressureKred;
+                cD.pressureMax = pressureMax /* pressureKred*/;
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
@@ -144,6 +144,8 @@ bool Mechanics::step() {
             if(quasimodoK > 0)
                 face_stiffness *= exp(-quasimodoK * cD.quasimodo);
             stiffness += face_stiffness;
+            if(cD.stage == 1 )
+                stiffness =  0.5;
         }
         stiffness /= cs.incidentCells(e, 2).size();
         eD.eStiffness = stiffness;
@@ -484,16 +486,22 @@ bool MechanicalGrowth::step(double Dt) {
     }
 
     // Find the highest LRC cell (used later for zonation, to see how far the cells are from the QC)
+    ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
     double lrc = -BIG_VAL;
     Point3d qc = Point3d(0,0,0);
+    Point3d source = Point3d(0,0,0); int source_cell = 0;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
             lrc = cD.centroid.y();
         if(cD.type == Tissue::QC)
             qc += cD.centroid;
+        if(cD.type == Tissue::Source) {
+            source += cD.centroid;
+            source_cell++;
+        }
     }
-    qc /= 2;
+    qc /= 2; source /= source_cell;
 
     // Zonation and Resting values update
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
@@ -504,11 +512,12 @@ bool MechanicalGrowth::step(double Dt) {
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         cD.lifeTime += Dt;
-        // Zonation
-        if(lrc != -BIG_VAL && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
-            if(cD.centroid.y() - lrc >  elongationZone)
+        // Zonation, I assume that the root is at least some size
+        if(norm(source - qc) > 150 && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
+            double dist = cD.centroid.y() - lrc;
+            if(dist >  elongationZone)
                 cD.stage = 1;
-            if(cD.centroid.y() - lrc >  differentiationZone)
+            if(dist >  differentiationZone)
                 cD.stage = 2;
 
         }
@@ -2644,7 +2653,7 @@ bool Root::step() {
         }        
         */
         // Crisanto's data
-
+        /*
         if(stepCount % 5 == 0)
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
@@ -2652,7 +2661,7 @@ bool Root::step() {
                     << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                     <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
                     << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
-        }
+        }*/
 
     }
 
