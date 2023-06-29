@@ -122,7 +122,7 @@ bool Mechanics::step() {
             if(cD.stage == 2)
                 cD.pressureMax = 1;
             else if(cD.stage == 1)
-                cD.pressureMax = pressureMax /* pressureKred*/;
+                cD.pressureMax = pressureMax * pressureKred;
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
@@ -144,8 +144,6 @@ bool Mechanics::step() {
             if(quasimodoK > 0)
                 face_stiffness *= exp(-quasimodoK * cD.quasimodo);
             stiffness += face_stiffness;
-            if(cD.stage == 1 )
-                stiffness =  0.5;
         }
         stiffness /= cs.incidentCells(e, 2).size();
         eD.eStiffness = stiffness;

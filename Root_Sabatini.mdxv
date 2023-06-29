@@ -79,7 +79,7 @@ CameraZoom: -0.864
 [Clip1]
 Enable: false
 Grid: false
-Width: 293.163
+Width: 260.012
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.99995 -0.00998078 -0.000235337 0 0.00998065 0.99995 -0.000571525 0 0.00
 [Clip2]
 Enable: false
 Grid: false
-Width: 293.163
+Width: 260.012
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 293.163
+Width: 260.012
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -1337,7 +1337,7 @@ ParmString:
 ParmName: Turgor Pressure
 ParmString: 2
 ParmName: Turgor Pressure non-Meristem Reduction
-ParmString: 0.9
+ParmString: 1
 ParmName: Turgor Pressure Rate
 ParmString: 0.5
 ParmName: External Forces
