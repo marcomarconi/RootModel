@@ -1019,21 +1019,28 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     cD.divInhibitor += (divBase * cD.area - divDecay + divInduced ) * Dt;
 
 
-    // find the QC so we can print the distance (for plotting)
-    /*
-    Point3d  QCcm;
+    // Find the highest LRC cell (used later for zonation, to see how far the cells are from the QC)
+    ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
+    double lrc = -BIG_VAL;
+    Point3d qc = Point3d(0,0,0);
+    Point3d source = Point3d(0,0,0); int source_cell = 0;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
+        if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
+            lrc = cD.centroid.y();
         if(cD.type == Tissue::QC)
-            QCcm += cD.centroid;
+            qc += cD.centroid;
+        if(cD.type == Tissue::Source) {
+            source += cD.centroid;
+            source_cell++;
+        }
     }
-    QCcm /= 2;
-    */
+    qc /= 2; source /= source_cell;
 
     // Quasimodo
     QString quasimodo_tissue = parm("Quasimodo Tissue");
     if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") &&(Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
-            cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+            cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 1 / (1 + exp(-0.5*((cD.centroid.y()-lrc) - 0))) * Dt;
     }
     if( quasimodo_tissue == "All" && (cD.type != Tissue::QC && cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) )
         cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
