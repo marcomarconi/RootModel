@@ -2411,12 +2411,12 @@ bool Root::step() {
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
-                                         "Chems: Division Inhibitor by Area",
-                                         "Chems: Division Promoter by Area",
+                                         //"Chems: Division Inhibitor by Area",
+                                         //"Chems: Division Promoter by Area",
                                          "Chems: Auxin By Area",
                                          //"Chems: Quasimodo",
-                                         "Chems: Division Probability",
-                                         "Division Count",
+                                         "Mechs: Edge Stiffness",
+                                         //"Division Count",
                                          "Mechs: Growth Rate"                                         
                                         };
         for(QString signalName: signals_set) {
