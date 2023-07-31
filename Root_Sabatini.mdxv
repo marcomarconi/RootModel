@@ -79,7 +79,7 @@ CameraZoom: -1.632
 [Clip1]
 Enable: false
 Grid: false
-Width: 241.829
+Width: 241.949
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.99995 -0.00998078 -0.000235337 0 0.00998065 0.99995 -0.000571525 0 0.00
 [Clip2]
 Enable: false
 Grid: false
-Width: 241.829
+Width: 241.949
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 241.829
+Width: 241.949
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1351,7 +1351,7 @@ ParmString: True
 ParmName: Manual Cell Division Enabled
 ParmString: True
 ProcessName: Model/Root/05 Mechanics
-NumParms: 23
+NumParms: 24
 ParmName: Dt
 ParmString: 0.03
 ParmName: Converge Threshold
@@ -1384,6 +1384,8 @@ ParmName: Turgor Pressure
 ParmString: 2
 ParmName: Turgor Pressure non-Meristem Reduction
 ParmString: 1
+ParmName: Turgor Pressure Intra-LRC Multiplier
+ParmString: 1.00
 ParmName: Turgor Pressure Rate
 ParmString: 0.5
 ParmName: External Forces
@@ -1681,7 +1683,7 @@ ParmString: 0,-1,0
 ParmName: Microfibril 2
 ParmString: 0.01,0,0
 ProcessName: Model/Root/23 Set Global Attr
-NumParms: 147
+NumParms: 131
 ParmName: Mechanics Process
 ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Growth Process
@@ -1697,8 +1699,6 @@ ParmString: 0
 ParmName: Undefined Shear CK
 ParmString: 0
 ParmName: Undefined Turgor Pressure
-ParmString: 0
-ParmName: Undefined Growth Factor
 ParmString: 0
 ParmName: Undefined Wall Max GR
 ParmString: -1
@@ -1716,8 +1716,6 @@ ParmName: QC Shear CK
 ParmString: 1
 ParmName: QC Turgor Pressure
 ParmString: 0
-ParmName: QC Growth Factor
-ParmString: 0
 ParmName: QC Wall Max GR
 ParmString: -1
 ParmName: QC Max area
@@ -1732,8 +1730,6 @@ ParmName: ColumellaInitial Shear EK
 ParmString: -1
 ParmName: ColumellaInitial Shear CK
 ParmString: -1
-ParmName: ColumellaInitial Growth Factor
-ParmString: 0
 ParmName: ColumellaInitial Wall Max GR
 ParmString: -1
 ParmName: ColumellaInitial Turgor Pressure
@@ -1749,8 +1745,6 @@ ParmString: -1
 ParmName: Columella Shear EK
 ParmString: -1
 ParmName: Columella Shear CK
-ParmString: -1
-ParmName: Columella Growth Factor
 ParmString: -1
 ParmName: Columella Wall Max GR
 ParmString: -1
@@ -1770,8 +1764,6 @@ ParmName: VascularInitial Shear CK
 ParmString: -1
 ParmName: VascularInitial Turgor Pressure
 ParmString: -1
-ParmName: VascularInitial Growth Factor
-ParmString: 5
 ParmName: VascularInitial Wall Max GR
 ParmString: -1
 ParmName: VascularInitial MF reorientation rate
@@ -1788,8 +1780,6 @@ ParmName: Vascular Shear CK
 ParmString: -1
 ParmName: Vascular Turgor Pressure
 ParmString: -1
-ParmName: Vascular Growth Factor
-ParmString: 4
 ParmName: Vascular Wall Max GR
 ParmString: -1
 ParmName: Vascular MF reorientation rate
@@ -1806,8 +1796,6 @@ ParmName: Pericycle Shear CK
 ParmString: -1
 ParmName: Pericycle Turgor Pressure
 ParmString: -1
-ParmName: Pericycle Growth Factor
-ParmString: 2
 ParmName: Pericycle Wall Max GR
 ParmString: -1
 ParmName: Pericycle MF reorientation rate
@@ -1824,8 +1812,6 @@ ParmName: Cortex Shear CK
 ParmString: -1
 ParmName: Cortex Turgor Pressure
 ParmString: -1
-ParmName: Cortex Growth Factor
-ParmString: 0
 ParmName: Cortex Wall Max GR
 ParmString: -1
 ParmName: Cortex Max area
@@ -1842,8 +1828,6 @@ ParmName: Endodermis Shear CK
 ParmString: -1
 ParmName: Endodermis Turgor Pressure
 ParmString: -1
-ParmName: Endodermis Growth Factor
-ParmString: 0
 ParmName: Endodermis Wall Max GR
 ParmString: -1
 ParmName: Endodermis Max area
@@ -1860,8 +1844,6 @@ ParmName: Epidermis Shear CK
 ParmString: -1
 ParmName: Epidermis Turgor Pressure
 ParmString: -1
-ParmName: Epidermis Growth Factor
-ParmString: 0
 ParmName: Epidermis Wall Max GR
 ParmString: -1
 ParmName: Epidermis Max area
@@ -1878,8 +1860,6 @@ ParmName: CEI Shear CK
 ParmString: -1
 ParmName: CEI Turgor Pressure
 ParmString: -1
-ParmName: CEI Growth Factor
-ParmString: 1
 ParmName: CEI Wall Max GR
 ParmString: -1
 ParmName: CEI Max area
@@ -1896,8 +1876,6 @@ ParmName: CEID Shear CK
 ParmString: -1
 ParmName: CEID Turgor Pressure
 ParmString: -1
-ParmName: CEID Growth Factor
-ParmString: 0
 ParmName: CEID Wall Max GR
 ParmString: -1
 ParmName: CEID Max area
@@ -1914,8 +1892,6 @@ ParmName: EpLrcInitial Shear CK
 ParmString: -1
 ParmName: EpLrcInitial Turgor Pressure
 ParmString: -1
-ParmName: EpLrcInitial Growth Factor
-ParmString: 1
 ParmName: EpLrcInitial Wall Max GR
 ParmString: -1
 ParmName: EpLrcInitial Max area
@@ -1931,8 +1907,6 @@ ParmString: -1
 ParmName: LRC Shear CK
 ParmString: -1
 ParmName: LRC Turgor Pressure
-ParmString: -1
-ParmName: LRC Growth Factor
 ParmString: -1
 ParmName: LRC Wall Max GR
 ParmString: -1
@@ -1950,8 +1924,6 @@ ParmName: Substrate Shear CK
 ParmString: 1
 ParmName: Substrate Turgor Pressure
 ParmString: 0
-ParmName: Substrate Growth Factor
-ParmString: 0
 ParmName: Substrate Wall Max GR
 ParmString: -1
 ParmName: Substrate MF reorientation rate
@@ -1968,8 +1940,6 @@ ParmName: Source Shear CK
 ParmString: 1
 ParmName: Source Turgor Pressure
 ParmString: -1
-ParmName: Source Growth Factor
-ParmString: 0
 ParmName: Source Wall Max GR
 ParmString: -1
 ParmName: Source MF reorientation rate
