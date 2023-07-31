@@ -947,6 +947,7 @@ bool Tissue::step(double Dt) {
     // perimeters and borders lengths between cells
     neighborhood2D(*mesh, cs, indexAttr, wallAreas, wallEdges);
 
+
     return false;
 }
 
@@ -1078,7 +1079,6 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.aux1ProdRate = aux1ProdRate;
     cD1.aux1InducedRate = aux1InducedRate;
     cD1.aux1MaxEdge = aux1MaxEdge;
-    cD1.growthFactor = growthFactor;
     cD1.wallsMaxGR = wallsMaxGR;
     cD1.pressureMax = pressureMax;
     cD1.Pin1 = Pin1 / 2;
@@ -1113,7 +1113,6 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.aux1ProdRate = aux1ProdRate;
     cD2.aux1InducedRate = aux1InducedRate;
     cD2.aux1MaxEdge = aux1MaxEdge;
-    cD2.growthFactor = growthFactor;
     cD2.wallsMaxGR = wallsMaxGR;
     cD2.pressureMax = pressureMax;
     cD2.Pin1 = Pin1 / 2;

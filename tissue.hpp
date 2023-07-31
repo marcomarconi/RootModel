@@ -324,7 +324,6 @@ public:
         double invmassVertices = 1;
         Point3d a1 = Point3d(0, EPS, 0), a2 = Point3d(EPS, 0, 0);
         double mfRORate = -1;
-        double growthFactor = 0;
         double wallsMaxGR = -1;
         double lifeTime = 0;
         double remeshTime = 0;

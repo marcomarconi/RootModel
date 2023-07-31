@@ -106,8 +106,16 @@ bool Mechanics::step() {
     Tissue::VertexDataAttr& vMAttr =
         mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
 
-
-
+    ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
+    double lrc = -BIG_VAL;
+    double qc = BIG_VAL;
+    for(auto c : cellAttr) {
+        Tissue::CellData& cD = cellAttr[c.first];
+        if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
+            lrc = cD.centroid.y();
+        if(cD.type == Tissue::QC && cD.centroid.y() < qc)
+            qc = cD.centroid.y();
+    }
 
     // Auxin relaxating effect on cell walls
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
@@ -115,6 +123,7 @@ bool Mechanics::step() {
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
+    double pressureLRC = parm("Turgor Pressure Intra-LRC Multiplier").toDouble();
     double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
     // Cell-wise updates
     for(auto c : cellAttr) {
@@ -123,6 +132,8 @@ bool Mechanics::step() {
                 cD.pressureMax = 1;
             else if(cD.stage == 1)
                 cD.pressureMax = pressureMax * pressureKred;
+            if(cD.centroid.y() < lrc && cD.centroid.y() > qc)
+                cD.pressureMax = pressureMax * pressureLRC;
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
@@ -3447,7 +3458,6 @@ bool SetGlobalAttr::step() {
         QString str = Tissue::ToString(cD.type);
         if(parm(QString(str + " Turgor Pressure")).toDouble() >= 0)
             cD.pressureMax = parm(QString(str + " Turgor Pressure")).toDouble();
-        cD.growthFactor = parm(QString(str + " Growth Factor")).toDouble();
         cD.wallsMaxGR = parm(QString(str + " Wall Max GR")).toDouble();
         if(parm(QString(str + " Max area")).toDouble() >= 0)
             cD.cellMaxArea = parm(QString(str + " Max area")).toDouble();
