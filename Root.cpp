@@ -1054,7 +1054,8 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 1 / (1 + exp(-0.5*((cD.centroid.y()-lrc) - 0))) * Dt;
     }
     if( quasimodo_tissue == "All" && (cD.type != Tissue::QC && cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) )
-        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+       if(cD.centroid.y() > lrc)
+            cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
 
 
