@@ -522,7 +522,7 @@ bool MechanicalGrowth::step(double Dt) {
         Tissue::CellData& cD = cellAttr[c.first];
         cD.lifeTime += Dt;
         // Zonation, I assume that the root is at least some size
-        if(norm(source - qc) > 150 && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
+        if(norm(source - qc) > 200 && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
             double dist = cD.centroid.y() - lrc;
             if(dist >  elongationZone)
                 cD.stage = 1;
