@@ -2670,15 +2670,32 @@ bool Root::step() {
         }        
         */
         // Crisanto's data
-        /*
-        if(stepCount % 5 == 0)
-        for(auto c : cellAttr) {
-            Tissue::CellData& cD = cellAttr[c.first];
-            mdxInfo << "Crisanto: " <<  " time " << stepCount << " label " << cD.label << " of size " << cD.area
+        if(stepCount % 20 == 0) {
+            // Root length
+            Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
+            Point3d SOURCEcm = Point3d(0,0,0); int source_cell = 0;
+            for(auto c : cellAttr) {
+                Tissue::CellData& cD = cellAttr[c.first];
+                if(cD.type == Tissue::QC) {
+                    QCcm += cD.centroid;
+                    qc_cell++;
+                }
+                else if(cD.type == Tissue::Source) {
+                    SOURCEcm += cD.centroid;
+                    source_cell++;
+                }
+            }
+            QCcm /= qc_cell; SOURCEcm /= source_cell;
+            double root_length = norm(SOURCEcm - QCcm) ;
+            for(auto c : cellAttr) {
+                Tissue::CellData& cD = cellAttr[c.first];
+                mdxInfo << "Crisanto: root length " << root_length <<  " time " << stepCount << " label " << cD.label << " of size " << cD.area
                     << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
-                    <<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
-                    << " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
-        }*/
+                    //<<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
+                    //<< " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
+                      << " growth rate " << cD.growthRate << endl;
+            }
+        }
 
     }
 
@@ -3415,6 +3432,22 @@ bool PrintCellAttr::step() {
         }
     }
     mdxInfo << "Total cells: " << cellAttr.size() << endl;
+    // Root length
+    Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
+    Point3d SOURCEcm = Point3d(0,0,0); int source_cell = 0;
+    for(auto c : cellAttr) {
+        Tissue::CellData& cD = cellAttr[c.first];
+        if(cD.type == Tissue::QC) {
+            QCcm += cD.centroid;
+            qc_cell++;
+        }
+        else if(cD.type == Tissue::Source) {
+            SOURCEcm += cD.centroid;
+            source_cell++;
+        }
+    }
+    QCcm /= qc_cell; SOURCEcm /= source_cell;
+    mdxInfo << "Distance from source to QC: " << norm(SOURCEcm - QCcm) << endl;
     // Get meristem size in number of cells
     int meristem_size = 0;
     for(auto c : cellAttr) {
