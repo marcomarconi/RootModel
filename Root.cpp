@@ -1051,7 +1051,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     // Quasimodo
     QString quasimodo_tissue = parm("Quasimodo Tissue");
     if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") &&(Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
-            cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 1 / (1 + exp(-0.5*((cD.centroid.y()-lrc) - 0))) * Dt;
+            cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 2 / (1 + exp(-0.04*((cD.centroid.y()-lrc) - 0))) * Dt;
     }
     if( quasimodo_tissue == "All" && (cD.type != Tissue::QC && cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) )
        if(cD.centroid.y() > lrc)
@@ -2426,7 +2426,7 @@ bool Root::step() {
                                          //"Chems: Division Inhibitor by Area",
                                          //"Chems: Division Promoter by Area",
                                          "Chems: Auxin By Area",
-                                         //"Chems: Quasimodo",
+                                         "Chems: Quasimodo",
                                          "Mechs: Edge Stiffness",
                                          //"Division Count",
                                          "Mechs: Growth Rate"                                         

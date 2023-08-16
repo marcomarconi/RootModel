@@ -1185,11 +1185,11 @@ ParmString: True
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
-ParmString: 0
+ParmString: 40
 ParmName: Mesh Update Timer
 ParmString: 20
 ParmName: Snapshots Timer
-ParmString: 0
+ParmString: 20
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1197,7 +1197,7 @@ ParmString: True
 ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
-ParmString: 0,-200
+ParmString: 0,200
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
@@ -1431,7 +1431,7 @@ ParmString: False
 ParmName: Zonation
 ParmString: 
 ParmName: Elongation Zone
-ParmString: 0
+ParmString: 30
 ParmName: Differentiation Zone
 ParmString: 1000
 ParmName: Mechanics Process
