@@ -2670,6 +2670,8 @@ bool Root::step() {
         }        
         */
         // Crisanto's data
+        ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
+        double lrc = -BIG_VAL;
         if(stepCount % 20 == 0) {
             // Root length
             Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
@@ -2684,12 +2686,14 @@ bool Root::step() {
                     SOURCEcm += cD.centroid;
                     source_cell++;
                 }
+                else if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
+                    lrc = cD.centroid.y();
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
             double root_length = norm(SOURCEcm - QCcm) ;
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
-                mdxInfo << "Crisanto: root length " << root_length <<  " time " << stepCount << " label " << cD.label << " of size " << cD.area
+                mdxInfo << "Crisanto: root length " << root_length << " meristem_length " <<  lrc-QCcm.y()  << " time " << stepCount << " label " << cD.label << " of size " << cD.area
                     << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                     //<<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
                     //<< " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
