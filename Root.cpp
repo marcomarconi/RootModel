@@ -1050,12 +1050,14 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
 
     // Quasimodo
     QString quasimodo_tissue = parm("Quasimodo Tissue");
-    if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") &&(Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
+    if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") &&  (quasimodo_tissue != "EpidermisCortex") && (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 2 / (1 + exp(-0.04*((cD.centroid.y()-lrc) - 0))) * Dt;
     }
-    if( quasimodo_tissue == "All" && (cD.type != Tissue::QC && cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) )
-       if(cD.centroid.y() > lrc)
+    else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC && cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) ){       if(cD.centroid.y() > lrc)
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    }else if( quasimodo_tissue == "EpidermisCortex" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) ){
+            cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    }
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
 
 

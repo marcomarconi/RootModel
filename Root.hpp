@@ -311,7 +311,9 @@ public:
                 "Quasimodo Tissue",
                 "None",
                 QStringList()
-                               << "None"
+                              << "None"
+                              << "All"
+                              << "EpidermisCortex"
                               << "Undefined"
                               << "QC"
                               << "Columella"
