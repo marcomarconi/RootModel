@@ -646,9 +646,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& auxinRatioSignal = mesh->signalAttr<double>("Chems: Auxin Transport");
     CCIndexDoubleAttr& auxinGradSignal = mesh->signalAttr<double>("Chems: Auxin Gradient");
     CCIndexDoubleAttr& auxinFluxImpactSignal = mesh->signalAttr<double>("Chems: Auxin Flux Impact");
-    CCIndexDoubleAttr& divInhibitorCytAreaSignal = mesh->signalAttr<double>("Chems: Division Inhibitor by Area");
     CCIndexDoubleAttr& divInhibitorCytSignal = mesh->signalAttr<double>("Chems: Division Inhibitor");
-    CCIndexDoubleAttr& divPromoterCytAreaSignal = mesh->signalAttr<double>("Chems: Division Promoter by Area");
     CCIndexDoubleAttr& divPromoterCytSignal = mesh->signalAttr<double>("Chems: Division Promoter");
     CCIndexDoubleAttr& divProbSignal = mesh->signalAttr<double>("Chems: Division Probability");
     CCIndexDoubleAttr& divTimeSignal = mesh->signalAttr<double>("Chems: Division Time");
@@ -659,7 +657,9 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& PINOIDCytSignal = mesh->signalAttr<double>("Chems: PINOID Cyt");
     CCIndexDoubleAttr& PP2ACytSignal = mesh->signalAttr<double>("Chems: PP2A Cyt");
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
-    CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Chems: PP2A Mem");
+    CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Che"
+                                                                "ms: PP2A Mem");
+    CCIndexIntAttr& brassinosteroidSignal = mesh->signalAttr<int>("Chems: Brassinosteoroid Signal");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
     CCIndexDoubleAttr& edgeStrainSignal = mesh->signalAttr<double>("Mechs: Edge Strain Rate");
@@ -685,8 +685,6 @@ bool Tissue::step(double Dt) {
     auxinGradSignal.clear();
     divInhibitorCytSignal.clear();
     divPromoterCytSignal.clear();
-    divInhibitorCytAreaSignal.clear();
-    divPromoterCytAreaSignal.clear();
     quasimodoCytSignal.clear();
     divProbSignal.clear();
     divTimeSignal.clear();
@@ -866,8 +864,6 @@ bool Tissue::step(double Dt) {
         auxinByAreaSignal[f] = cD.auxin / cD.area;
         Aux1CytSignal[f] = fD.Aux1Cyt;
         Aux1MemSignal[f] = fD.Aux1Mem;
-        divInhibitorCytAreaSignal[f] = cD.divInhibitor / cD.area;
-        divPromoterCytAreaSignal[f] = cD.divPromoter / cD.area;
         divInhibitorCytSignal[f] = cD.divInhibitor;
         divPromoterCytSignal[f] = cD.divPromoter;
         divProbSignal[f] = cD.divProb;
@@ -880,6 +876,7 @@ bool Tissue::step(double Dt) {
         PP2AMemSignal[f] = fD.PP2AMem;
         quasimodoCytSignal[f] = cD.quasimodo;
         pressureSignal[f] = cD.pressure;
+        brassinosteroidSignal[f] = cD.brassinosteroidSignal;
 
         fD.auxin = cD.auxin;
         fD.intercellularAuxin = 0;
@@ -1089,6 +1086,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.quasimodo = quasimodo / 2;
     cD1.divisionCount = divisionCount+1;
     cD1.divProb = 0;
+    cD1.brassinosteroidTarget = false;
 
     cD2.tissue = tissue;
     cD2.type = type2;
@@ -1124,6 +1122,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.quasimodo = quasimodo / 2;
     cD2.divisionCount = divisionCount+1;
     cD2.divProb = 0;
+    cD2.brassinosteroidTarget = false;
 
     std::vector<CCIndex> edges;
     edges.insert(edges.end(), cD1.perimeterEdges.begin(), cD1.perimeterEdges.end());
@@ -1141,6 +1140,13 @@ void Tissue::CellData::division(const CCStructure &cs,
         eD.geomImpact.erase(label);
         eD.pin1SensitivityRaw.erase(label);
         eD.pin1Sensitivity.erase(label);
+    }
+
+
+    if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
+        cD1.brassinosteroidTarget = true;
+    } else {
+        cD2.brassinosteroidTarget = true;
     }
     /*
     if(parm("Verbose") == "True")

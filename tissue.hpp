@@ -353,6 +353,8 @@ public:
         double aux1ProdRate = -1;
         double aux1InducedRate = -1;
         double aux1MaxEdge = -1;
+        bool brassinosteroidTarget = false;
+        int brassinosteroidSignal = 0;
 
         // other dinamically loaded attribute
         bool selected = false;
@@ -825,51 +827,7 @@ public:
                     if(axisMin_grs.size() > 0)
                         axisMin_growthRate /= axisMin_grs.size();
                 }
-                /*
-                // rest shape tensor
-                M0 = 0;
-                for(auto v : perimeterVertices) {
-                    M0[0][0] += pow(vMAttr[v].restPos[0] - restCm[0], 2);
-                    M0[1][1] += pow(vMAttr[v].restPos[1] - restCm[1], 2);
-                    M0[0][1] += (vMAttr[v].restPos[0] - restCm[0]) * (vMAttr[v].restPos[1] - restCm[1]);
-                    M0[1][0] += (vMAttr[v].restPos[0] - restCm[0]) * (vMAttr[v].restPos[1] - restCm[1]);
-                }
-                M0 /= perimeterVertices.size();
 
-                // current shape tensor
-                M = 0;
-                for(auto v : perimeterVertices) {
-                    M[0][0] += pow(indexAttr[v].pos[0] - centroid[0], 2);
-                    M[1][1] += pow(indexAttr[v].pos[1] - centroid[1], 2);
-                    M[0][1] += (indexAttr[v].pos[0] - centroid[0]) * (indexAttr[v].pos[1] - centroid[1]);
-                    M[1][0] += (indexAttr[v].pos[0] - centroid[0]) * (indexAttr[v].pos[1] - centroid[1]);
-                }
-                M /= perimeterVertices.size();
-
-                // shape tensor strain
-                S = (M - M0);
-                for(int i = 0; i < 3; i++)
-                    for(int j = 0; j < 3; j++)
-                        S[i][j] = S[i][j] / transpose(M0)[i][j];
-
-                // principal components of the shape strain tensor
-                sAngle = sMax = sMin = 0;
-                if((S[0][0] - S[1][1]) != 0) {
-                    sAngle = (0.5 * atan(2 * S[0][1] / (S[0][0] - S[1][1]) )) ;
-                    double left = (S[0][0] + S[1][1]) / 2;
-                    double right = sqrt(pow((S[0][0] - S[1][1]) / 2, 2) + pow(S[0][1]/2, 2));
-                    sMax = left + right;
-                    sMin = left - right;
-                }
-                if(S[0][0] < S[1][1])
-                    if(sAngle > -(M_PI/4) && sAngle < (M_PI/4))
-                        sAngle += (M_PI/2);
-                */
-
-                /*if(axisMax[1] < 0)
-                    axisMax *= -1;
-                if(axisMin[1] < 0)
-                    axisMin *= -1;*/
             } else
                 mdxInfo << "Cell " << label << " has no vertices!?!?" << endl;
 

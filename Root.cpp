@@ -516,6 +516,7 @@ bool MechanicalGrowth::step(double Dt) {
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
     double wallsMaxGrowthRate = parm("Walls Growth Rate").toDouble();
     bool preventElengation = parm("Prevent Cell Elongation") == "True";
+    double brassinosteroidDelay = parm("Brassinosteroid Delay").toDouble();
     double elongationZone = parm("Elongation Zone").toDouble();
     double differentiationZone = parm("Differentiation Zone").toDouble();
     for(auto c : cellAttr) {
@@ -530,6 +531,9 @@ bool MechanicalGrowth::step(double Dt) {
                 cD.stage = 2;
 
         }
+        cD.brassinosteroidSignal = 0;
+        if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
+            cD.brassinosteroidSignal = 1;
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
         if(cD.mfRORate == 0)
@@ -549,17 +553,19 @@ bool MechanicalGrowth::step(double Dt) {
             for(CCIndex e : cs.incidentCells(f, 1)) {
                 Tissue::EdgeData& eD = edgeAttr[e];
                 if(eD.type == Tissue::Wall) {
-                    if(eD.strain >= growthRateThresh && cD.growthRate > growthRateThresh) {
-                        //eD.restLength = eD.length;
-                        double strainDiff = eD.strain - growthRateThresh;
-                        double wallsMaxGR = cD.wallsMaxGR;
-                        if(wallsMaxGR == -1)
+                    if(!cD.brassinosteroidSignal) {
+                        if(eD.strain >= growthRateThresh && cD.growthRate > growthRateThresh) {
+                            //eD.restLength = eD.length;
+                            double strainDiff = eD.strain - growthRateThresh;
+                            double wallsMaxGR = cD.wallsMaxGR;
+                            if(wallsMaxGR == -1)
+                                wallsMaxGR = wallsMaxGrowthRate;
                             wallsMaxGR = wallsMaxGrowthRate;
-                        wallsMaxGR = wallsMaxGrowthRate;
-                        eD.restLength += wallsMaxGR * strainDiff * Dt;
-                        if( eD.restLength > eD.length) {
-                            mdxInfo << "WARNING: restLength is updated inmediately" << endl;
-                            eD.restLength = eD.length;
+                            eD.restLength += wallsMaxGR * strainDiff * Dt;
+                            if( eD.restLength > eD.length) {
+                                mdxInfo << "WARNING: restLength is updated inmediately" << endl;
+                                eD.restLength = eD.length;
+                            }
                         }
                     }
                 } else if (eD.type == Tissue::Shear)

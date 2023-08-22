@@ -194,6 +194,7 @@ public:
         addParm("Prevent Cell Elongation", "The cell will stop growing when reaching max area if division is not allowed", "True",
                 QStringList() << "True"
                               << "False");
+        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
         addParm("Zonation", "Zonation", "");
         addParm("Elongation Zone", "Elongation Zone", "50");
         addParm("Differentiation Zone", "Differentiation Zone", "100");
