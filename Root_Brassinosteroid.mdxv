@@ -73,13 +73,13 @@ UnsharpStrength: 1
 MaxNbPeels: 10
 CameraFrame: 0.999797 0.010589 -0.0171338 0 -0.0106135 0.999943 -0.00133576 0 0.0171187 0.00151734 0.999852 0 -21.4694 166.299 -1156.48 1
 SceneRadius: 500
-CameraZoom: -0.096
+CameraZoom: 0.288
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 117.965
+Width: 118.059
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 117.965
+Width: 118.059
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 117.965
+Width: 118.059
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: Root_model.mdxm
+MeshFile: Root_Brassinosteroid.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05813 1.05813 1.05813
+Size: 1.05865 1.05865 1.05865
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
