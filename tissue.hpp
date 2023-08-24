@@ -354,7 +354,7 @@ public:
         double aux1InducedRate = -1;
         double aux1MaxEdge = -1;
         bool brassinosteroidTarget = false;
-        int brassinosteroidSignal = 0;
+        double brassinosteroidSignal = 0;
 
         // other dinamically loaded attribute
         bool selected = false;

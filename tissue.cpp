@@ -659,7 +659,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
     CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Che"
                                                                 "ms: PP2A Mem");
-    CCIndexIntAttr& brassinosteroidSignal = mesh->signalAttr<int>("Chems: Brassinosteoroid Signal");
+    CCIndexDoubleAttr& brassinosteroidSignal = mesh->signalAttr<double>("Chems: Brassinosteoroid Signal");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
     CCIndexDoubleAttr& edgeStrainSignal = mesh->signalAttr<double>("Mechs: Edge Strain Rate");

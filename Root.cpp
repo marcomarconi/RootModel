@@ -531,9 +531,9 @@ bool MechanicalGrowth::step(double Dt) {
                 cD.stage = 2;
 
         }
-        cD.brassinosteroidSignal = 0;
+        cD.brassinosteroidSignal = 1;
         if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
-            cD.brassinosteroidSignal = 1;
+            cD.brassinosteroidSignal = 1 / (1 + exp(-2*(cD.lastDivision - brassinosteroidDelay)));
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
         if(cD.mfRORate == 0)
@@ -553,21 +553,20 @@ bool MechanicalGrowth::step(double Dt) {
             for(CCIndex e : cs.incidentCells(f, 1)) {
                 Tissue::EdgeData& eD = edgeAttr[e];
                 if(eD.type == Tissue::Wall) {
-                    if(!cD.brassinosteroidSignal) {
                         if(eD.strain >= growthRateThresh && cD.growthRate > growthRateThresh) {
                             //eD.restLength = eD.length;
                             double strainDiff = eD.strain - growthRateThresh;
                             double wallsMaxGR = cD.wallsMaxGR;
                             if(wallsMaxGR == -1)
                                 wallsMaxGR = wallsMaxGrowthRate;
-                            wallsMaxGR = wallsMaxGrowthRate;
+                            wallsMaxGR = wallsMaxGrowthRate * cD.brassinosteroidSignal;
                             eD.restLength += wallsMaxGR * strainDiff * Dt;
                             if( eD.restLength > eD.length) {
                                 mdxInfo << "WARNING: restLength is updated inmediately" << endl;
                                 eD.restLength = eD.length;
                             }
                         }
-                    }
+
                 } else if (eD.type == Tissue::Shear)
                     //if(eD.length > eD.restLength) // this seems to have very little effect
                     eD.restLength = eD.length ;
