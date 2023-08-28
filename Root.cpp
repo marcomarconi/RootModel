@@ -129,7 +129,7 @@ bool Mechanics::step() {
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
     double pressureLRC = parm("Turgor Pressure Intra-LRC Multiplier").toDouble();
     double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
-    double brassinosteroidDelay = parm("Brassinosteroid Delay").toDouble();
+    double brassinosteroidDelay = parm("Brassinosteroid Delay M").toDouble();
 
     // Cell-wise updates
     for(auto c : cellAttr) {
@@ -171,7 +171,8 @@ bool Mechanics::step() {
                     face_stiffness *= exp(-quasimodoK * cD.quasimodo);
 
                 if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
-                   face_stiffness = wallEK * ((1/wallEK-1) / (1 + exp(1*(cD.lastDivision - brassinosteroidDelay))) + 1);
+                   //face_stiffness = wallEK * ((1/wallEK-1) / (1 + exp(1*(cD.lastDivision - brassinosteroidDelay))) + 1);
+                    face_stiffness = wallEK * (1 / (1 + exp(-1*(cD.lastDivision - brassinosteroidDelay))) + 1);
             }
             stiffness += face_stiffness;
         }
@@ -535,7 +536,7 @@ bool MechanicalGrowth::step(double Dt) {
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
     double wallsMaxGrowthRate = parm("Walls Growth Rate").toDouble();
     bool preventElengation = parm("Prevent Cell Elongation") == "True";
-    double brassinosteroidDelay = parm("Brassinosteroid Delay").toDouble();
+    double brassinosteroidDelay = parm("Brassinosteroid Delay G").toDouble();
     double elongationZone = parm("Elongation Zone").toDouble();
     double differentiationZone = parm("Differentiation Zone").toDouble();
     for(auto c : cellAttr) {

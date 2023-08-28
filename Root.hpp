@@ -90,7 +90,7 @@ public:
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
         addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "3");
         addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
-        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
+        addParm("Brassinosteroid Delay M", "Brassinosteroid Delay", "0");
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");
@@ -199,7 +199,7 @@ public:
         addParm("Prevent Cell Elongation", "The cell will stop growing when reaching max area if division is not allowed", "True",
                 QStringList() << "True"
                               << "False");
-        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
+        addParm("Brassinosteroid Delay G", "Brassinosteroid Delay", "0");
         addParm("Zonation", "Zonation", "");
         addParm("Elongation Zone", "Elongation Zone", "50");
         addParm("Differentiation Zone", "Differentiation Zone", "100");
