@@ -83,13 +83,14 @@ public:
 
         // Mass Springs
         addParm("Mass Spring Parameters", "", "");
-        addParm("Wall EK", "Stiffness of the cross springs", "1");
-        addParm("Wall CK", "Stiffness of the cross springs", "1");
+        addParm("Wall EK", "Stiffness of the wall springs", "1");
+        addParm("Wall CK", "Stiffness of the wall springs", "1");
         addParm("Shear EK", "Extensional Stiffness of the shear edge springs", "0");
         addParm("Shear CK", "Compression Stiffness of the shear edge springs", "1");
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
         addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "3");
         addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
+        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");
@@ -106,6 +107,9 @@ public:
         addParm("PBD Engine",
                 "Name of PBD Engine",
                 "Model/Root/07 PBD Engine");
+        addParm("Set Global Attr Process",
+                "Name of the process for Set Global Attr",
+                "Model/Root/23 Set Global Attr");
     }
 
 
@@ -114,6 +118,7 @@ public:
     bool rewind(QWidget* parent);
     bool step();
     PBD* PBDProcess = 0;
+    SetGlobalAttr* setGlobalAttrProcess = 0;
     double Dt = 0;
     double userTime = 0;
     double realTime = 0;
@@ -900,6 +905,7 @@ public:
                               << "True");
         addParm("Debug File", "Debug File", "debug.csv");
         addParm("Frame fixed on QC", "Frame fixed on QC", "0");
+        addParm("Set Global Attr Process","Name of the process for Set Global Attr", "Model/Root/23 Set Global Attr");
         addParm("Frame fixed on Substrate", "Frame fixed on Substrate", "0");
         addParm("Execution Time", "Execution Time", "0");
         addParm("Output Mesh", "Output Mesh", "output.mdxm");

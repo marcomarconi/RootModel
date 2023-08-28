@@ -7,15 +7,17 @@ using namespace ROOT;
 bool Mechanics::initialize(QWidget* parent) {
     Mesh* mesh = getMesh("Mesh 1");
     if(!mesh)
-        throw(QString("MechanicalGrowth::step No current mesh"));
+        throw(QString("Mechanics::step No current mesh"));
 
     if(!getProcess(parm("PBD Engine"), PBDProcess))
         throw(QString("Mechanics::initialize Cannot make PBD Engine") +
               parm("Mechanical Solver Process"));
     if(!getProcess(parm("Tissue Process"), tissueProcess))
-        throw(QString("Chemicals::initialize Cannot make Tissue Process:") +
+        throw(QString("Mechanics::initialize Cannot make Tissue Process:") +
               parm("Tissue Process"));
-
+    if(!getProcess(parm("Set Global Attr Process"), setGlobalAttrProcess))
+        throw(QString("Mechanics::initialize Cannot make Set Global Attr Process:") +
+              parm("Set Global Attr Process"));
     Verbose = parm("Verbose") == "True";
 
     if(Verbose)
@@ -118,6 +120,8 @@ bool Mechanics::step() {
     }
 
     // Auxin relaxating effect on cell walls
+    double wallEK = parm("Wall EK").toDouble();
+    double shearEK = parm("Shear EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
     double pressureMax = parm("Turgor Pressure").toDouble();
@@ -125,6 +129,8 @@ bool Mechanics::step() {
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
     double pressureLRC = parm("Turgor Pressure Intra-LRC Multiplier").toDouble();
     double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
+    double brassinosteroidDelay = parm("Brassinosteroid Delay").toDouble();
+
     // Cell-wise updates
     for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
@@ -140,20 +146,33 @@ bool Mechanics::step() {
     }
     // Edge-wise updates
     for(CCIndex e: cs.edges()) {
-        Tissue::EdgeData& eD = edgeAttr[e];
-        if(eD.type != Tissue::Wall)
-            continue;
+        Tissue::EdgeData& eD = edgeAttr[e];        
         double stiffness = 0;
         for(CCIndex f : cs.incidentCells(e, 2)){
             Tissue::CellData& cD = cellAttr[(*indexAttr)[f].label];
-            double auxinByArea =  cD.auxin / cD.area;
+            if(eD.type == Tissue::Wall) {
+                eD.eStiffness = setGlobalAttrProcess->parm(QString(Tissue::ToString(cD.type)) + " Wall EK").toDouble();
+                if(eD.eStiffness == -1)
+                    eD.eStiffness = wallEK;
+            }
+            if(eD.type == Tissue::Shear) {
+                eD.eStiffness = setGlobalAttrProcess->parm(QString(Tissue::ToString(cD.type)) + " Shear EK").toDouble();
+                if(eD.eStiffness == -1)
+                    eD.eStiffness = shearEK;
+            }
             double face_stiffness = eD.eStiffness;
-            if(auxinWallK1 > 0)
-                face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
-                                                                    pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
-                                                                    );
-            if(quasimodoK > 0)
-                face_stiffness *= exp(-quasimodoK * cD.quasimodo);
+            if(eD.type == Tissue::Wall) {
+                double auxinByArea =  cD.auxin / cD.area;
+                if(auxinWallK1 > 0)
+                    face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
+                                                                        pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
+                                                                        );
+                if(quasimodoK > 0)
+                    face_stiffness *= exp(-quasimodoK * cD.quasimodo);
+
+                if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
+                   face_stiffness = wallEK * ((1/wallEK-1) / (1 + exp(1*(cD.lastDivision - brassinosteroidDelay))) + 1);
+            }
             stiffness += face_stiffness;
         }
         stiffness /= cs.incidentCells(e, 2).size();
@@ -532,8 +551,11 @@ bool MechanicalGrowth::step(double Dt) {
 
         }
         cD.brassinosteroidSignal = 1;
+
+        /*
         if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
             cD.brassinosteroidSignal = 1 / (1 + exp(-2*(cD.lastDivision - brassinosteroidDelay)));
+        */
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
         if(cD.mfRORate == 0)
@@ -2432,9 +2454,9 @@ bool Root::step() {
         std::set<QString> signals_set = {
                                          //"Chems: Division Inhibitor by Area",
                                          //"Chems: Division Promoter by Area",
-                                         "Chems: Auxin By Area",
-                                         "Chems: Quasimodo",
-                                         "Mechs: Edge Stiffness",
+                                         //"Chems: Auxin By Area",
+                                         "Chems: Brassinosteoroid Signal",
+                                         //"Mechs: Edge Stiffness",
                                          //"Division Count",
                                          "Mechs: Growth Rate"                                         
                                         };
@@ -3552,11 +3574,11 @@ bool SetGlobalAttr::step() {
 bool SetCellAttr::step() {
     Mesh* mesh = getMesh("Mesh 1");
     if(!mesh or mesh->file().isEmpty())
-        throw(QString("SetGlobalAttr::step No current mesh, cannot rewind"));
+        throw(QString("SetCellAttr::step No current mesh, cannot rewind"));
 
     QString ccName = mesh->ccName();
     if(ccName.isEmpty())
-        throw(QString("SetGlobalAttr::step Error, no cell complex selected"));
+        throw(QString("SetCellAttr::step Error, no cell complex selected"));
 
     CCStructure& cs = mesh->ccStructure(ccName);
     CCIndexDataAttr& indexAttr = mesh->indexAttr();
