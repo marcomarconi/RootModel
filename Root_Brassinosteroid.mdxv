@@ -79,7 +79,7 @@ CameraZoom: -0.96
 [Clip1]
 Enable: false
 Grid: false
-Width: 118.237
+Width: 118.344
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 118.237
+Width: 118.344
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 118.237
+Width: 118.344
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06024 1.06024 1.06024
+Size: 1.06067 1.06067 1.06067
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1152,6 +1152,8 @@ ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
 ParmString: 0,220
+ParmName: Set Global Attr Process
+ParmString: Model/Root/23 Set Global Attr
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
@@ -1176,8 +1178,6 @@ ParmName: Delete Cell Process
 ParmString: Model/Root/31 Delete Cell
 ParmName: Execute Test Process
 ParmString: Model/Root/4 Execute Test
-ParmName: Set Global Attr Process
-ParmString: Model/Root/23 Set Global Attr
 ParmName: Triangulate Faces
 ParmString: Model/Root/Triangulate Faces
 ParmName: Remesh
@@ -1305,7 +1305,7 @@ ParmString: True
 ParmName: Manual Cell Division Enabled
 ParmString: True
 ProcessName: Model/Root/05 Mechanics
-NumParms: 25
+NumParms: 26
 ParmName: Dt
 ParmString: 0.03
 ParmName: Converge Threshold
@@ -1332,7 +1332,7 @@ ParmName: Auxin-induced wall relaxation K2
 ParmString: 3
 ParmName: Quasimodo wall relaxation K
 ParmString: 0
-ParmName: Brassinosteroid Delay
+ParmName: Brassinosteroid Delay M
 ParmString: 0
 ParmName: Hydrostatic Parameters
 ParmString: 
@@ -1356,6 +1356,8 @@ ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ParmName: PBD Engine
 ParmString: Model/Root/07 PBD Engine
+ParmName: Set Global Attr Process
+ParmString: Model/Root/23 Set Global Attr
 ProcessName: Model/Root/052 Mechanical Growth
 NumParms: 19
 ParmName: Verbose
@@ -1384,7 +1386,7 @@ ParmName: MF Delete After Division
 ParmString: False
 ParmName: Prevent Cell Elongation
 ParmString: True
-ParmName: Brassinosteroid Delay
+ParmName: Brassinosteroid Delay G
 ParmString: 0
 ParmName: Zonation
 ParmString: 
