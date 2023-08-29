@@ -551,12 +551,10 @@ bool MechanicalGrowth::step(double Dt) {
                 cD.stage = 2;
 
         }
-        cD.brassinosteroidSignal = 1;
-
-        /*
+        cD.brassinosteroidSignal = 1;        
         if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
-            cD.brassinosteroidSignal = 1 / (1 + exp(-2*(cD.lastDivision - brassinosteroidDelay)));
-        */
+            cD.brassinosteroidSignal = 1 / (1 + exp(-1*(cD.lastDivision - brassinosteroidDelay)));
+
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
         if(cD.mfRORate == 0)
