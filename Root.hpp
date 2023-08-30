@@ -85,10 +85,10 @@ public:
         addParm("Mass Spring Parameters", "", "");
         addParm("Wall EK", "Stiffness of the wall springs", "1");
         addParm("Wall CK", "Stiffness of the wall springs", "1");
-        addParm("Shear EK", "Extensional Stiffness of the shear edge springs", "0");
+        addParm("Shear EK", "Extensional Stiffness of the shear edge springs", "0.01");
         addParm("Shear CK", "Compression Stiffness of the shear edge springs", "1");
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
-        addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "3");
+        addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "300");
         addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
         addParm("Brassinosteroid Delay M", "Brassinosteroid Delay", "0");
         // Hydrostatics

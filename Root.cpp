@@ -171,8 +171,8 @@ bool Mechanics::step() {
                     face_stiffness *= exp(-quasimodoK * cD.quasimodo);
 
                 if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
-                   //face_stiffness = wallEK * ((1/wallEK-1) / (1 + exp(1*(cD.lastDivision - brassinosteroidDelay))) + 1);
-                    face_stiffness = wallEK * (1 / (1 + exp(-1*(cD.lastDivision - brassinosteroidDelay))) + 1);
+                   ;//face_stiffness = wallEK * ((1/wallEK-1) / (1 + exp(1*(cD.lastDivision - brassinosteroidDelay))) + 1);
+
             }
             stiffness += face_stiffness;
         }
@@ -553,7 +553,7 @@ bool MechanicalGrowth::step(double Dt) {
         }
         cD.brassinosteroidSignal = 1;        
         if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
-            cD.brassinosteroidSignal = 1 / (1 + exp(-1*(cD.lastDivision - brassinosteroidDelay)));
+            cD.brassinosteroidSignal = 1 / (1 + exp(-2*(cD.lastDivision - brassinosteroidDelay)));
 
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
@@ -2371,7 +2371,6 @@ bool Root::step() {
         //setGlobalAttrProcess->step();
         // Update the tissue
         tissueProcess->step(mechanicsProcess->Dt);
-
         i++;
     } while(!mechanicsProcessConverged && i < maxMechanicsIter);
 
