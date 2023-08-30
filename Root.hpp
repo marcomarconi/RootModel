@@ -89,8 +89,8 @@ public:
         addParm("Shear CK", "Compression Stiffness of the shear edge springs", "1");
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
         addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "300");
+        addParm("Minimum Wall EK", "Minimum Wall EK", "0");
         addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
-        addParm("Brassinosteroid Delay M", "Brassinosteroid Delay", "0");
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");

@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999797 0.010589 -0.0171338 0 -0.0106135 0.999943 -0.00133576 0 0.0171187 0.00151734 0.999852 0 -21.4694 166.299 -1156.48 1
+CameraFrame: 0.999797 0.010589 -0.0171338 0 -0.0106135 0.999943 -0.00133576 0 0.0171187 0.00151734 0.999852 0 -12.2614 205.177 -1156.48 1
 SceneRadius: 500
-CameraZoom: -0.96
+CameraZoom: -1.248
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 118.344
+Width: 118.64
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 118.344
+Width: 118.64
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 118.344
+Width: 118.64
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06067 1.06067 1.06067
+Size: 1.06226 1.06226 1.06226
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -278,6 +278,52 @@ ParmName: Axis Name
 ParmString: 
 ParmName: Width
 ParmString: 2.0
+ProcessName: Mesh/Cell Atlas 3D/A Analyze Cells 3D
+NumParms: 3
+ParmName: Surface Mesh
+ParmString: Surface Mesh
+ParmName: Volume Threshold
+ParmString: 0
+ParmName: Mode
+ParmString: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Centroids
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Property Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Create Contour Attr Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Export Nucleus Stress Data Steve
+NumParms: 3
+ParmName: Filename Contour Data
+ParmString: 
+ParmName: Filename Min Distance
+ParmString: 
+ParmName: Wall Type Min Distance
+ParmString: Side
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Cell Wall Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data2
+NumParms: 2
+ParmName: Filename
+ParmString: 
+ParmName: Histogram Bins
+ParmString: 20
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Cell Wall Labels
+NumParms: 1
+ParmName: Face Labeling
+ParmString: Face Type
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Volume Label
+NumParms: 1
+ParmName: Label
+ParmString: 1
+ProcessName: Mesh/Cell Atlas 3D/Tools/Collapse Bezier Points
+NumParms: 0
 ProcessName: Mesh/Cell Axis/Cell Axis Load
 NumParms: 2
 ParmName: Type
@@ -1131,7 +1177,7 @@ ParmString: 30
 ParmName: Mechanics Enabled
 ParmString: True
 ParmName: Chemicals Enabled
-ParmString: False
+ParmString: True
 ParmName: Growth Enabled
 ParmString: True
 ParmName: Cell Division Enabled
@@ -1141,13 +1187,13 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: 0
 ParmName: Mesh Update Timer
-ParmString: 2
+ParmString: 20
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
-ParmString: False
+ParmString: True
 ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
@@ -1157,7 +1203,7 @@ ParmString: Model/Root/23 Set Global Attr
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 3600
+ParmString: 7000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1319,7 +1365,7 @@ ParmString: 10
 ParmName: Mass Spring Parameters
 ParmString: 
 ParmName: Wall EK
-ParmString: 0.2
+ParmString: 1
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
@@ -1329,10 +1375,10 @@ ParmString: 1
 ParmName: Auxin-induced wall relaxation K1
 ParmString: 0.05
 ParmName: Auxin-induced wall relaxation K2
-ParmString: 3
+ParmString: 300
+ParmName: Minimum Wall EK
+ParmString: 0.2
 ParmName: Quasimodo wall relaxation K
-ParmString: 0
-ParmName: Brassinosteroid Delay M
 ParmString: 0
 ParmName: Hydrostatic Parameters
 ParmString: 
@@ -2186,6 +2232,74 @@ ParmName: Low Threshold
 ParmString: 1000
 ParmName: High Threshold
 ParmString: 0
+ProcessName: Stack/ITK/Filters/ITK Curvature Anisotropic Diffusion Image Filter
+NumParms: 3
+ParmName: Time Step
+ParmString: 0.03
+ParmName: Iterations
+ParmString: 5
+ParmName: Conductance
+ParmString: 9.0
+ProcessName: Stack/ITK/Filters/ITK Curvature Flow Image Filter
+NumParms: 2
+ParmName: Time Step
+ParmString: .0.0625
+ParmName: Steps
+ParmString: 10
+ProcessName: Stack/ITK/Filters/ITK Gradient Magnitude Recursive Gaussian Image Filter
+NumParms: 1
+ParmName: Sigma
+ParmString: 0.5
+ProcessName: Stack/ITK/Filters/ITK Sigmoid Image Filter
+NumParms: 2
+ParmName: Alpha
+ParmString: 1000.0
+ParmName: Beta
+ParmString: 2000.0
+ProcessName: Stack/ITK/Filters/ITK Smoothing Recursive Gaussian Image Filter
+NumParms: 1
+ParmName: Radius
+ParmString: 1.0
+ProcessName: Stack/ITK/Registration/ITK Demons Registration
+NumParms: 6
+ParmName: Deformation File
+ParmString: deformation.vtk
+ParmName: Threshold at Mean
+ParmString: Yes
+ParmName: Histogram Levels
+ParmString: 1024
+ParmName: Match Points
+ParmString: 7
+ParmName: Iterations
+ParmString: 150
+ParmName: Sigma
+ParmString: 1.0
+ProcessName: Stack/ITK/Segmentation/ITK Watershed
+NumParms: 2
+ParmName: Fully Connected
+ParmString: No
+ParmName: Mark Watershed Line
+ParmString: No
+ProcessName: Stack/ITK/Segmentation/ITK Watershed Auto Seeded
+NumParms: 3
+ParmName: Fully Connected
+ParmString: No
+ParmName: Mark Watershed Line
+ParmString: No
+ParmName: Level
+ParmString: 1500
+ProcessName: Stack/ITK/System/ITK Image Reader
+NumParms: 3
+ParmName: File Name
+ParmString: 
+ParmName: Store
+ParmString: Main
+ParmName: Stack Number
+ParmString: 0
+ProcessName: Stack/ITK/System/ITK VTK Writer
+NumParms: 1
+ParmName: File Name
+ParmString: 
 ProcessName: Stack/Mesh Interaction/Annihilate
 NumParms: 4
 ParmName: Fill
@@ -2262,6 +2376,10 @@ ParmName: Adapt Factor
 ParmString: 0.3
 ParmName: Fill Value
 ParmString: 30000
+ProcessName: Stack/Morphology/Edge Detect Angle
+NumParms: 1
+ParmName: Fill Holes
+ParmString: No
 ProcessName: Stack/Morphology/Erode
 NumParms: 5
 ParmName: X Radius

@@ -124,12 +124,12 @@ bool Mechanics::step() {
     double shearEK = parm("Shear EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
+    double minimumWallEK = parm("Minimum Wall EK").toDouble();
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
     double pressureLRC = parm("Turgor Pressure Intra-LRC Multiplier").toDouble();
     double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
-    double brassinosteroidDelay = parm("Brassinosteroid Delay M").toDouble();
 
     // Cell-wise updates
     for(auto c : cellAttr) {
@@ -169,15 +169,13 @@ bool Mechanics::step() {
                                                                         );
                 if(quasimodoK > 0)
                     face_stiffness *= exp(-quasimodoK * cD.quasimodo);
-
-                if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
-                   ;//face_stiffness = wallEK * ((1/wallEK-1) / (1 + exp(1*(cD.lastDivision - brassinosteroidDelay))) + 1);
-
             }
             stiffness += face_stiffness;
         }
         stiffness /= cs.incidentCells(e, 2).size();
         eD.eStiffness = stiffness;
+        if(eD.eStiffness < minimumWallEK)
+            eD.eStiffness = minimumWallEK;
     }
 
     // Apply external/internal forces on vertices
