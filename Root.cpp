@@ -174,7 +174,7 @@ bool Mechanics::step() {
         }
         stiffness /= cs.incidentCells(e, 2).size();
         eD.eStiffness = stiffness;
-        if(eD.eStiffness < minimumWallEK)
+        if(eD.type == Tissue::Wall && eD.eStiffness < minimumWallEK)
             eD.eStiffness = minimumWallEK;
     }
 
@@ -2450,7 +2450,7 @@ bool Root::step() {
         std::set<QString> signals_set = {
                                          //"Chems: Division Inhibitor by Area",
                                          //"Chems: Division Promoter by Area",
-                                         //"Chems: Auxin By Area",
+                                         "Chems: Auxin By Area",
                                          "Chems: Brassinosteoroid Signal",
                                          //"Mechs: Edge Stiffness",
                                          //"Division Count",
