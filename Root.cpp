@@ -2354,10 +2354,10 @@ bool Root::step() {
         if(divisionEnabled)
             //while(divideProcess->step(mechanicsProcess->Dt)); // multiple divisions on the same step, usually crashes
             divideProcess->step(mechanicsProcess->Dt);
+        // Mechanics
         if(mechanicsEnabled)
             mechanicsProcessConverged= mechanicsProcess->step();
-        userTime += mechanicsProcess->Dt;
-        // Update the chemicals
+                // Update the chemicals
         if(chemicalsEnabled)
             for(int j = 0; j < maxChemicalIter; j++)
                 if(chemicalsProcess->update())
@@ -2365,11 +2365,11 @@ bool Root::step() {
         // Grow the tissue
         if(growthEnabled)
             mechanicalGrowthProcess->step(mechanicsProcess->Dt);
-
         // Reset attributes ?
         //setGlobalAttrProcess->step();
         // Update the tissue
         tissueProcess->step(mechanicsProcess->Dt);
+        userTime += mechanicsProcess->Dt;
         i++;
     } while(!mechanicsProcessConverged && i < maxMechanicsIter);
 
