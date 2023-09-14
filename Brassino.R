@@ -5,17 +5,17 @@ theme_set(theme_bw())
 #for f in `ls output*_`; do grep "root length [^ ]* meristem_length [^ ]* time [0-9]*" $f  -o | sed 's/root length \([0-9\.]*\) meristem_length \([0-9\.]*\) time \([0-9]*\)/\3,\1,\2/' | uniq > $f.out; done
 
 
-dir <- "/home/marco/trabajo/Models/RootModel/Brassino/Brassino2/"
+dir <- "/home/marco/trabajo/Models/RootModel/Brassino/BrassinoG_Auxin/"
 setwd(dir)
 files <- list()
-for(f in list.files(".", pattern = ".*0\\.2.*False.*out")) {
+for(f in list.files(".", pattern = ".*_100\\.0.*False.*out")) {
   df <- read_csv(f) %>% head(-10)
   colnames(df) <- c("Time", "Root", "Meristem")
   df$GR <- EMA(c(0, diff((df$Root))), 10)
   files[[f ]] <- df
 }
 
-n <- c("All", "Vascular", "Pericycle", "Endodermis", "Cortex", "Epidermis", "Epidermis/Cortex", "None") # no
+
 full_df <- Reduce(function(...) full_join(..., by = "Time"), files) %>% arrange(Time) 
 GR <- full_df[, grep("Time|GR", colnames(full_df))]
 colnames(GR) <- c("Time", n)

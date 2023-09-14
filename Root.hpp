@@ -222,12 +222,6 @@ private:
 };
 
 
-/* Suggestions:
- * - High auxin -> higher auxin degradation
- * - High auxin -> lower PIN degradation on membranes  (Paciorek et al. 2005.
- * - High auxin -> Lower PIN expression  (Vieten 2005) or higher PIN degradation in cytoplasm (Baster et al., 2013).
- * - Growth dynamically affect by auxin? (tested: does not seems to work well)
-*/
 class Chemicals : public Process {
 public:
     Chemicals(const Process& process)
@@ -312,7 +306,8 @@ public:
         addParm("Division Promoter Permeability", "Division Promoter Permeability", "1"); // 1 for the data, 5 for the figure
         addParm("Quasimodo Basal Production Rate", "Quasimodo Basal Production Rate", "1");
         addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
-        addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
+        addParm("WOX5 Basal Production Rate", "WOX5 Basal Production Rate", "1");
+        addParm("WOX5 Decay Rate", "WOX5 Decay Rate", "0.1");
         addParm("Quasimodo Tissue",
                 "Quasimodo Tissue",
                 "None",
