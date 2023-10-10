@@ -2435,7 +2435,7 @@ bool Root::step() {
             Tissue::CellData& cD = cellAttr[c.first];
             cD.remeshTime += mechanicsProcess->Dt;
             int minimum = remeshAvg / 2;
-            int range = remeshAvg - minimum + 1;
+            int range = remeshAvg - minimum + 1;  
             int num = rand() % range + minimum;
             if(cD.area > cD.cellMaxArea && cD.remeshTime > num) {
                 mdxInfo << "Remeshing Cell: " << cD.label << endl;
