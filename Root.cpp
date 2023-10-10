@@ -38,13 +38,13 @@ bool Mechanics::initialize(QWidget* parent) {
     gravity *=  parm("Gravity Force").toDouble();
 
     // Hydrostatics
-     for(uint i = 0; i < cellAttr.size(); i++) {
-         auto it = cellAttr.begin();
-         advance(it, i);
-         Tissue::CellData& cD = it->second;
-         if(cD.pressureMax == -1)
+    for(uint i = 0; i < cellAttr.size(); i++) {
+        auto it = cellAttr.begin();
+        advance(it, i);
+        Tissue::CellData& cD = it->second;
+        if(cD.pressureMax == -1)
             cD.pressureMax = parm("Turgor Pressure").toDouble();
-     }
+    }
 
     return true;
 }
@@ -1084,6 +1084,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     }
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
 
+<<<<<<< HEAD
     // WOX5
     if(cD.type != Tissue::QC) {
         double wox5_p = parm("WOX5 Basal Production Rate").toDouble();
@@ -1093,6 +1094,16 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         cD.wox5 += (wox5_p * pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
                     - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2)) * cD.wox5 * wox5_d) * Dt;
     }
+=======
+
+    // WOX5
+    double won5p = parm("WOX5 Basal Production Rate").toDouble();
+    double won5d = parm("WOX5 Decay Rate").toDouble();
+    double auxin_conc = cD.auxin/cD.area;
+    cD.wox5 += (won5p * (pow(auxin_conc,2)/(pow(auxin_conc,2) + pow(1,2))) - cD.wox5 * won5d) * Dt;
+    if(cD.wox5 > 10) cD.wox5 = 10;
+
+>>>>>>> 5c35a1c7244294cf18c0c45e54813aa1695d343c
 
 
     // Undefined are like dead cells
@@ -1976,6 +1987,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     double divisionPromoterLevel = parm("Division Promoter Level").toDouble();
     bool divisionControl = parm("Division Control") == "True";
     bool sabatiniControl = parm("Sabatini Control") == "True";
+    bool wox5Control = parm("WOX5 Control") == "True";
     double divisionCoefficientRate = parm("Division Coefficient Rate").toDouble();
     double minimumAreaPerc = parm("Minimum Area Percentage").toDouble();
     double maximumAreaPerc = parm("Maximum Area Percentage").toDouble();
@@ -2024,6 +2036,14 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             cD.divProb = minimumAreaPerc*cD.cellMaxArea + (maximumAreaPerc*cD.cellMaxArea) / (1 + exp(divisionCoefficientRate * stiffness));
             if(cD.area > cD.divProb)
                 cD.divisionAllowed = true;;
+        }
+        // WOX5
+        if(wox5Control && cD.type == Tissue::QC) {
+            if(cD.wox5 > 10)
+                mdxInfo << "WOX5 higher than 10: " << cD.wox5 << endl;
+            double f1 = 1 - exp(-2 * cD.wox5);
+            double f2 = (1 - exp(2 * (cD.wox5 - 10))); // assume max wox5 = 10
+            cD.divProb = -((f1 + f2) - 2);
         }
         // Cell division
         if(
@@ -3340,7 +3360,7 @@ bool PrintCellAttr::step() {
             mdxInfo
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
-                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " "
+                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "

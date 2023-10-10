@@ -306,8 +306,12 @@ public:
         addParm("Division Promoter Permeability", "Division Promoter Permeability", "1"); // 1 for the data, 5 for the figure
         addParm("Quasimodo Basal Production Rate", "Quasimodo Basal Production Rate", "1");
         addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
+<<<<<<< HEAD
         addParm("WOX5 Basal Production Rate", "WOX5 Basal Production Rate", "1");
         addParm("WOX5 Induction by Auxin", "WOX5 Induction by Auxin", "1");
+=======
+        addParm("WOX5 Basal Production Rate", "WOX5 Basal Production Rate", "0.5");
+>>>>>>> 5c35a1c7244294cf18c0c45e54813aa1695d343c
         addParm("WOX5 Decay Rate", "WOX5 Decay Rate", "0.1");
         addParm("Quasimodo Tissue",
                 "Quasimodo Tissue",
@@ -435,6 +439,7 @@ public:
                 "False",
                                 QStringList() << "True"
                                               << "False");
+
         addParm("Division Coefficient Rate",
                 "Division Coefficient Rate",
                 "10");
@@ -473,7 +478,11 @@ public:
         addParm("Division half-probability by Inhibitor",
                 "Division half-probability by Inhibitor",
                 "0.03" );
-
+        addParm("WOX5 Control",
+                "WOX5 Control",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
         addParm("Ignore Cell Type",
                 "Ignore Cell Type",
                 "False",
