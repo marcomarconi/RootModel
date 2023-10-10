@@ -1084,26 +1084,17 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     }
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
 
-<<<<<<< HEAD
     // WOX5
-    if(cD.type != Tissue::QC) {
+    if(cD.type == Tissue::QC) {
         double wox5_p = parm("WOX5 Basal Production Rate").toDouble();
         double wox5_d = parm("WOX5 Decay Rate").toDouble();
         double wox5_pa = parm("WOX5 Induction by Auxin").toDouble();
         double wox5_da = parm("WOX5 Degradation by Auxin").toDouble();
-        cD.wox5 += (wox5_p * pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
-                    - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2)) * cD.wox5 * wox5_d) * Dt;
+        cD.wox5 += (  wox5_p
+                    + pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
+                    - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2))
+                    - cD.wox5 * wox5_d) * Dt;
     }
-=======
-
-    // WOX5
-    double won5p = parm("WOX5 Basal Production Rate").toDouble();
-    double won5d = parm("WOX5 Decay Rate").toDouble();
-    double auxin_conc = cD.auxin/cD.area;
-    cD.wox5 += (won5p * (pow(auxin_conc,2)/(pow(auxin_conc,2) + pow(1,2))) - cD.wox5 * won5d) * Dt;
-    if(cD.wox5 > 10) cD.wox5 = 10;
-
->>>>>>> 5c35a1c7244294cf18c0c45e54813aa1695d343c
 
 
     // Undefined are like dead cells
@@ -2041,8 +2032,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         if(wox5Control && cD.type == Tissue::QC) {
             if(cD.wox5 > 10)
                 mdxInfo << "WOX5 higher than 10: " << cD.wox5 << endl;
-            double f1 = 1 - exp(-2 * cD.wox5);
-            double f2 = (1 - exp(2 * (cD.wox5 - 10))); // assume max wox5 = 10
+            double f1 = 1 - exp(-5 * cD.wox5);
+            double f2 = (1 - exp(5 * (cD.wox5 - 5))); // assume max wox5 = 10
             cD.divProb = -((f1 + f2) - 2);
         }
         // Cell division
