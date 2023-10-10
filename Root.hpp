@@ -307,6 +307,7 @@ public:
         addParm("Quasimodo Basal Production Rate", "Quasimodo Basal Production Rate", "1");
         addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
         addParm("WOX5 Basal Production Rate", "WOX5 Basal Production Rate", "1");
+        addParm("WOX5 Induction by Auxin", "WOX5 Induction by Auxin", "1");
         addParm("WOX5 Decay Rate", "WOX5 Decay Rate", "0.1");
         addParm("Quasimodo Tissue",
                 "Quasimodo Tissue",

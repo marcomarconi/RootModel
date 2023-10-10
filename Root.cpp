@@ -1084,17 +1084,16 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     }
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
 
-
-    if(cD.selected) {
-        for(CCIndex f : *cD.cellFaces)
-          if(indexAttr[f].selected)
-              for(CCIndex ez : cs.incidentCells(f, 1)){
-                  Tissue::EdgeData& eD = edgeAttr[ez];
-                    cout << cD.label << endl;
-                    cout <<  "User Time: " << userTime <<  " PIN mem " << ez <<  " " << eD.Pin1[label] << " AUX1 mem " << ez <<  " " << eD.Aux1[label]  <<  endl;
-
-                }
+    // WOX5
+    if(cD.type != Tissue::QC) {
+        double wox5_p = parm("WOX5 Basal Production Rate").toDouble();
+        double wox5_d = parm("WOX5 Decay Rate").toDouble();
+        double wox5_pa = parm("WOX5 Induction by Auxin").toDouble();
+        double wox5_da = parm("WOX5 Degradation by Auxin").toDouble();
+        cD.wox5 += (wox5_p * pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
+                    - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2)) * cD.wox5 * wox5_d) * Dt;
     }
+
 
     // Undefined are like dead cells
     if(cD.type == Tissue::Undefined) {
