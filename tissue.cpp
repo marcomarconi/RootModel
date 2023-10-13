@@ -654,6 +654,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& Pin1MemSignal = mesh->signalAttr<double>("Chems: Pin1 Mem");
     CCIndexDoubleAttr& pin1SensitivitySignal = mesh->signalAttr<double>("Chems: Pin Sensitivity");
     CCIndexDoubleAttr& quasimodoCytSignal = mesh->signalAttr<double>("Chems: Quasimodo");
+    CCIndexDoubleAttr& wox5CytSignal = mesh->signalAttr<double>("Chems: WOX5");
     CCIndexDoubleAttr& PINOIDCytSignal = mesh->signalAttr<double>("Chems: PINOID Cyt");
     CCIndexDoubleAttr& PP2ACytSignal = mesh->signalAttr<double>("Chems: PP2A Cyt");
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
@@ -686,6 +687,7 @@ bool Tissue::step(double Dt) {
     divInhibitorCytSignal.clear();
     divPromoterCytSignal.clear();
     quasimodoCytSignal.clear();
+    wox5CytSignal.clear();
     divProbSignal.clear();
     divTimeSignal.clear();
     Pin1CytSignal.clear();
@@ -875,6 +877,7 @@ bool Tissue::step(double Dt) {
         PINOIDMemSignal[f] = fD.PINOIDMem;
         PP2AMemSignal[f] = fD.PP2AMem;
         quasimodoCytSignal[f] = cD.quasimodo;
+        wox5CytSignal[f] = cD.wox5;
         pressureSignal[f] = cD.pressure;
         brassinosteroidSignal[f] = cD.brassinosteroidSignal;
 
