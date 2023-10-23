@@ -708,9 +708,6 @@ public:
                                                         QStringList() << "Hard"
                 << "Soft");
         addParm("Split Edges Max Length", "Split Edges Max Length", "3");
-
-        addParm("Remeshing Min Area", "Minimum triangle area that triggers remeshing", "0");
-        addParm("Remeshing Max Area", "Maximum triangle area that triggers remeshing", "100");
         addParm("Tissue Process", "Name of Tissue Process", "Model/Root/03 Cell Tissue");
         addParm("Triangulate Faces", "Triangulate Faces", "Model/Root/Triangulate Faces");
         addParm("ClearCells", "ClearCells", "Model/Root/ClearCells");

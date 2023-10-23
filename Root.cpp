@@ -2030,11 +2030,15 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         }
         // WOX5
         if(wox5Control && cD.type == Tissue::QC) {
+            cD.divisionAllowed = false;
             if(cD.wox5 > 10)
                 mdxInfo << "WOX5 higher than 10: " << cD.wox5 << endl;
-            double f1 = 1 - exp(-5 * cD.wox5);
-            double f2 = (1 - exp(5 * (cD.wox5 - 5))); // assume max wox5 = 10
+            double f1 = 1 - exp(-2 * cD.wox5);
+            double f2 = (1 - exp(5 * (cD.wox5 - 10)));
             cD.divProb = -((f1 + f2) - 2);
+            double r = ((double) rand() / (RAND_MAX));
+            if(r < cD.divProb*0.01)
+                cD.divisionAllowed = true;
         }
         // Cell division
         if(
@@ -2441,7 +2445,7 @@ bool Root::step() {
             int minimum = remeshAvg / 2;
             int range = remeshAvg - minimum + 1;
             int num = rand() % range + minimum;
-            if(cD.area > cD.cellMaxArea && cD.remeshTime > num) {
+            if((cD.area > cD.cellMaxArea || cD.type == Tissue::Columella) && cD.remeshTime > num) {
                 mdxInfo << "Remeshing Cell: " << cD.label << endl;
                 remeshCellProcess->step(cD.label);
                 cD.pressure = 0;
@@ -2460,9 +2464,9 @@ bool Root::step() {
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
                                          //"Chems: Division Inhibitor by Area",
-                                         //"Chems: Division Promoter by Area",
+                                         "Chems: Division Probability",
                                          "Chems: Auxin By Area",
-                                         "Chems: Brassinosteoroid Signal",
+                                         "Chems: WOX5",
                                          //"Mechs: Edge Stiffness",
                                          //"Division Count",
                                          "Mechs: Growth Rate"                                         
