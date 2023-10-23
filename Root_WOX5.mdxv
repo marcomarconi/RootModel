@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 2.1684e-19 2.95051e-35 0 -2.1684e-19 1 8.69532e-21 0 -2.95032e-35 -8.69532e-21 1 0 2.98497 233.446 -1156.48 1
+CameraFrame: 1 2.1684e-19 2.95051e-35 0 -2.1684e-19 1 8.69532e-21 0 -2.95032e-35 -8.69532e-21 1 0 -0.392064 15.3289 -1156.48 1
 SceneRadius: 500
-CameraZoom: -0.672
+CameraZoom: -1.152
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 263.407
+Width: 229.798
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.999796 -0.0201819 0.000138489 0 0.0201818 0.999796 0.000546789 0 -0.000
 [Clip2]
 Enable: false
 Grid: false
-Width: 263.407
+Width: 229.798
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 263.407
+Width: 229.798
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -143,7 +143,7 @@ CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -0.375124 -215.322 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 0.193832 7.95195 0 1
 
 
 [Stack2]
@@ -1127,7 +1127,7 @@ NumParms: 33
 ParmName: Max Mechanical Iterations
 ParmString: 1
 ParmName: Max Chemical Iterations
-ParmString: 30
+ParmString: 10
 ParmName: Mechanics Enabled
 ParmString: True
 ParmName: Chemicals Enabled
@@ -1157,7 +1157,7 @@ ParmString: Model/Root/23 Set Global Attr
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 10000
+ParmString: 1000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1417,7 +1417,7 @@ ParmString: 0
 ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
-ParmString: 0
+ParmString: 1
 ParmName: Auxin SCN Basal Production Rate
 ParmString: 0
 ParmName: Auxin Decay Rate
