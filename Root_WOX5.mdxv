@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 2.1684e-19 2.95051e-35 0 -2.1684e-19 1 8.69532e-21 0 -2.95032e-35 -8.69532e-21 1 0 -0.392064 15.3289 -1156.48 1
+CameraFrame: 1 1.4221e-33 5.86547e-18 0 -1.1779e-33 1 -4.16334e-17 0 -5.86547e-18 4.16334e-17 1 0 10.502 -45.6086 -1156.48 1
 SceneRadius: 500
-CameraZoom: -1.152
+CameraZoom: -0.864
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 229.798
+Width: 243.398
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.999796 -0.0201819 0.000138489 0 0.0201818 0.999796 0.000546789 0 -0.000
 [Clip2]
 Enable: false
 Grid: false
-Width: 229.798
+Width: 243.398
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 229.798
+Width: 243.398
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -143,7 +143,7 @@ CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 0.193832 7.95195 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 2.04275 97.9767 0 1
 
 
 [Stack2]
@@ -1143,7 +1143,7 @@ ParmString: 0
 ParmName: Mesh Update Timer
 ParmString: 10
 ParmName: Snapshots Timer
-ParmString: 10
+ParmString: 0
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1417,7 +1417,7 @@ ParmString: 0
 ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
-ParmString: 1
+ParmString: 0
 ParmName: Auxin SCN Basal Production Rate
 ParmString: 0
 ParmName: Auxin Decay Rate
@@ -1533,7 +1533,7 @@ ParmString: 0.1
 ParmName: WOX5 Basal Production Rate
 ParmString: 0
 ParmName: WOX5 Induction by Auxin
-ParmString: 1
+ParmString: 0.01
 ParmName: WOX5 Degradation by Auxin
 ParmString: 10
 ParmName: WOX5 Decay Rate
