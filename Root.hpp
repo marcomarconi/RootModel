@@ -475,6 +475,15 @@ public:
         addParm("Division half-probability by Inhibitor",
                 "Division half-probability by Inhibitor",
                 "0.03" );
+        addParm("Brassinosteroids Control",
+                "Brassinosteroids Control",
+                "None",
+                                QStringList() << "None"
+                                              << "Both"
+                                              << "Lower"
+                                              << "Upper"
+
+                );
         addParm("WOX5 Control",
                 "WOX5 Control",
                 "False",

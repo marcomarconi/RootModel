@@ -575,11 +575,11 @@ bool MechanicalGrowth::step(double Dt) {
                         if(eD.strain >= growthRateThresh && cD.growthRate > growthRateThresh) {
                             //eD.restLength = eD.length;
                             double strainDiff = eD.strain - growthRateThresh;
-                            double wallsMaxGR = cD.wallsMaxGR;
-                            if(wallsMaxGR == -1)
-                                wallsMaxGR = wallsMaxGrowthRate;
-                            wallsMaxGR = wallsMaxGrowthRate * cD.brassinosteroidSignal;
-                            eD.restLength += wallsMaxGR * strainDiff * Dt;
+                            eD.updateRate = cD.wallsMaxGR;
+                            if(eD.updateRate == -1)
+                                eD.updateRate = wallsMaxGrowthRate;
+                            eD.updateRate *= cD.brassinosteroidSignal * strainDiff * Dt;
+                            eD.restLength += eD.updateRate;
                             if( eD.restLength > eD.length) {
                                 mdxInfo << "WARNING: restLength is updated inmediately" << endl;
                                 eD.restLength = eD.length;
@@ -1979,6 +1979,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool divisionControl = parm("Division Control") == "True";
     bool sabatiniControl = parm("Sabatini Control") == "True";
     bool wox5Control = parm("WOX5 Control") == "True";
+    QString brControl = parm("Brassinosteroids Control");
     double divisionCoefficientRate = parm("Division Coefficient Rate").toDouble();
     double minimumAreaPerc = parm("Minimum Area Percentage").toDouble();
     double maximumAreaPerc = parm("Maximum Area Percentage").toDouble();
@@ -2143,9 +2144,30 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         maxAreas[(Tissue::CellType)fooInt] =
                 rootProcess->setGlobalAttrProcess->parm(QString(Tissue::ToString((Tissue::CellType)fooInt)) + " Max area").toInt();
     for(Tissue::CellData cD : cDs)
-        if(daughters[cD.label].first > 0 && daughters[cD.label].second > 0)
+        if(daughters[cD.label].first > 0 && daughters[cD.label].second > 0) {
+            Tissue::CellData &cD1 = cellAttr[daughters[cD.label].first];
+            Tissue::CellData &cD2 = cellAttr[daughters[cD.label].second];
             cD.division(cs, cellAttr, faceAttr, edgeAttr,
-                        cellAttr[daughters[cD.label].first], cellAttr[daughters[cD.label].second], maxAreas, ignoreCellType);
+                        cD1, cD2, maxAreas, ignoreCellType);
+            if(brControl != "None" && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
+                if       (brControl == "Lower") {
+                    if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
+                        cD1.brassinosteroidTarget = true;
+                    } else {
+                        cD2.brassinosteroidTarget = true;
+                    }
+                } else if(brControl == "Upper") {
+                    if(norm(cD1.centroid - QCcm) < norm(cD2.centroid - QCcm)) {
+                        cD1.brassinosteroidTarget = true;
+                    } else {
+                        cD2.brassinosteroidTarget = true;
+                    }
+                } else if(brControl == "Both") {
+                    cD1.brassinosteroidTarget = true;
+                    cD2.brassinosteroidTarget = true;
+                }
+            }
+        }
 
     // Update mesh points, edges, surfaces
     mesh->updateAll();
@@ -2731,7 +2753,9 @@ bool Root::step() {
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
             double root_length = norm(SOURCEcm - QCcm) ;
+            mdxInfo << "Root length " << root_length << " Meristem length " <<  lrc-QCcm.y()  << " Time " << stepCount << endl;
             for(auto c : cellAttr) {
+                continue;
                 Tissue::CellData& cD = cellAttr[c.first];
                 mdxInfo << "Crisanto: root length " << root_length << " meristem_length " <<  lrc-QCcm.y()  << " time " << stepCount << " label " << cD.label << " of size " << cD.area
                     << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
@@ -2746,7 +2770,7 @@ bool Root::step() {
     // Calculate FPS
     clock_t curr_clock = clock();
     double elapsed_secs = double(curr_clock - prev_clock) / CLOCKS_PER_SEC;
-    if(stepCount % 10 == 0)
+    if(stepCount % 10 == 0 && debugging)
         mdxInfo << "FPS: " << (stepCount - prevStepCount) / elapsed_secs << ", time in seconds: " <<  double(curr_clock - begin_clock) / CLOCKS_PER_SEC <<  ", steps: " << stepCount << " steps" << endl;
     prev_clock = curr_clock;
     prevStepCount = stepCount;

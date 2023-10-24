@@ -873,6 +873,7 @@ public:
         double prevLength = 0, length = 0;
         double prev_strain = 0, strain = 0;
         double strainRate = 0;
+        double updateRate = 0;
         double eStiffness = -1;
         double cStiffness = -1;
         double intercellularAuxin = 0;
@@ -1154,6 +1155,7 @@ public:
         double pressure = 0;
         double edgeStrain = 0;
         double edgeStiffness = 0;
+        double edgeUpdateRate = 0;
         double MFImpact = 0, auxinFluxImpact = 0, geomImpact = 0, auxinRatio = 0, auxinGrad = 0;
         double pin1Sensitivity = 0, pin1SensitivityRaw = 0;
         Matrix3d E, G, V, dV, F = Matrix3d().identity(), R = Matrix3d().identity(), U = Matrix3d().identity(), Ev, F1, F2;

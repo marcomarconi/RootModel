@@ -658,12 +658,12 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& PINOIDCytSignal = mesh->signalAttr<double>("Chems: PINOID Cyt");
     CCIndexDoubleAttr& PP2ACytSignal = mesh->signalAttr<double>("Chems: PP2A Cyt");
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
-    CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Che"
-                                                                "ms: PP2A Mem");
+    CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Chems: PP2A Mem");
     CCIndexDoubleAttr& brassinosteroidSignal = mesh->signalAttr<double>("Chems: Brassinosteoroid Signal");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
     CCIndexDoubleAttr& edgeStrainSignal = mesh->signalAttr<double>("Mechs: Edge Strain Rate");
+    CCIndexDoubleAttr& edgeRestLengthUpdateSignal = mesh->signalAttr<double>("Mechs: Edge RestLength Update Rate");
     CCIndexDoubleAttr& growthRateSignal = mesh->signalAttr<double>("Mechs: Growth Rate");
     CCIndexDoubleAttr& distanceConstrainSignal = mesh->signalAttr<double>("PBD: distance constrain");
     CCIndexDoubleAttr& bendingConstrainSignal = mesh->signalAttr<double>("PBD: bending constrain");
@@ -700,6 +700,7 @@ bool Tissue::step(double Dt) {
     pressureSignal.clear();
     edgeStrainSignal.clear();
     edgeStiffnessSignal.clear();
+    edgeRestLengthUpdateSignal.clear();
     growthRateSignal.clear();
 
     //updateGeometry(cs, indexAttr);
@@ -897,6 +898,7 @@ bool Tissue::step(double Dt) {
         fD.auxinFluxImpact = 0;
         fD.edgeStrain = 0;
         fD.edgeStiffness = 0;
+        fD.edgeUpdateRate = 0;
         if(fD.type == Membrane) {
             int es = 0;
             for(CCIndex e : cs.incidentCells(f, 1)) {
@@ -909,6 +911,7 @@ bool Tissue::step(double Dt) {
                     fD.intercellularAuxin += eD.intercellularAuxin / eD.length;
                     fD.edgeStrain += eD.strainRate;
                     fD.edgeStiffness += eD.eStiffness;
+                    fD.edgeUpdateRate += eD.updateRate;
                     fD.pin1Sensitivity += eD.pin1Sensitivity[indexAttr[f].label];
                     fD.MFImpact += eD.MFImpact[indexAttr[f].label];
                     fD.geomImpact += eD.geomImpact[indexAttr[f].label];
@@ -920,6 +923,7 @@ bool Tissue::step(double Dt) {
             }
            fD.edgeStrain /= es;
            fD.edgeStiffness /= es;
+           fD.edgeUpdateRate /= es;
            fD.pin1Sensitivity /= es;
            fD.MFImpact /= es;
            fD.geomImpact /= es;
@@ -935,6 +939,7 @@ bool Tissue::step(double Dt) {
         intercellularAuxinSignal[f] = fD.intercellularAuxin;
         edgeStrainSignal[f] = fD.edgeStrain;
         edgeStiffnessSignal[f] = fD.edgeStiffness;
+        edgeRestLengthUpdateSignal[f] = fD.edgeUpdateRate;
         pin1SensitivitySignal[f] = fD.pin1Sensitivity;
         MFImpactSignal[f] = fD.MFImpact;
         geomImpactSignal[f] = fD.geomImpact;
@@ -1146,12 +1151,6 @@ void Tissue::CellData::division(const CCStructure &cs,
         eD.pin1Sensitivity.erase(label);
     }
 
-
-    if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
-        cD1.brassinosteroidTarget = true;
-    } else {
-        cD2.brassinosteroidTarget = true;
-    }
     /*
     if(parm("Verbose") == "True")
         mdxInfo << "I, label " << label << " am a " << Tissue::ToString(type)
