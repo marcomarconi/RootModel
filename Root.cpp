@@ -1983,6 +1983,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     double divisionCoefficientRate = parm("Division Coefficient Rate").toDouble();
     double minimumAreaPerc = parm("Minimum Area Percentage").toDouble();
     double maximumAreaPerc = parm("Maximum Area Percentage").toDouble();
+    bool removeAuxin = parm("Remove Auxin after Division") == "True";
     bool ignoreCellType = parm("Ignore Cell Type") == "True";
 
     // find the QC so we can print the distance (for plotting)
@@ -2166,6 +2167,10 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                     cD1.brassinosteroidTarget = true;
                     cD2.brassinosteroidTarget = true;
                 }
+            }
+            if(brControl != "None" && removeAuxin && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
+                cD1.auxin = 0;
+                cD2.auxin = 0;
             }
         }
 

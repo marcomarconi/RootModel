@@ -484,11 +484,17 @@ public:
                                               << "Upper"
 
                 );
+        addParm("Remove Auxin after Division",
+                "Remove Auxin after Division",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
         addParm("WOX5 Control",
                 "WOX5 Control",
                 "False",
                                 QStringList() << "True"
                                               << "False");
+
         addParm("Ignore Cell Type",
                 "Ignore Cell Type",
                 "False",
