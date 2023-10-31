@@ -79,7 +79,7 @@ CameraZoom: -1.344
 [Clip1]
 Enable: false
 Grid: false
-Width: 121.844
+Width: 121.905
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 121.844
+Width: 121.905
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 121.844
+Width: 121.905
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1187,9 +1187,9 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: 0
 ParmName: Mesh Update Timer
-ParmString: 5
+ParmString: 50
 ParmName: Snapshots Timer
-ParmString: 0
+ParmString: 50
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
