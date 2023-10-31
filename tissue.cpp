@@ -1096,6 +1096,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.divisionCount = divisionCount+1;
     cD1.divProb = 0;
     cD1.brassinosteroidTarget = false;
+    cD1.brassinosteroidSignal = 0;
 
     cD2.tissue = tissue;
     cD2.type = type2;
@@ -1132,6 +1133,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.divisionCount = divisionCount+1;
     cD2.divProb = 0;
     cD2.brassinosteroidTarget = false;
+    cD2.brassinosteroidSignal = 0;
 
     std::vector<CCIndex> edges;
     edges.insert(edges.end(), cD1.perimeterEdges.begin(), cD1.perimeterEdges.end());

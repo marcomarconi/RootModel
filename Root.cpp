@@ -549,9 +549,12 @@ bool MechanicalGrowth::step(double Dt) {
                 cD.stage = 2;
 
         }
-        cD.brassinosteroidSignal = 1;        
-        if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay)
-            cD.brassinosteroidSignal = 1 / (1 + exp(-2*(cD.lastDivision - brassinosteroidDelay)));
+        // Brassinosteroids
+        if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay) {
+            cD.brassinosteroidSignal +=  Dt / brassinosteroidDelay;
+            if(cD.brassinosteroidSignal > 1) cD.brassinosteroidSignal = 1;
+        } else
+            cD.brassinosteroidSignal = 1;
 
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
@@ -1979,7 +1982,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool divisionControl = parm("Division Control") == "True";
     bool sabatiniControl = parm("Sabatini Control") == "True";
     bool wox5Control = parm("WOX5 Control") == "True";
-    QString brControl = parm("Brassinosteroids Control");
+    bool brControl = parm("Brassinosteroids Control") == "True";
+    QString brSignalling = parm("Brassinosteroids Signalling");
     double divisionCoefficientRate = parm("Division Coefficient Rate").toDouble();
     double minimumAreaPerc = parm("Minimum Area Percentage").toDouble();
     double maximumAreaPerc = parm("Maximum Area Percentage").toDouble();
@@ -2150,25 +2154,46 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             Tissue::CellData &cD2 = cellAttr[daughters[cD.label].second];
             cD.division(cs, cellAttr, faceAttr, edgeAttr,
                         cD1, cD2, maxAreas, ignoreCellType);
-            if(brControl != "None" && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
-                if       (brControl == "Lower") {
+            // Brassinosteoroids after cell division
+            if(brControl && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
+                if       (brSignalling == "Lower") {
                     if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
                         cD1.brassinosteroidTarget = true;
+                        cD2.brassinosteroidTarget = false;
+                        cD1.brassinosteroidSignal = 0;
+                        cD2.brassinosteroidSignal = 1;
+
                     } else {
+                        cD1.brassinosteroidTarget = false;
                         cD2.brassinosteroidTarget = true;
+                        cD1.brassinosteroidSignal = 1;
+                        cD2.brassinosteroidSignal = 0;
                     }
-                } else if(brControl == "Upper") {
+                } else if(brSignalling == "Upper") {
                     if(norm(cD1.centroid - QCcm) < norm(cD2.centroid - QCcm)) {
                         cD1.brassinosteroidTarget = true;
+                        cD2.brassinosteroidTarget = false;
+                        cD1.brassinosteroidSignal = 0;
+                        cD2.brassinosteroidSignal = 1;
                     } else {
+                        cD1.brassinosteroidTarget = false;
                         cD2.brassinosteroidTarget = true;
+                        cD1.brassinosteroidSignal = 1;
+                        cD2.brassinosteroidSignal = 0;
                     }
-                } else if(brControl == "Both") {
+                } else if(brSignalling == "Both") {
                     cD1.brassinosteroidTarget = true;
                     cD2.brassinosteroidTarget = true;
+                    cD1.brassinosteroidSignal = 0;
+                    cD2.brassinosteroidSignal = 0;
+                } else if(brSignalling == "None") {
+                    cD1.brassinosteroidTarget = false;
+                    cD2.brassinosteroidTarget = false;
+                    cD1.brassinosteroidSignal = 1;
+                    cD2.brassinosteroidSignal = 1;
                 }
             }
-            if(brControl != "None" && removeAuxin && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
+            if(brControl && removeAuxin && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
                 cD1.auxin = 0;
                 cD2.auxin = 0;
             }

@@ -477,6 +477,11 @@ public:
                 "0.03" );
         addParm("Brassinosteroids Control",
                 "Brassinosteroids Control",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
+        addParm("Brassinosteroids Signalling",
+                "Brassinosteroids Signalling",
                 "None",
                                 QStringList() << "None"
                                               << "Both"
