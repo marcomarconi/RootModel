@@ -2156,7 +2156,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                         cD1, cD2, maxAreas, ignoreCellType);
             // Brassinosteoroids after cell division
             if(brControl && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
-                if       (brSignalling == "Lower") {
+                if       (brSignalling == "Upper") {
                     if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
                         cD1.brassinosteroidTarget = true;
                         cD2.brassinosteroidTarget = false;
@@ -2169,7 +2169,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                         cD1.brassinosteroidSignal = 1;
                         cD2.brassinosteroidSignal = 0;
                     }
-                } else if(brSignalling == "Upper") {
+                } else if(brSignalling == "Lower") {
                     if(norm(cD1.centroid - QCcm) < norm(cD2.centroid - QCcm)) {
                         cD1.brassinosteroidTarget = true;
                         cD2.brassinosteroidTarget = false;
@@ -2764,7 +2764,7 @@ bool Root::step() {
         // Crisanto's data
         ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
         double lrc = -BIG_VAL;
-        if(stepCount % 20 == 0) {
+        if(stepCount % 5 == 0) {
             // Root length
             Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
             Point3d SOURCEcm = Point3d(0,0,0); int source_cell = 0;
