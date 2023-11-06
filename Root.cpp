@@ -3409,7 +3409,7 @@ bool PrintCellAttr::step() {
             mdxInfo
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
-                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " "
+                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
@@ -3439,7 +3439,7 @@ bool PrintCellAttr::step() {
                 mdxInfo << "Edge: " << e << " " << indexAttr[cs.edgeBounds(e).first].pos << " : "
                         << indexAttr[cs.edgeBounds(e).second].pos << " type: " << Tissue::ToString(eD.type)
                         << " length: " << eD.length << " prevLength: " << eD.prevLength
-                        << " restLength: " << eD.restLength ;
+                        << " restLength: " << eD.restLength << " update rate: " << eD.updateRate; ;
                 for(auto p : eD.outwardNormal)
                    mdxInfo << " outward normal to " << indexAttr[p.first].label << " : " << p.second;
                 mdxInfo << endl ;
