@@ -649,7 +649,6 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& divInhibitorCytSignal = mesh->signalAttr<double>("Chems: Division Inhibitor");
     CCIndexDoubleAttr& divPromoterCytSignal = mesh->signalAttr<double>("Chems: Division Promoter");
     CCIndexDoubleAttr& divProbSignal = mesh->signalAttr<double>("Chems: Division Probability");
-    CCIndexDoubleAttr& divTimeSignal = mesh->signalAttr<double>("Chems: Division Time");
     CCIndexDoubleAttr& Pin1CytSignal = mesh->signalAttr<double>("Chems: Pin1 Cyt");
     CCIndexDoubleAttr& Pin1MemSignal = mesh->signalAttr<double>("Chems: Pin1 Mem");
     CCIndexDoubleAttr& pin1SensitivitySignal = mesh->signalAttr<double>("Chems: Pin Sensitivity");
@@ -660,6 +659,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
     CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Chems: PP2A Mem");
     CCIndexDoubleAttr& brassinosteroidSignal = mesh->signalAttr<double>("Chems: Brassinosteoroid Signal");
+    CCIndexDoubleAttr& growthSignal = mesh->signalAttr<double>("Chems: Growth Signal");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
     CCIndexDoubleAttr& edgeStrainSignal = mesh->signalAttr<double>("Mechs: Edge Strain Rate");
@@ -689,7 +689,6 @@ bool Tissue::step(double Dt) {
     quasimodoCytSignal.clear();
     wox5CytSignal.clear();
     divProbSignal.clear();
-    divTimeSignal.clear();
     Pin1CytSignal.clear();
     Pin1MemSignal.clear();
     pin1SensitivitySignal.clear();
@@ -870,7 +869,6 @@ bool Tissue::step(double Dt) {
         divInhibitorCytSignal[f] = cD.divInhibitor;
         divPromoterCytSignal[f] = cD.divPromoter;
         divProbSignal[f] = cD.divProb;
-        divTimeSignal[f] = exp(-0.1*cD.lastDivision);
         Pin1CytSignal[f] = cD.Pin1;
         Pin1MemSignal[f] = fD.Pin1Mem;
         PINOIDCytSignal[f] = cD.PINOID;
@@ -881,6 +879,7 @@ bool Tissue::step(double Dt) {
         wox5CytSignal[f] = cD.wox5;
         pressureSignal[f] = cD.pressure;
         brassinosteroidSignal[f] = cD.brassinosteroidSignal;
+        growthSignal[f] = cD.growthSignal;
 
         fD.auxin = cD.auxin;
         fD.intercellularAuxin = 0;
@@ -1097,6 +1096,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD1.divProb = 0;
     cD1.brassinosteroidTarget = false;
     cD1.brassinosteroidSignal = 0;
+    cD1.auxinSignal = 0;
 
     cD2.tissue = tissue;
     cD2.type = type2;
@@ -1134,6 +1134,7 @@ void Tissue::CellData::division(const CCStructure &cs,
     cD2.divProb = 0;
     cD2.brassinosteroidTarget = false;
     cD2.brassinosteroidSignal = 0;
+    cD2.auxinSignal = 0;
 
     std::vector<CCIndex> edges;
     edges.insert(edges.end(), cD1.perimeterEdges.begin(), cD1.perimeterEdges.end());

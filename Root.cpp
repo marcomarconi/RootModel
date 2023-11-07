@@ -553,8 +553,13 @@ bool MechanicalGrowth::step(double Dt) {
         if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay) {
             cD.brassinosteroidSignal +=  Dt / brassinosteroidDelay;
             if(cD.brassinosteroidSignal > 1) cD.brassinosteroidSignal = 1;
-        } else
+            cD.auxinSignal = cD.auxin/cD.area < 1 ? cD.auxin/cD.area : 1;
+            cD.growthSignal = (cD.brassinosteroidSignal + cD.auxinSignal) / 2;
+        } else { // just ignore
             cD.brassinosteroidSignal = 1;
+            cD.auxinSignal = 1;
+            cD.growthSignal = 1;
+        }
 
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
@@ -581,7 +586,7 @@ bool MechanicalGrowth::step(double Dt) {
                             eD.updateRate = cD.wallsMaxGR;
                             if(eD.updateRate == -1)
                                 eD.updateRate = wallsMaxGrowthRate;
-                            eD.updateRate *= cD.brassinosteroidSignal * strainDiff * Dt;
+                            eD.updateRate *= cD.growthSignal * strainDiff * Dt;
                             eD.restLength += eD.updateRate;
                             if( eD.restLength > eD.length) {
                                 mdxInfo << "WARNING: restLength is updated inmediately" << endl;
@@ -3409,7 +3414,7 @@ bool PrintCellAttr::step() {
             mdxInfo
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
-                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " "
+                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
