@@ -7,7 +7,6 @@
 //
 // MorphoDynamX is free software, and is licensed under under the terms of the
 // GNU General (GPL) Public License version 2.0, http://www.gnu.org/licenses.
-// beeeeeeeeeeeeeeeh
 
 #ifndef ROOT_HPP
 #define ROOT_HPP
@@ -428,6 +427,11 @@ public:
                 "When using division algorithm 2, the closest existing division point will be used as \
                 joining point, up to this maximum distance",
                 "1" );
+        addParm("Split Division Plane",
+                "Split Division Plane",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
         addParm("Sabatinis's parameters",
                 "",
                 "");
@@ -527,6 +531,13 @@ public:
         return step(mesh, &subdiv);
     }
 
+    bool divideCell2dX(CCStructure &cs, CCIndexDataAttr &indexAttr, Tissue::VertexDataAttr &vMAttr, CCIndex cell,
+                           const Cell2dDivideParms &divParms, Subdivide *sDiv,
+                       Cell2dDivideParms::DivAlg divAl,
+                       const Point3d &divVector, std::set<CCIndex> divisionPoints,
+                       double maxJoiningDistance);
+
+
     // Run a step of cell division
     virtual bool step(Mesh* mesh, Subdivide* subdiv);
 
@@ -573,10 +584,6 @@ public:
     RootDivide(const Process& process)
         : CellDivision(process) {
         setName("Model/Root/04 Divide Cells");
-
-        addParm("Cell Division Enabled", "Cell Division Enabled", "True",
-                                                        QStringList() << "False"
-                                                                      << "True");
         addParm("Manual Cell Division Enabled", "Manual Cell Division Enabled", "False",
                                                         QStringList() << "False"
                                                                       << "True");
@@ -788,15 +795,7 @@ public:
 
         if(cellToRemesh.size() == 0)
             return;
-/*
-        for(int label : cellToRemesh) {
-            CCIndex ft = clearCellsProcess->clearCell(label);
-            updateGeometry(cs, (*indexAttr));
-            (*indexAttr)[ft].selected = true;
-        }
 
-        triangulateProcess->step();
-        tissueProcess->initialize();*/
         step(true, false, false);
 
         return ;
@@ -2027,37 +2026,6 @@ public:
 
 
 
-/*
-class ReadRootVerticesFromFile : public Process {
-public:
-    ReadRootVerticesFromFile(const Process &process) : Process(process) {
-        setName("Model/Root/Read Root Vertices From File");
-        addParm("File", "File", "");
-        addParm("Scale", "Scale", "1");
-    }
-    bool step() {
-        Mesh *mesh = getMesh("Mesh 1");
-        if (!mesh or mesh->file().isEmpty())
-            throw(QString("Root::ReadRootVerticesFromFile No current mesh"));
-
-        CCStructure &cs = mesh->ccStructure("Root");
-        CCIndexDataAttr &indexAttr = mesh->indexAttr();
-
-        std::ifstream file(parm("File").toStdString());
-        double scale = parm("Scale").toDouble();
-        std::string   line;
-
-        while(std::getline(file, line))
-        {
-            double x = std::stod(line.substr(0, line.find(',')));
-            double y = std::stod(line.substr(line.find(',')+1, line.size()));
-            CCIndex v = CCIndexFactory.getIndex();
-            cs.addCell(v);
-            indexAttr[v].pos = Point3d(x/scale, y/scale, 0);
-        }
-        return false;
-    }
-};*/
 
 } // namespace ROOT
 

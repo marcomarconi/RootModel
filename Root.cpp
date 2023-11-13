@@ -1510,10 +1510,6 @@ MDXSubdivideX::MDXSubdivideX(Mesh &_mesh)
 {
   mesh = &_mesh;
   indexAttr = &mesh->indexAttr();
-
-  /*for(const QString &signal : mesh->signalAttrList())
-    attrVec.push_back(&mesh->signalAttr<double>(signal)); //this creates warnings
-    */
 }
 
 void MDXSubdivideX::splitCellUpdate(Dimension dim, const CCStructure &cs,
@@ -1581,11 +1577,8 @@ void Splitter::splitCellUpdate(Dimension dim,
 
 // Run a step of cell division
 bool RootDivide::step(double Dt) {
-    if(parm("Cell Division Enabled") == "True")
-        // Pass our subdivide
         return CellDivision::step(getMesh("Mesh 1"), &subdiv);
-    else
-        return false;
+
 }
 
 // copy here the modified MDXProcessCellDivide
@@ -1851,11 +1844,12 @@ CCIndex getClosestAvailableCutPoint(CCIndex v, Point3d& closest, const CCStructu
 }
 
 // Divide a two-dimensional cell using to the given division parameters and algorithm.
-bool divideCell2dX(CCStructure &cs, CCIndexDataAttr &indexAttr, Tissue::VertexDataAttr &vMAttr, CCIndex cell,
+bool CellDivision::divideCell2dX(CCStructure &cs, CCIndexDataAttr &indexAttr, Tissue::VertexDataAttr &vMAttr, CCIndex cell,
                        const Cell2dDivideParms &divParms, Subdivide *sDiv,
-                   Cell2dDivideParms::DivAlg divAlg = Cell2dDivideParms::SHORTEST_WALL_THROUGH_CENTROID,
+                   Cell2dDivideParms::DivAlg divAl = Cell2dDivideParms::SHORTEST_WALL_THROUGH_CENTROID,
                    const Point3d &divVector = Point3d(1., 0., 0.), std::set<CCIndex> divisionPoints = std::set<CCIndex>(), double maxJoiningDistance = 1)
 {
+
 
   // Find out where the division will take place
   DivWall2d divWall;
@@ -1863,13 +1857,13 @@ bool divideCell2dX(CCStructure &cs, CCIndexDataAttr &indexAttr, Tissue::VertexDa
   CCIndex ep[2];
   //if(!findCellDiv2dX(cs, indexAttr, cell, divParms, divAlg, divVector, divWall))
   //  return false;
-  if(divAlg == Cell2dDivideParms::SHORTEST_WALL_THROUGH_CENTROID ) {
-      if(!findCellDiv2dX(cs, indexAttr, cell, divParms, divAlg, divVector, divWall))
+  if(divAl == Cell2dDivideParms::SHORTEST_WALL_THROUGH_CENTROID ) {
+      if(!findCellDiv2dX(cs, indexAttr, cell, divParms, divAl, divVector, divWall))
           return false;
-  } else if (divAlg == Cell2dDivideParms::ASSIGNED_VECTOR_TRHOUGH_CENTROID) {
-      if(!findCellDiv2dX(cs, indexAttr, cell, divParms, divAlg, divVector, divWall))
+  } else if (divAl == Cell2dDivideParms::ASSIGNED_VECTOR_TRHOUGH_CENTROID) {
+      if(!findCellDiv2dX(cs, indexAttr, cell, divParms, divAl, divVector, divWall))
           return false;
-  } else if     (divAlg == 2) {
+  } else if     (divAl == 2) {
       if(divisionPoints.empty())
           return(divideCell2dX(cs, indexAttr, vMAttr, cell, divParms, sDiv, Cell2dDivideParms::ASSIGNED_VECTOR_TRHOUGH_CENTROID, divVector));
       else {
@@ -1909,7 +1903,7 @@ bool divideCell2dX(CCStructure &cs, CCIndexDataAttr &indexAttr, Tissue::VertexDa
       throw(QString("divideCell2dX: Unknown division algorithm"));
 
   // Divide the cell walls
-  if(divAlg == Cell2dDivideParms::SHORTEST_WALL_THROUGH_CENTROID || divAlg == Cell2dDivideParms::ASSIGNED_VECTOR_TRHOUGH_CENTROID) {
+  if(divAl == Cell2dDivideParms::SHORTEST_WALL_THROUGH_CENTROID || divAl == Cell2dDivideParms::ASSIGNED_VECTOR_TRHOUGH_CENTROID) {
       for(int i = 0 ; i < 2 ; i++) {
         CCIndex edge = edgeBetween(cs, divWall.endpoints[i].vA, divWall.endpoints[i].vB);
 
@@ -1926,7 +1920,7 @@ bool divideCell2dX(CCStructure &cs, CCIndexDataAttr &indexAttr, Tissue::VertexDa
                                 neg ? divWall.endpoints[i].sfrac : (1.0 - divWall.endpoints[i].sfrac));
         }
       }
-  } else if(divAlg == 2) {
+  } else if(divAl == 2) {
       for(int i = 0 ; i < 2 ; i++) {
         if(!ep[i].isPseudocell()) continue;
 
@@ -1951,6 +1945,10 @@ bool divideCell2dX(CCStructure &cs, CCIndexDataAttr &indexAttr, Tissue::VertexDa
   CCStructure::SplitStruct ss(cell);
   CCIndexFactory.fillSplitStruct(ss);
   cs.splitCell(ss, +ep[0] -ep[1]);
+  if(parm("Split Division Plane") == "True") {
+    CCIndexVec edges; edges.push_back(ss.membrane);
+    splitEdges(cs, indexAttr, edges, sDiv);
+  }
 
   if(sDiv) {
     updateFaceGeometry(cs, indexAttr, ss.childP);
@@ -2161,6 +2159,14 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                         cD1, cD2, maxAreas, ignoreCellType);
             // Brassinosteoroids after cell division
             if(brControl && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
+                cD1.brassinosteroidMother = cD2.brassinosteroidMother = cD.label;
+                if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
+                    cD1.brassinosteroidTop = true;
+                    cD2.brassinosteroidTop = false;
+                } else {
+                    cD1.brassinosteroidTop = false;
+                    cD2.brassinosteroidTop = true;
+                }
                 if       (brSignalling == "Upper") {
                     if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
                         cD1.brassinosteroidTarget = true;
@@ -2762,14 +2768,16 @@ bool Root::step() {
         /*
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
+
             if(cD.type != Tissue::Source && cD.type != Tissue::Substrate && cD.type != Tissue::QC )
                 cerr <<  mechanicsProcess->userTime << "," << cD.type << "," << cD.centroid.y() - VIcm.y() << "," << cD.auxin/cD.area << "," << cD.growthRate << "," << norm(cD.a1) << "," <<  norm(cD.a2) << endl;
-        }        
-        */
+
+        }        */
+
         // Crisanto's data
         ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
         double lrc = -BIG_VAL;
-        if(stepCount % 5 == 0) {
+        if(stepCount % 500 == 0) {
             // Root length
             Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
             Point3d SOURCEcm = Point3d(0,0,0); int source_cell = 0;
@@ -2785,6 +2793,11 @@ bool Root::step() {
                 }
                 else if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
                     lrc = cD.centroid.y();
+
+                if(cD.lastDivision > 0 && cD.lastDivision && cD.brassinosteroidMother > 0) {
+                    cerr << cD.brassinosteroidMother << ","  << cD.lastDivision << "," << cD.brassinosteroidTop << "," << cD.growthRate <<
+                            "," << cD.brassinosteroidSignal << "," << cD.auxin/cD.area << endl;
+                }
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
             double root_length = norm(SOURCEcm - QCcm) ;

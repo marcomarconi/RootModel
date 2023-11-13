@@ -356,6 +356,8 @@ public:
         double aux1MaxEdge = -1;
         bool brassinosteroidTarget = false;
         double brassinosteroidSignal = 1;
+        bool brassinosteroidTop = false;
+        int brassinosteroidMother = 0;
         double auxinSignal = 1;
         double growthSignal = 1;
 
