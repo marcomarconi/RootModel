@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 1.03444e-34 -9.66892e-19 0 -1.03444e-34 1 -1.4123e-37 0 9.66892e-19 1.4123e-37 1 0 -27.8505 -16.2529 -678.226 1
+CameraFrame: 1 1.03444e-34 -9.66892e-19 0 -1.03444e-34 1 -1.4123e-37 0 9.66892e-19 1.4123e-37 1 0 -27.2204 94.2037 -678.226 1
 SceneRadius: 500
-CameraZoom: -0.576
+CameraZoom: 0.384
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 226.621
+Width: 345.426
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 226.621
+Width: 345.426
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 226.621
+Width: 345.426
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: Root_Brassinosteroid_grid.mdxm
+MeshFile: Root_Brassinosteroid_grid2.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -1177,7 +1177,7 @@ ParmString: 100
 ParmName: Mechanics Enabled
 ParmString: True
 ParmName: Chemicals Enabled
-ParmString: True
+ParmString: False
 ParmName: Growth Enabled
 ParmString: True
 ParmName: Cell Division Enabled
@@ -1369,7 +1369,7 @@ ParmString: 10
 ParmName: Mass Spring Parameters
 ParmString: 
 ParmName: Wall EK
-ParmString: 1
+ParmString: 0.1
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
@@ -1381,13 +1381,13 @@ ParmString: 0.05
 ParmName: Auxin-induced wall relaxation K2
 ParmString: 300
 ParmName: Minimum Wall EK
-ParmString: 0.2
+ParmString: 0
 ParmName: Quasimodo wall relaxation K
 ParmString: 0
 ParmName: Hydrostatic Parameters
 ParmString: 
 ParmName: Turgor Pressure
-ParmString: 2.0
+ParmString: 1.25
 ParmName: Turgor Pressure non-Meristem Reduction
 ParmString: 1.00
 ParmName: Turgor Pressure Intra-LRC Multiplier
@@ -1643,7 +1643,7 @@ NumParms: 20
 ParmName: Print Stats
 ParmString: False
 ParmName: Substrate Fixed
-ParmString: False
+ParmString: True
 ParmName: Velocity Update
 ParmString: First Order
 ParmName: Max Velocity
