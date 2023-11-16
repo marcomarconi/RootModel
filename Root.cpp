@@ -2683,6 +2683,7 @@ bool Root::step() {
 
     // Debugs?
     if(debugging) {
+        /*
         double rootGR = 0;
         for(double gr : mechanicsProcess->growthRatesVector)
             rootGR += gr;
@@ -2763,7 +2764,7 @@ bool Root::step() {
                     << endl
                     << flush;
 
-
+        */
         // positions, auxin and growth rate (for plotting)                
         /*
         for(auto c : cellAttr) {
@@ -2794,9 +2795,10 @@ bool Root::step() {
                 else if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
                     lrc = cD.centroid.y();
 
-                if(cD.lastDivision > 0 && cD.lastDivision && cD.brassinosteroidMother > 0) {
-                    /*cerr << cD.brassinosteroidMother << ","  << cD.lastDivision << "," << cD.brassinosteroidTop << "," << cD.growthRate <<
-                            "," << cD.brassinosteroidSignal << "," << cD.auxin/cD.area << endl;*/
+                if(cD.lastDivision > 0 && cD.brassinosteroidMother > 0) {
+                    cerr << "Brassino" << "," << cD.type << "," << cD.brassinosteroidMother << ","  << cD.lastDivision << ","
+                         << cD.brassinosteroidTop << "," << cD.area << "," << cD.growthRate <<
+                         "," << cD.brassinosteroidSignal << "," << cD.auxin/cD.area << endl;
                 }
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
