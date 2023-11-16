@@ -2508,7 +2508,7 @@ bool Root::step() {
             int minimum = remeshAvg / 2;
             int range = remeshAvg - minimum + 1;
             int num = rand() % range + minimum;
-            if((cD.area > cD.cellMaxArea || cD.type == Tissue::Columella) && cD.remeshTime > num) {
+            if(/*cD.area > cD.cellMaxArea &&*/ cD.remeshTime > num) {
                 mdxInfo << "Remeshing Cell: " << cD.label << endl;
                 remeshCellProcess->step(cD.label);
                 cD.pressure = 0;
@@ -2777,7 +2777,7 @@ bool Root::step() {
         // Crisanto's data
         ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
         double lrc = -BIG_VAL;
-        if(stepCount % 500 == 0) {
+        if(stepCount % 5 == 0) {
             // Root length
             Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
             Point3d SOURCEcm = Point3d(0,0,0); int source_cell = 0;
@@ -2795,22 +2795,22 @@ bool Root::step() {
                     lrc = cD.centroid.y();
 
                 if(cD.lastDivision > 0 && cD.lastDivision && cD.brassinosteroidMother > 0) {
-                    cerr << cD.brassinosteroidMother << ","  << cD.lastDivision << "," << cD.brassinosteroidTop << "," << cD.growthRate <<
-                            "," << cD.brassinosteroidSignal << "," << cD.auxin/cD.area << endl;
+                    /*cerr << cD.brassinosteroidMother << ","  << cD.lastDivision << "," << cD.brassinosteroidTop << "," << cD.growthRate <<
+                            "," << cD.brassinosteroidSignal << "," << cD.auxin/cD.area << endl;*/
                 }
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
             double root_length = norm(SOURCEcm - QCcm) ;
             mdxInfo << "Root length " << root_length << " Meristem length " <<  lrc-QCcm.y()  << " Time " << stepCount << endl;
+            /*
             for(auto c : cellAttr) {
-                continue;
                 Tissue::CellData& cD = cellAttr[c.first];
                 mdxInfo << "Crisanto: root length " << root_length << " meristem_length " <<  lrc-QCcm.y()  << " time " << stepCount << " label " << cD.label << " of size " << cD.area
                     << " of type " << Tissue::ToString(cD.type) << " at position " << cD.centroid << " distance from QC " << cD.centroid.y() - QCcm.y()
                     //<<   " bigger than " << cD.cellMaxArea << " last division time: " << cD.lastDivision
                     //<< " division inhibitor: " << cD.divInhibitor/cD.area  << " division promoter: " << cD.divPromoter/cD.area  << " division prob: " << cD.divProb  << endl;
                       << " growth rate " << cD.growthRate << endl;
-            }
+            }*/
         }
 
     }
