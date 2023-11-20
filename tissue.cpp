@@ -636,6 +636,8 @@ bool Tissue::step(double Dt) {
     CCIndexIntAttr& cellTypeSignal = mesh->signalAttr<int>("Cell Type");
     CCIndexIntAttr& cellLineageSignal = mesh->signalAttr<int>("Cell Lineage");
     CCIndexDoubleAttr& divisionCountSignal = mesh->signalAttr<double>("Division Count");
+    CCIndexDoubleAttr& lifeTimeSignal = mesh->signalAttr<double>("Life Time");
+    CCIndexDoubleAttr& areaSignal = mesh->signalAttr<double>("Cell Area");
     CCIndexDoubleAttr& auxinSignal = mesh->signalAttr<double>("Chems: Auxin");
     CCIndexDoubleAttr& auxinByAreaSignal = mesh->signalAttr<double>("Chems: Auxin By Area");
     CCIndexDoubleAttr& intercellularAuxinSignal = mesh->signalAttr<double>("Chems: Intercellular Auxin");
@@ -659,6 +661,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
     CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Chems: PP2A Mem");
     CCIndexDoubleAttr& brassinosteroidSignal = mesh->signalAttr<double>("Chems: Brassinosteoroid Signal");
+    CCIndexDoubleAttr& brassinosteroidTopSignal = mesh->signalAttr<double>("Chems: Brassinosteoroid Top");
     CCIndexDoubleAttr& growthSignal = mesh->signalAttr<double>("Chems: Growth Signal");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
@@ -862,6 +865,8 @@ bool Tissue::step(double Dt) {
         cellTypeSignal[f] = cellAttr[indexAttr[f].label].type;
         cellLineageSignal[f] = cellAttr[indexAttr[f].label].lineage;
         divisionCountSignal[f] = cellAttr[indexAttr[f].label].divisionCount;
+        areaSignal[f] = cD.area;
+        lifeTimeSignal[f] = cD.lifeTime;
         auxinSignal[f] = cD.auxin;
         auxinByAreaSignal[f] = cD.auxin / cD.area;
         Aux1CytSignal[f] = fD.Aux1Cyt;
@@ -879,6 +884,7 @@ bool Tissue::step(double Dt) {
         wox5CytSignal[f] = cD.wox5;
         pressureSignal[f] = cD.pressure;
         brassinosteroidSignal[f] = cD.brassinosteroidSignal;
+        brassinosteroidTopSignal[f] = cD.brassinosteroidTop;
         growthSignal[f] = cD.growthSignal;
 
         fD.auxin = cD.auxin;
@@ -955,8 +961,8 @@ bool Tissue::step(double Dt) {
     return false;
 }
 
-void Tissue::CellData::division(const CCStructure &cs,
-                                CellDataAttr& cellAttr, FaceDataAttr& faceAttr, EdgeDataAttr& edgeAttr,
+void Tissue::CellData::division(const CCStructure &cs, const CCIndexDataAttr& indexAttr,
+                                CellDataAttr& cellAttr, FaceDataAttr& faceAttr, EdgeDataAttr& edgeAttr, VertexDataAttr& vMAttr,
                                 CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas, bool ignoreCellType) {
 
     if(!tissue)
@@ -1154,6 +1160,8 @@ void Tissue::CellData::division(const CCStructure &cs,
         eD.pin1Sensitivity.erase(label);
     }
 
+    cD1.updateGeom(indexAttr, faceAttr, edgeAttr, 0);
+    cD2.updateGeom(indexAttr, faceAttr, edgeAttr, 0);
     /*
     if(parm("Verbose") == "True")
         mdxInfo << "I, label " << label << " am a " << Tissue::ToString(type)

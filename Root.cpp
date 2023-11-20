@@ -1994,13 +1994,15 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     bool ignoreCellType = parm("Ignore Cell Type") == "True";
 
     // find the QC so we can print the distance (for plotting)
-    Point3d  QCcm;
+    Point3d  QCcm; int QCcells = 0;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
-        if(cD.type == Tissue::QC)
+        if(cD.type == Tissue::QC) {
             QCcm += cD.centroid;
+            QCcells ++;
+        }
     }
-    QCcm /= 2;
+    QCcm /= QCcells;
     // check if there are any cells to divide (depending on are or other clues)
     std::vector<Tissue::CellData> cDs;
     bool trigger_division = false;
@@ -2155,15 +2157,18 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         if(daughters[cD.label].first > 0 && daughters[cD.label].second > 0) {
             Tissue::CellData &cD1 = cellAttr[daughters[cD.label].first];
             Tissue::CellData &cD2 = cellAttr[daughters[cD.label].second];
-            cD.division(cs, cellAttr, faceAttr, edgeAttr,
+            cD.division(cs, indexAttr, cellAttr, faceAttr, edgeAttr, vMAttr,
                         cD1, cD2, maxAreas, ignoreCellType);
             // Brassinosteoroids after cell division
-            if(brControl && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
+            if(brControl/* && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis*/) {
                 cD1.brassinosteroidMother = cD2.brassinosteroidMother = cD.label;
+                cout << cD1.centroid << " " << cD2.centroid << " " <<  QCcm << endl;
                 if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
+                    cout << "first top" << endl;
                     cD1.brassinosteroidTop = true;
                     cD2.brassinosteroidTop = false;
                 } else {
+                    cout << "second top" << endl;
                     cD1.brassinosteroidTop = false;
                     cD2.brassinosteroidTop = true;
                 }
@@ -2204,7 +2209,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                     cD2.brassinosteroidSignal = 1;
                 }
             }
-            if(brControl && removeAuxin && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis) {
+            if(brControl && removeAuxin/* && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis*/) {
                 cD1.auxin = 0;
                 cD2.auxin = 0;
             }

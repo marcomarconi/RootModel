@@ -356,7 +356,7 @@ public:
         double aux1MaxEdge = -1;
         bool brassinosteroidTarget = false;
         double brassinosteroidSignal = 1;
-        bool brassinosteroidTop = false;
+        int brassinosteroidTop = -1;
         int brassinosteroidMother = 0;
         double auxinSignal = 1;
         double growthSignal = 1;
@@ -848,8 +848,9 @@ public:
 
         }
 
-        void division(const CCStructure &cs, CellDataAttr& cellAttr,
-                       FaceDataAttr& faceAttr, EdgeDataAttr &edgeAttr, CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas, bool ignoreCellType=false) ;
+        void division(const CCStructure &cs, const CCIndexDataAttr& indexAttr, CellDataAttr& cellAttr,
+                       FaceDataAttr& faceAttr, EdgeDataAttr &edgeAttr, VertexDataAttr& vMAttr,
+                      CellData& cD1, CellData& cD2, std::map<CellType, int> maxAreas, bool ignoreCellType=false) ;
 
 
     };
