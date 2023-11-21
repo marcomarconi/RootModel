@@ -140,13 +140,13 @@ bool Mechanics::step() {
                 cD.pressureMax = pressureMax * pressureKred;
             if(cD.centroid.y() < lrc && cD.centroid.y() > qc)
                 cD.pressureMax = pressureMax * pressureLRC;
-            cD.pressure += pressureK * Dt;
+            cD.pressure += pressureK * cD.brassinosteroidSignal * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
     }
     // Edge-wise updates
     for(CCIndex e: cs.edges()) {
-        Tissue::EdgeData& eD = edgeAttr[e];        
+        Tissue::EdgeData& eD = edgeAttr[e];
         double stiffness = 0;
         for(CCIndex f : cs.incidentCells(e, 2)){
             Tissue::CellData& cD = cellAttr[(*indexAttr)[f].label];
@@ -388,7 +388,7 @@ bool MechanicalGrowth::step(double Dt) {
     for(uint i = 0; i < cellAttr.size(); i++) {
         auto it = cellAttr.begin();
         advance(it, i);
-        Tissue::CellData& cD = it->second;        
+        Tissue::CellData& cD = it->second;
         if(cD.mfRORate != 0)
             cD.mfDelete = parm("MF Delete After Division") == "True";
         if(norm(cD.a1) == 0)
@@ -1372,7 +1372,7 @@ bool Chemicals::update() {
         if(parm("Verbose") == "True")
             mdxInfo << "Chemical Time: " << userTime <<" Norm: " << normal << " Average Auxin Conc. :" << avg_auxin_conc << endl;
         debug_step = 0;
-    }  
+    }
 
     // Chemical convergence is ***only*** based on auxin flow
     if(normal <= convergeThresh) {
@@ -2098,7 +2098,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
         throw(QString("CellDivision.step: empty cells division set"));
 
     // divide the cells
-    std::map<int, std::pair<int, int>> daughters;        
+    std::map<int, std::pair<int, int>> daughters;
     forall(const CCIndex& f, D) {
         int label = indexAttr[f].label;
         Tissue::CellData& cD = cellAttr[label];
@@ -2537,7 +2537,7 @@ bool Root::step() {
                                          "Chems: WOX5",
                                          //"Mechs: Edge Stiffness",
                                          //"Division Count",
-                                         "Mechs: Growth Rate"                                         
+                                         "Mechs: Growth Rate"
                                         };
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
@@ -2770,7 +2770,7 @@ bool Root::step() {
                     << flush;
 
         */
-        // positions, auxin and growth rate (for plotting)                
+        // positions, auxin and growth rate (for plotting)
         /*
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
