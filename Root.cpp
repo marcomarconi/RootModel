@@ -140,7 +140,7 @@ bool Mechanics::step() {
                 cD.pressureMax = pressureMax * pressureKred;
             if(cD.centroid.y() < lrc && cD.centroid.y() > qc)
                 cD.pressureMax = pressureMax * pressureLRC;
-            cD.pressure += pressureK * cD.brassinosteroidSignal * Dt;
+            cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
     }
@@ -246,9 +246,6 @@ Point3d Mechanics::calcForcesFace(CCIndex f,
     return dx;
 }
 
-// this function computes the force acting on the vtx v as member of the edge e.
-// Its connected vtx n, with an eventual label to identify the cell exterting
-// the force (0 if wall edge)
 Point3d Mechanics::calcForcesEdge(
     const CCStructure& cs, const CCIndexDataAttr& indexAttr, CCIndex e, CCIndex v, int label) {
     Mesh* mesh = getMesh("Mesh 1");
@@ -534,7 +531,6 @@ bool MechanicalGrowth::step(double Dt) {
     double growthRateThresh = parm("Strain Threshold for Growth").toDouble();
     double wallsMaxGrowthRate = parm("Walls Growth Rate").toDouble();
     bool preventElengation = parm("Prevent Cell Elongation") == "True";
-    double brassinosteroidDelay = parm("Brassinosteroid Delay G").toDouble();
     double elongationZone = parm("Elongation Zone").toDouble();
     double differentiationZone = parm("Differentiation Zone").toDouble();
     for(auto c : cellAttr) {
@@ -550,14 +546,9 @@ bool MechanicalGrowth::step(double Dt) {
 
         }
         // Brassinosteroids
-        if(cD.brassinosteroidTarget && brassinosteroidDelay > 0 && cD.lastDivision < brassinosteroidDelay) {
-            cD.brassinosteroidSignal +=  Dt / brassinosteroidDelay;
-            if(cD.brassinosteroidSignal > 1) cD.brassinosteroidSignal = 1;
-            cD.auxinSignal = cD.auxin/cD.area < 1 ? cD.auxin/cD.area : 1;
-            cD.growthSignal = (cD.brassinosteroidSignal + cD.auxinSignal) / 2;
-        } else { // just ignore
-            cD.brassinosteroidSignal = 1;
-            cD.auxinSignal = 1;
+        if(parm("Brassinosteroids Control") == "True") {
+            cD.growthSignal = cD.brassinosteroids * cD.brassinosteroidSignal;
+        } else {
             cD.growthSignal = 1;
         }
 
@@ -609,18 +600,23 @@ bool MechanicalGrowth::step(double Dt) {
             cD.divAlg = 2;
             if(cD.area < cD.cellMaxArea)
                 synchronized = false;
+            else
+                synchronized = true;
         }
     }
+
+    // disabled?
+    /*
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         if(cD.type == Tissue::ColumellaInitial || (cD.type == Tissue::EpLrcInitial  && cD.periclinalDivision)) {
             if(synchronized)
                 cD.divisionAllowed = true;
             else
-                cD.divisionAllowed = true;  ///////// disabled at the moment
+                cD.divisionAllowed = false;
         }
     }
-
+    */
     return false;
 }
 
@@ -804,7 +800,6 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     double AUX1MaxEdge = cD.aux1MaxEdge;
     for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
         for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, indexAttr[vn].label)]) {
-    //for(CCIndex e : cD.perimeterEdges){{
             Tissue::EdgeData& eD = edgeAttr[e];
             double Aux1Sensitivity = eD.length / cD.perimeter;
             double traffickedAUX1 = AUX1Krate * Aux1Sensitivity * cD.Aux1
@@ -846,7 +841,6 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     double lateralized_pins = 0;
     for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
         for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, indexAttr[vn].label)]) {
-    //for(CCIndex e : cD.perimeterEdges){{
             Tissue::EdgeData& eD = edgeAttr[e];
             double traffickedPin1 = Krate * eD.pin1Sensitivity[label] * cD.Pin1
                      * (pow(pinMaxEdge,10) / (pow(pinMaxEdge,10) + pow(eD.Pin1[label]/eD.length,10)));
@@ -899,112 +893,110 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     double MF_PP2A_Relief_K = parm("MF-PP2A Relief K").toDouble();
     double PINOIDdilutionRate = parm("PINOID Dilution Rate").toDouble();
     double PP2AdilutionRate = parm("PP2A Dilution Rate").toDouble();
-
     double trafficked_PINOID_total = 0, trafficked_PP2A_total = 0;
     double disassociated_PINOID_total = 0, disassociated_PP2A_total = 0;
-    /*for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
-        for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, indexAttr[vn].label)]) {*/
-    for(CCIndex e : cD.perimeterEdges){{
-            Tissue::EdgeData& eD = edgeAttr[e];
-            double PINOID_conc_eD = eD.PINOID[label] / eD.length;
-            double PP2A_conc_eD = eD.PP2A[label] / eD.length;
-            double auxin_ratio = eD.auxinGrad[label] > 0 ? eD.auxinGrad[label] : 0;
-            // exocytosis
-            double trafficked_PINOID = Dt * cD.PINOID
-                        * PINOIDKrate * (eD.length / cD.perimeter) // equal trafficking for edge
-                        * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2))) // auxin promotes trafficking
-                        * (pow(PINOIDMaxEdge,10) / (pow(PINOIDMaxEdge,10) + pow(PINOID_conc_eD,10))) // Max amount on edge
-                        ;
-            double trafficked_PP2A = Dt * cD.PP2A * (eD.length / cD.perimeter)
-                        * (  // not equal trafficking for edge
-                           PP2AKrate +
-                           AUXIN_PP2A_Relief_T * (pow(auxin_ratio, 4) / (pow(auxin_ratio, 4) + pow(AUXIN_PP2A_Relief_K, 4))) +
-                           Geom_PP2A_Relief_T * (pow(1-eD.geomImpact[label], 4) / (pow(1-eD.geomImpact[label], 4) + pow(1-Geom_PP2A_Relief_K, 4))) +
-                           MF_PP2A_Relief_T * (pow(1-eD.MFImpact[label], 4) / (pow(1-eD.MFImpact[label], 4) + pow(1-MF_PP2A_Relief_K, 4)))
-                          )
-                        * (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) / (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) + pow(PINOID_conc_eD, 8))) // not used
-                        * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2))) // auxin promotes trafficking
-                        * (pow(PP2AMaxEdge,10) / (pow(PP2AMaxEdge,10) + pow(PP2A_conc_eD,10))) // Max amount on edge
-                      ;
-            trafficked_PINOID_total += trafficked_PINOID;
-            trafficked_PP2A_total += trafficked_PP2A;
+    if(parm("Auxin Polarity Method") == "PINOID") // avoid entering the loop if not the selected method
+        for(CCIndex e : cD.perimeterEdges){{
+                Tissue::EdgeData& eD = edgeAttr[e];
+                double PINOID_conc_eD = eD.PINOID[label] / eD.length;
+                double PP2A_conc_eD = eD.PP2A[label] / eD.length;
+                double auxin_ratio = eD.auxinGrad[label] > 0 ? eD.auxinGrad[label] : 0;
+                // exocytosis
+                double trafficked_PINOID = Dt * cD.PINOID
+                            * PINOIDKrate * (eD.length / cD.perimeter) // equal trafficking for edge
+                            * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2))) // auxin promotes trafficking
+                            * (pow(PINOIDMaxEdge,10) / (pow(PINOIDMaxEdge,10) + pow(PINOID_conc_eD,10))) // Max amount on edge
+                            ;
+                double trafficked_PP2A = Dt * cD.PP2A * (eD.length / cD.perimeter)
+                            * (  // not equal trafficking for edge
+                               PP2AKrate +
+                               AUXIN_PP2A_Relief_T * (pow(auxin_ratio, 4) / (pow(auxin_ratio, 4) + pow(AUXIN_PP2A_Relief_K, 4))) +
+                               Geom_PP2A_Relief_T * (pow(1-eD.geomImpact[label], 4) / (pow(1-eD.geomImpact[label], 4) + pow(1-Geom_PP2A_Relief_K, 4))) +
+                               MF_PP2A_Relief_T * (pow(1-eD.MFImpact[label], 4) / (pow(1-eD.MFImpact[label], 4) + pow(1-MF_PP2A_Relief_K, 4)))
+                              )
+                            * (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) / (pow(PINOID_PP2A_Trafficking_Toggle_K, 8) + pow(PINOID_conc_eD, 8))) // not used
+                            * (pow(cD.auxin / cD.area, 2) / (pow(0.01, 2) + pow(cD.auxin / cD.area, 2))) // auxin promotes trafficking
+                            * (pow(PP2AMaxEdge,10) / (pow(PP2AMaxEdge,10) + pow(PP2A_conc_eD,10))) // Max amount on edge
+                          ;
+                trafficked_PINOID_total += trafficked_PINOID;
+                trafficked_PP2A_total += trafficked_PP2A;
 
-            double disassociated_PINOID = 0;
-            double disassociated_PP2A = Dt * eD.PP2A[label]
-                        * (pow(PINOID_conc_eD, 8) / (pow(PINOID_PP2A_Disassociation_Toggle_K, 8) + pow(PINOID_conc_eD, 8)))
-                      ;
-            disassociated_PINOID_total += disassociated_PINOID;
-            disassociated_PP2A_total += disassociated_PP2A;
+                double disassociated_PINOID = 0;
+                double disassociated_PP2A = Dt * eD.PP2A[label]
+                            * (pow(PINOID_conc_eD, 8) / (pow(PINOID_PP2A_Disassociation_Toggle_K, 8) + pow(PINOID_conc_eD, 8)))
+                          ;
+                disassociated_PINOID_total += disassociated_PINOID;
+                disassociated_PP2A_total += disassociated_PP2A;
 
-            std::vector<CCIndex>::iterator it = std::find(cD.perimeterEdges.begin(), cD.perimeterEdges.end(), e);
-            int curr_index = std::distance(cD.perimeterEdges.begin(), it);
-            int next_index = curr_index + 1;
-            int prev_index = curr_index - 1;
-            if((uint)next_index == cD.perimeterEdges.size())
-                next_index = 0;
-            if(prev_index == -1)
-                prev_index = cD.perimeterEdges.size() - 1;
-            CCIndex en = cD.perimeterEdges[next_index];
-            CCIndex ep = cD.perimeterEdges[prev_index];
-            Tissue::EdgeData& eDn = edgeAttr[en];
-            Tissue::EdgeData& eDp = edgeAttr[ep];
-            double PP2A_conc_eDn = eDn.PP2A[label] / eDn.length;
-            double PP2A_conc_eDp = eDp.PP2A[label] / eDp.length;
-            double PINOID_conc_eDn = eDn.PINOID[label] / eDn.length;
-            double PINOID_conc_eDp = eDp.PINOID[label] / eDp.length;
+                std::vector<CCIndex>::iterator it = std::find(cD.perimeterEdges.begin(), cD.perimeterEdges.end(), e);
+                int curr_index = std::distance(cD.perimeterEdges.begin(), it);
+                int next_index = curr_index + 1;
+                int prev_index = curr_index - 1;
+                if((uint)next_index == cD.perimeterEdges.size())
+                    next_index = 0;
+                if(prev_index == -1)
+                    prev_index = cD.perimeterEdges.size() - 1;
+                CCIndex en = cD.perimeterEdges[next_index];
+                CCIndex ep = cD.perimeterEdges[prev_index];
+                Tissue::EdgeData& eDn = edgeAttr[en];
+                Tissue::EdgeData& eDp = edgeAttr[ep];
+                double PP2A_conc_eDn = eDn.PP2A[label] / eDn.length;
+                double PP2A_conc_eDp = eDp.PP2A[label] / eDp.length;
+                double PINOID_conc_eDn = eDn.PINOID[label] / eDn.length;
+                double PINOID_conc_eDp = eDp.PINOID[label] / eDp.length;
 
-            // Dilution
-            double dilution_PINOID_n = 0;
-            double dilution_PP2A_n = 0;
-            double dilution_PINOID_p = 0;
-            double dilution_PP2A_p = 0;
-            //if(!cs.onBorder(en))
-            {
-                 dilution_PINOID_n = PINOIDdilutionRate * (PINOID_conc_eD - PINOID_conc_eDn)  * Dt;
-                 dilution_PP2A_n = PP2AdilutionRate * (PP2A_conc_eD - PP2A_conc_eDn)  * Dt;
-            }
-            //if(!cs.onBorder(ep))
-            {
-                dilution_PINOID_p = PINOIDdilutionRate * (PINOID_conc_eD - PINOID_conc_eDp)  * Dt;
-                dilution_PP2A_p = PP2AdilutionRate * (PP2A_conc_eD - PP2A_conc_eDp)  * Dt;
-            }
-            eD.PP2A[label] -= dilution_PP2A_n + dilution_PP2A_p;
-            eD.PINOID[label] -=  dilution_PINOID_n + dilution_PINOID_p;
-            eDn.PP2A[label] += dilution_PP2A_n;
-            eDn.PINOID[label] += dilution_PINOID_n;
-            eDp.PP2A[label] += dilution_PP2A_p;
-            eDp.PINOID[label] += dilution_PINOID_p;
-
-            CCIndex ec;
-            /*if(cs.onBorder(en))
-                ec = ep;
-            else if (cs.onBorder(ep))
-                ec = en;
-            else*/
-                ec = (rand() > RAND_MAX/2) ? en : ep;
-            Tissue::EdgeData& eDc = edgeAttr[ec];
-
-            double PP2A_conc_eDc = eDc.PP2A[label] / eDc.length;
-            double PINOID_conc_eDc = eDc.PINOID[label] / eDc.length;
-
-            // PINOIDS moving toward the lowest
-            if(abs(PP2A_conc_eDc - PP2A_conc_eD ) > EPS){
-                if(PP2A_conc_eDc <= PP2A_conc_eD || rand() < PINOID_fluidity_K * RAND_MAX * (PP2A_conc_eD / (PP2A_conc_eDc + EPS))) {
-                      double disp_PINOID = PINOID_disp_K / (eD.length + eDc.length) * eD.PINOID[label] * Dt;
-                      disp_PINOID *= (pow(PINOIDMaxEdge,10) / (pow(PINOIDMaxEdge,10) + pow(PINOID_conc_eDc,10))); // Max amount on edge
-                      eDc.PINOID[label] += disp_PINOID;
-                      eD.PINOID[label] -= disp_PINOID;
+                // Dilution
+                double dilution_PINOID_n = 0;
+                double dilution_PP2A_n = 0;
+                double dilution_PINOID_p = 0;
+                double dilution_PP2A_p = 0;
+                //if(!cs.onBorder(en))
+                {
+                     dilution_PINOID_n = PINOIDdilutionRate * (PINOID_conc_eD - PINOID_conc_eDn)  * Dt;
+                     dilution_PP2A_n = PP2AdilutionRate * (PP2A_conc_eD - PP2A_conc_eDn)  * Dt;
                 }
+                //if(!cs.onBorder(ep))
+                {
+                    dilution_PINOID_p = PINOIDdilutionRate * (PINOID_conc_eD - PINOID_conc_eDp)  * Dt;
+                    dilution_PP2A_p = PP2AdilutionRate * (PP2A_conc_eD - PP2A_conc_eDp)  * Dt;
+                }
+                eD.PP2A[label] -= dilution_PP2A_n + dilution_PP2A_p;
+                eD.PINOID[label] -=  dilution_PINOID_n + dilution_PINOID_p;
+                eDn.PP2A[label] += dilution_PP2A_n;
+                eDn.PINOID[label] += dilution_PINOID_n;
+                eDp.PP2A[label] += dilution_PP2A_p;
+                eDp.PINOID[label] += dilution_PINOID_p;
+
+                CCIndex ec;
+                /*if(cs.onBorder(en))
+                    ec = ep;
+                else if (cs.onBorder(ep))
+                    ec = en;
+                else*/
+                    ec = (rand() > RAND_MAX/2) ? en : ep;
+                Tissue::EdgeData& eDc = edgeAttr[ec];
+
+                double PP2A_conc_eDc = eDc.PP2A[label] / eDc.length;
+                double PINOID_conc_eDc = eDc.PINOID[label] / eDc.length;
+
+                // PINOIDS moving toward the lowest
+                if(abs(PP2A_conc_eDc - PP2A_conc_eD ) > EPS){
+                    if(PP2A_conc_eDc <= PP2A_conc_eD || rand() < PINOID_fluidity_K * RAND_MAX * (PP2A_conc_eD / (PP2A_conc_eDc + EPS))) {
+                          double disp_PINOID = PINOID_disp_K / (eD.length + eDc.length) * eD.PINOID[label] * Dt;
+                          disp_PINOID *= (pow(PINOIDMaxEdge,10) / (pow(PINOIDMaxEdge,10) + pow(PINOID_conc_eDc,10))); // Max amount on edge
+                          eDc.PINOID[label] += disp_PINOID;
+                          eD.PINOID[label] -= disp_PINOID;
+                    }
+                }
+
+                // decay
+                double decayedPINOID = Dt * eD.PINOID[label] * PINOIDdecayRate;
+                double decayedPP2A = Dt * eD.PP2A[label] * PP2AdecayRate;
+                eD.PP2A[label] += trafficked_PP2A - disassociated_PP2A - decayedPP2A;
+                eD.PINOID[label] += trafficked_PINOID -  disassociated_PINOID - decayedPINOID;
+
             }
-
-            // decay
-            double decayedPINOID = Dt * eD.PINOID[label] * PINOIDdecayRate;
-            double decayedPP2A = Dt * eD.PP2A[label] * PP2AdecayRate;
-            eD.PP2A[label] += trafficked_PP2A - disassociated_PP2A - decayedPP2A;
-            eD.PINOID[label] += trafficked_PINOID -  disassociated_PINOID - decayedPINOID;
-
         }
-    }
     double PINOIDbasalProduction = PINOIDbasalProductionRate * Dt;
     double PP2AbasalProduction = PP2AbasalProductionRate * Dt;
     double PINOIDdecay = PINOIDdecayRate * cD.PINOID * Dt;
@@ -1012,29 +1004,31 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     cD.PINOID += PINOIDbasalProduction - trafficked_PINOID_total + disassociated_PINOID_total - PINOIDdecay;
     cD.PP2A += PP2AbasalProduction - trafficked_PP2A_total + disassociated_PP2A_total - PP2Adecay;
 
+    //// BEGIN Crisanto's stuff
     // Division Inhibitor and Promoter
     double divInhibitorPermeability = parm("Division Inhibitor Permeability").toDouble();
     double divPromoterPermeability = parm("Division Promoter Permeability").toDouble();
-    for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
-        int labeln = indexAttr[vn].label;
-        Tissue::CellData& cDn = cellAttr[labeln];
-        for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, labeln)]) {
-            Tissue::EdgeData& eD = edgeAttr[e];
-            double inhibitorDiffusion = 0.5 * divInhibitorPermeability * eD.length * (cDn.divInhibitor/cDn.area - cD.divInhibitor/cD.area)  ;
-            cD.divInhibitor += inhibitorDiffusion * Dt;
-            cDn.divInhibitor -= inhibitorDiffusion * Dt;
-            double promoterDiffusion = 0.5 * divPromoterPermeability * eD.length * (cDn.divPromoter/cDn.area - cD.divPromoter/cD.area)   ;
-            cD.divPromoter += promoterDiffusion * Dt;
-            cDn.divPromoter -= promoterDiffusion * Dt;
+    if(divInhibitorPermeability > 0 || divPromoterPermeability > 0) // avoid entering this loop if disabled
+        for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
+            int labeln = indexAttr[vn].label;
+            Tissue::CellData& cDn = cellAttr[labeln];
+            for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, labeln)]) {
+                Tissue::EdgeData& eD = edgeAttr[e];
+                double inhibitorDiffusion = 0.5 * divInhibitorPermeability * eD.length * (cDn.divInhibitor/cDn.area - cD.divInhibitor/cD.area)  ;
+                cD.divInhibitor += inhibitorDiffusion * Dt;
+                cDn.divInhibitor -= inhibitorDiffusion * Dt;
+                double promoterDiffusion = 0.5 * divPromoterPermeability * eD.length * (cDn.divPromoter/cDn.area - cD.divPromoter/cD.area)   ;
+                cD.divPromoter += promoterDiffusion * Dt;
+                cDn.divPromoter -= promoterDiffusion * Dt;
+            }
         }
-    }
     // Promoter
     double divBase = parm("Division Promoter Basal Production Rate").toDouble();
     double divKmax = parm("Division Promoter Max Auxin-induced Expression").toDouble();
     double divK = parm("Division Promoter Half-max Auxin-induced K").toDouble();
     int divN = parm("Division Promoter Half-max Auxin-induced n").toInt();
     double divInduced = 0;
-    if(cD.divPromoter/cD.area < 5)
+    if(cD.divPromoter/cD.area < 5) // ???
         if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::CEID || cD.type == Tissue::Columella || cD.type == Tissue::EpLrcInitial)
             divInduced = divKmax *
                                     (
@@ -1060,10 +1054,10 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     //divInduced =  divInduced * cD.area / 20; // necessary to homogenize the chemical (otherwise it looks patchy among cells). It is not included by default because I had to rerun everything. The "/ 20" is to approx rescale it to the version default version
     divDecay = cD.divInhibitor * parm("Division Inhibitor Decay Rate").toDouble();
     cD.divInhibitor += (divBase * cD.area - divDecay + divInduced ) * Dt;
-
+    //// END Crisanto's stuff
 
     // Find the highest LRC cell (used later for zonation, to see how far the cells are from the QC)
-    ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
+    // ONLY WORKS IF the root grows from top to bottom, or change the code
     double lrc = -BIG_VAL;
     Point3d qc = Point3d(0,0,0);
     Point3d source = Point3d(0,0,0); int source_cell = 0;
@@ -1104,6 +1098,35 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
                     - cD.wox5 * wox5_d) * Dt;
     }
 
+    // Brassinosteroids
+    double brassinosteroidDelay = parm("Brassinosteroid Delay").toDouble();
+    double brassinosteroidPermeability = parm("Brassinosteroid Permeability").toDouble();
+    if(cD.brassinosteroidTarget == 1 && cD.lastDivision < brassinosteroidDelay) {
+        cD.brassinosteroidSignal +=  1 * Dt;
+        cD.brassinosteroidProd = 0;
+    }  else if (cD.brassinosteroidTarget == -1 && cD.lastDivision < brassinosteroidDelay){
+        cD.brassinosteroidSignal = 0;
+        cD.brassinosteroidProd +=  1 * Dt;
+    } else {
+        cD.brassinosteroidSignal +=  1 * Dt;
+        cD.brassinosteroidProd = 0;
+    }
+    if(cD.brassinosteroids > 1)
+        cD.brassinosteroids = 1;
+    if(brassinosteroidPermeability > 0) // avoid entering this loop if disabled
+        for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
+            int labeln = indexAttr[vn].label;
+            Tissue::CellData& cDn = cellAttr[labeln];
+            for(CCIndex e : tissueProcess->wallEdges[std::make_pair(label, labeln)]) {
+                Tissue::EdgeData& eD = edgeAttr[e];
+                double diffusion = 0.5 * brassinosteroidPermeability * eD.length * (cDn.brassinosteroids/cDn.area - cD.brassinosteroids/cD.area)  ;
+                cD.brassinosteroids += diffusion * Dt;
+                cDn.brassinosteroids -= diffusion * Dt;
+            }
+        }
+    cD.brassinosteroids += (cD.brassinosteroidProd - 0.1 * cD.brassinosteroids) * Dt;
+    if(cD.brassinosteroids > 1)
+        cD.brassinosteroids = 1;
 
     // Undefined are like dead cells
     if(cD.type == Tissue::Undefined) {
@@ -1990,7 +2013,6 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
     double divisionCoefficientRate = parm("Division Coefficient Rate").toDouble();
     double minimumAreaPerc = parm("Minimum Area Percentage").toDouble();
     double maximumAreaPerc = parm("Maximum Area Percentage").toDouble();
-    bool removeAuxin = parm("Remove Auxin after Division") == "True";
     bool ignoreCellType = parm("Ignore Cell Type") == "True";
 
     // find the QC so we can print the distance (for plotting)
@@ -2160,7 +2182,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             cD.division(cs, indexAttr, cellAttr, faceAttr, edgeAttr, vMAttr,
                         cD1, cD2, maxAreas, ignoreCellType);
             // Brassinosteoroids after cell division
-            if(brControl/* && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis*/) {
+            if(brControl) {
                 cD1.brassinosteroidMother = cD2.brassinosteroidMother = cD.label;
                 cout << cD1.centroid << " " << cD2.centroid << " " <<  QCcm << endl;
                 if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
@@ -2174,44 +2196,31 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
                 }
                 if       (brSignalling == "Upper") {
                     if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
-                        cD1.brassinosteroidTarget = true;
-                        cD2.brassinosteroidTarget = false;
-                        cD1.brassinosteroidSignal = 0;
-                        cD2.brassinosteroidSignal = 1;
+                        cD1.brassinosteroidTarget = 1;
+                        cD2.brassinosteroidTarget = -1;
 
                     } else {
-                        cD1.brassinosteroidTarget = false;
-                        cD2.brassinosteroidTarget = true;
-                        cD1.brassinosteroidSignal = 1;
-                        cD2.brassinosteroidSignal = 0;
+                        cD1.brassinosteroidTarget = -1;
+                        cD2.brassinosteroidTarget = 1;
                     }
                 } else if(brSignalling == "Lower") {
                     if(norm(cD1.centroid - QCcm) < norm(cD2.centroid - QCcm)) {
-                        cD1.brassinosteroidTarget = true;
-                        cD2.brassinosteroidTarget = false;
-                        cD1.brassinosteroidSignal = 0;
-                        cD2.brassinosteroidSignal = 1;
+                        cD1.brassinosteroidTarget = 1;
+                        cD2.brassinosteroidTarget = -1;
                     } else {
-                        cD1.brassinosteroidTarget = false;
-                        cD2.brassinosteroidTarget = true;
-                        cD1.brassinosteroidSignal = 1;
-                        cD2.brassinosteroidSignal = 0;
+                        cD1.brassinosteroidTarget = -1;
+                        cD2.brassinosteroidTarget = 1;
                     }
                 } else if(brSignalling == "Both") {
-                    cD1.brassinosteroidTarget = true;
-                    cD2.brassinosteroidTarget = true;
-                    cD1.brassinosteroidSignal = 0;
-                    cD2.brassinosteroidSignal = 0;
+                    cD1.brassinosteroidTarget = 1;
+                    cD2.brassinosteroidTarget = 1;
                 } else if(brSignalling == "None") {
-                    cD1.brassinosteroidTarget = false;
-                    cD2.brassinosteroidTarget = false;
-                    cD1.brassinosteroidSignal = 1;
-                    cD2.brassinosteroidSignal = 1;
+                    cD1.brassinosteroidTarget = -1;
+                    cD2.brassinosteroidTarget = -1;
                 }
-            }
-            if(brControl && removeAuxin/* && cD1.type == Tissue::Epidermis && cD2.type == Tissue::Epidermis*/) {
-                cD1.auxin = 0;
-                cD2.auxin = 0;
+            } else {
+                cD1.brassinosteroidTarget = 0;
+                cD2.brassinosteroidTarget = 0;
             }
         }
 
@@ -2531,12 +2540,9 @@ bool Root::step() {
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
-                                         //"Chems: Division Inhibitor by Area",
-                                         "Chems: Division Probability",
-                                         "Chems: Auxin By Area",
-                                         "Chems: WOX5",
-                                         //"Mechs: Edge Stiffness",
-                                         //"Division Count",
+                                         "Chems: Brassinosterois",
+                                         "Chems: Brassinosteoroid Signal",
+                                         "Chems: Growth Signal",
                                          "Mechs: Growth Rate"
                                         };
         for(QString signalName: signals_set) {
@@ -2799,12 +2805,12 @@ bool Root::step() {
                 }
                 else if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
                     lrc = cD.centroid.y();
-
+                /*
                 if(cD.lastDivision > 0 && cD.brassinosteroidMother > 0) {
                     cerr << "Brassino" << "," << cD.type << "," << cD.brassinosteroidMother << ","  << cD.lastDivision << ","
                          << cD.brassinosteroidTop << "," << cD.area << "," << cD.growthRate <<
                          "," << cD.brassinosteroidSignal << "," << cD.auxin/cD.area << endl;
-                }
+                }*/
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
             double root_length = norm(SOURCEcm - QCcm) ;
@@ -2901,39 +2907,6 @@ bool ClearCells::clearCell_old(int label) {
     }
     if(bn.size() < 3)
         throw(QString("Root::ClearCells Error, not enough perimeter edges found for cell " + label));
-
-    /*
-
-    // order the vertices
-    std::vector<std::pair<Point3d, Point3d>> polygonSegs;
-    std::vector<CCIndex> vs_orig;
-    std::vector<CCIndex> vs_ordered;
-
-    // get the original edges
-    for(auto i : bn) {
-        std::pair<CCIndex, CCIndex> eb = cs.edgeBounds(i);
-        vs_orig.push_back(eb.first);
-        vs_orig.push_back(eb.second);
-        polygonSegs.push_back(make_pair(indexAttr[eb.first].pos, indexAttr[eb.second].pos));
-    }
-
-    // sort them
-    for(auto i : orderPolygonSegs(polygonSegs))
-        for(auto j : vs_orig)
-            if(i == indexAttr[j].pos) {
-                vs_ordered.push_back(j);
-                break;
-            }
-
-    // vertices must be ordered counter-clockwise for the face to be displayed
-    // in front of the viewer
-    Point3d cross_product = (indexAttr[vs_ordered[0]].pos - centroid)
-                                .cross(indexAttr[vs_ordered[1]].pos - centroid);
-    if(cross_product.z() < 0)
-        std::reverse(std::begin(vs_ordered), std::end(vs_ordered));
-    face_to_create = vs_ordered;
-
-    */
 
     // delete marked edges, faces and vertices
     for(auto i : to_delete_faces)
@@ -3413,7 +3386,7 @@ bool PrintCellAttr::step() {
                     << " max area: " << cD.cellMaxArea << " "
                     << " perimeter: " << cD.perimeter << " "
                     << " invmassVertices: " << cD.invmassVertices << " " << endl
-                    << " G: " << cD.G << " E: " << cD.E << " F: " << cD.F << " R: " << cD.R << " U: " << cD.U << " S: " << cD.S << " M: " << cD.M << " M0: " << cD.M0
+                    << " G: " << cD.G << " E: " << cD.E
                     << " gMax: " << cD.gMax
                     << " gMin: " << cD.gMin
                     << " restCm: " << cD.restCm << " "
@@ -3434,7 +3407,8 @@ bool PrintCellAttr::step() {
             mdxInfo
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
-                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " " << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
+                    << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
+                    << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " Brassinosteroids: " << cD.brassinosteroids << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
@@ -3446,12 +3420,9 @@ bool PrintCellAttr::step() {
             Tissue::FaceData fD = faceAttr[f];
             mdxInfo << "Face: " << f  << " type: " << Tissue::ToString(fD.type) << " center: " << cIdx.pos << " label " << cIdx.label  << " owner " << fD.owner
                     << endl
-                    //<< " orientation with TOP: " << cs.ro(CCIndex::TOP, f) << endl
                     << " area: " << fD.area << " restAreaFace: " << fD.restAreaFace << " invRestMat: " << fD.invRestMat << " restPos: " << fD.restPos[0] << " : " << fD.restPos[1] << " : " << fD.restPos[2]
                     << endl
-                    //<< " prev_centroid: " << fD.prev_centroid << endl
                     << " E: " << fD.E << " " << " F: " << fD.F << " " << " R: " << fD.R << " " << " G: " << fD.G << " " << " V: " << fD.V << endl
-                    //<< " F1: " << fD.F1 << " " << " F2: " << fD.F2 << endl
                     << " a1: " << fD.a1 << " " << " a2: " << fD.a2 << endl
                     << " (visuals)"
                     << " type : " << fD.type << " growthRate : " << fD.growthRate << " auxin : " << fD.auxin << " intercellularAuxin : " << fD.intercellularAuxin

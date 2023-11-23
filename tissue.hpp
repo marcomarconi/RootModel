@@ -354,7 +354,9 @@ public:
         double aux1ProdRate = -1;
         double aux1InducedRate = -1;
         double aux1MaxEdge = -1;
-        bool brassinosteroidTarget = false;
+        double brassinosteroids = 0;
+        double brassinosteroidProd = 0;
+        int brassinosteroidTarget = 0;
         double brassinosteroidSignal = 1;
         int brassinosteroidTop = -1;
         int brassinosteroidMother = 0;
@@ -372,7 +374,7 @@ public:
         std::map<CCIndex, double> perimeterAngles;
         double growthRate = 0, axisMin_growthRate = 0, axisMax_growthRate = 0;
         std::vector<double> growthRates, axisMin_grs, axisMax_grs;
-        Matrix3d G, E, U, M, M0, S, F = Matrix3d().identity(), R = Matrix3d().identity();
+        Matrix3d G, E, U = Matrix3d().identity();
         double gMax = 0, gMin = 0, gAngle = 0, sMax = 0, sMin = 0, sAngle = 0;
         bool divisionAllowed = true;
         double divProb = 0;
@@ -578,6 +580,7 @@ public:
             divInhibitor = 0;
             quasimodo = 0;
             wox5 = 0;
+            brassinosteroids = 0;
             auxinFluxes.clear();
             auxinFluxVector = Point3d(0, 0, 0);
         }
@@ -603,7 +606,7 @@ public:
             area = 0;
             centroid = Point3d(0, 0, 0);
             // deformation gradient and green strain tensor
-            G = 0, E = 0, F = 0;
+            G = 0, E = 0;
             int i = 0;
             for(CCIndex f : *cellFaces) {
                 FaceData fD = faceAttr[f];
@@ -612,14 +615,12 @@ public:
                 if(fD.type == Membrane) {
                     E += fD.E;
                     G += fD.G;
-                    F += fD.F;
                     i++;
                 }
             }
             centroid /= cellFaces->size();
             E /= i;
             G /= i;
-            F /= i;
 
             // perimeter length
             perimeter = 0;

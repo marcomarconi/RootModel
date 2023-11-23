@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 1.03444e-34 -9.66892e-19 0 -1.03444e-34 1 -1.4123e-37 0 9.66892e-19 1.4123e-37 1 0 -24.4066 3.31671 -678.226 1
+CameraFrame: 1 5.30382e-35 1.30107e-18 0 -6.43232e-35 1 8.67362e-18 0 -1.30107e-18 -8.67362e-18 1 0 -36.2851 85.5908 -1156.48 1
 SceneRadius: 500
-CameraZoom: -0.096
+CameraZoom: -0.192
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 345.081
+Width: 354.768
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 345.081
+Width: 354.768
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 345.081
+Width: 354.768
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -143,7 +143,7 @@ CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -0.35483 -4.902 0 1
 
 
 [Stack2]
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06458 1.06458 1.06458
+Size: 1.06299 1.06299 1.06299
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1187,7 +1187,7 @@ ParmString: Hard
 ParmName: Remesh during execution
 ParmString: 0
 ParmName: Mesh Update Timer
-ParmString: 2
+ParmString: 5
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
@@ -1303,7 +1303,7 @@ ParmString: 1
 ParmName: Max Joining Distance
 ParmString: 1.5
 ParmName: Split Division Plane
-ParmString: True
+ParmString: False
 ParmName: Sabatinis's parameters
 ParmString: 
 ParmName: Sabatini Control
@@ -1363,7 +1363,7 @@ ParmString: .1
 ParmName: Convergence Lag
 ParmString: 1
 ParmName: Verbose
-ParmString: False
+ParmString: True
 ParmName: Debug Steps
 ParmString: 10
 ParmName: Mass Spring Parameters
@@ -1387,7 +1387,7 @@ ParmString: 0
 ParmName: Hydrostatic Parameters
 ParmString: 
 ParmName: Turgor Pressure
-ParmString: 1.25
+ParmString: 2
 ParmName: Turgor Pressure non-Meristem Reduction
 ParmString: 1.00
 ParmName: Turgor Pressure Intra-LRC Multiplier
@@ -1437,7 +1437,7 @@ ParmString: False
 ParmName: Prevent Cell Elongation
 ParmString: True
 ParmName: Brassinosteroid Delay G
-ParmString: 5
+ParmString: 100
 ParmName: Zonation
 ParmString: 
 ParmName: Elongation Zone
@@ -1461,7 +1461,7 @@ ParmString: 10
 ParmName: Auxin
 ParmString: 
 ParmName: Auxin Source
-ParmString: 100
+ParmString: 10
 ParmName: Auxin Intercellular Diffusion
 ParmString: 1
 ParmName: Auxin Cell Permeability
@@ -1495,7 +1495,7 @@ ParmString: 0.08
 ParmName: Pin1 Membrane Max Decay Rate
 ParmString: 0.08
 ParmName: Pin1 Max Trafficking Rate
-ParmString: 1.0
+ParmString: 1
 ParmName: Pin1 Max Amount Edge
 ParmString: 15
 ParmName: Pin1-auxin export rate
@@ -1685,7 +1685,7 @@ NumParms: 0
 ProcessName: Model/Root/22 Set Cell Attr
 NumParms: 8
 ParmName: Cell Type
-ParmString: Substrate
+ParmString: QC
 ParmName: Vertices Masses
 ParmString: 1
 ParmName: Auxin production rate
@@ -1865,7 +1865,7 @@ ParmString: -1
 ParmName: Epidermis Wall Max GR
 ParmString: -1
 ParmName: Epidermis Max area
-ParmString: 150
+ParmString: 200
 ParmName: Epidermis MF reorientation rate
 ParmString: -1
 ParmName: CEI Wall EK
@@ -2681,9 +2681,9 @@ NumParms: 9
 ParmName: Rows
 ParmString: 6
 ParmName: Columns
-ParmString: 5
+ParmString: 6
 ParmName: Row Segments
-ParmString: 5
+ParmString: 4
 ParmName: Col Segments
 ParmString: 4
 ParmName: Row Seg Length
@@ -2693,7 +2693,7 @@ ParmString: 2.5
 ParmName: Y Size Func
 ParmString: 
 ParmName: Stagger
-ParmString: 2
+ParmString: 0
 ParmName: Shape
 ParmString: Rectangle
 ProcessName: Tools/Cell Maker/Mesh 2D/Shapes/Polygon

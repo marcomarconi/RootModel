@@ -198,10 +198,14 @@ public:
         addParm("Prevent Cell Elongation", "The cell will stop growing when reaching max area if division is not allowed", "True",
                 QStringList() << "True"
                               << "False");
-        addParm("Brassinosteroid Delay G", "Brassinosteroid Delay", "0");
         addParm("Zonation", "Zonation", "");
         addParm("Elongation Zone", "Elongation Zone", "50");
         addParm("Differentiation Zone", "Differentiation Zone", "100");
+        addParm("Brassinosteroids Control",
+                "Brassinosteroids Control",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
         addParm("Mechanics Process",
                 "Name of Mechanics derivatives process",
                 "Model/Root/05 Mechanics");
@@ -305,10 +309,6 @@ public:
         addParm("Division Promoter Permeability", "Division Promoter Permeability", "1"); // 1 for the data, 5 for the figure
         addParm("Quasimodo Basal Production Rate", "Quasimodo Basal Production Rate", "1");
         addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
-        addParm("WOX5 Basal Production Rate", "WOX5 Basal Production Rate", "1");
-        addParm("WOX5 Induction by Auxin", "WOX5 Induction by Auxin", "1");
-        addParm("WOX5 Degradation by Auxin", "WOX5 Degradation by Auxin", "10");
-        addParm("WOX5 Decay Rate", "WOX5 Decay Rate", "0.1");
         addParm("Quasimodo Tissue",
                 "Quasimodo Tissue",
                 "None",
@@ -333,6 +333,12 @@ public:
                               << "Columella"
                               << "Substrate"
                               << "Source");
+        addParm("WOX5 Basal Production Rate", "WOX5 Basal Production Rate", "1");
+        addParm("WOX5 Induction by Auxin", "WOX5 Induction by Auxin", "1");
+        addParm("WOX5 Degradation by Auxin", "WOX5 Degradation by Auxin", "10");
+        addParm("WOX5 Decay Rate", "WOX5 Decay Rate", "0.1");        
+        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
+        addParm("Brassinosteroid Permeability", "Brassinosteroid Permeability", "0");
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");
@@ -493,11 +499,6 @@ public:
                                               << "Upper"
 
                 );
-        addParm("Remove Auxin after Division",
-                "Remove Auxin after Division",
-                "False",
-                                QStringList() << "True"
-                                              << "False");
         addParm("WOX5 Control",
                 "WOX5 Control",
                 "False",

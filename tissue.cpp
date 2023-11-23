@@ -660,6 +660,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& PP2ACytSignal = mesh->signalAttr<double>("Chems: PP2A Cyt");
     CCIndexDoubleAttr& PINOIDMemSignal = mesh->signalAttr<double>("Chems: PINOID Mem");
     CCIndexDoubleAttr& PP2AMemSignal = mesh->signalAttr<double>("Chems: PP2A Mem");
+    CCIndexDoubleAttr& brassinosteroidsSignal = mesh->signalAttr<double>("Chems: Brassinosteoroids");
     CCIndexDoubleAttr& brassinosteroidSignal = mesh->signalAttr<double>("Chems: Brassinosteoroid Signal");
     CCIndexDoubleAttr& brassinosteroidTopSignal = mesh->signalAttr<double>("Chems: Brassinosteoroid Top");
     CCIndexDoubleAttr& growthSignal = mesh->signalAttr<double>("Chems: Growth Signal");
@@ -883,6 +884,7 @@ bool Tissue::step(double Dt) {
         quasimodoCytSignal[f] = cD.quasimodo;
         wox5CytSignal[f] = cD.wox5;
         pressureSignal[f] = cD.pressure;
+        brassinosteroidsSignal[f] = cD.brassinosteroids;
         brassinosteroidSignal[f] = cD.brassinosteroidSignal;
         brassinosteroidTopSignal[f] = cD.brassinosteroidTop;
         growthSignal[f] = cD.growthSignal;
@@ -1102,6 +1104,7 @@ void Tissue::CellData::division(const CCStructure &cs, const CCIndexDataAttr& in
     cD1.divProb = 0;
     cD1.brassinosteroidTarget = false;
     cD1.brassinosteroidSignal = 0;
+    cD1.brassinosteroidProd = 0;
     cD1.auxinSignal = 0;
 
     cD2.tissue = tissue;
@@ -1140,6 +1143,7 @@ void Tissue::CellData::division(const CCStructure &cs, const CCIndexDataAttr& in
     cD2.divProb = 0;
     cD2.brassinosteroidTarget = false;
     cD2.brassinosteroidSignal = 0;
+    cD2.brassinosteroidProd = 0;
     cD2.auxinSignal = 0;
 
     std::vector<CCIndex> edges;
