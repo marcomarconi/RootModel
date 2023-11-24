@@ -580,6 +580,7 @@ bool MechanicalGrowth::step(double Dt) {
                             eD.updateRate *= cD.growthSignal * strainDiff * Dt;
                             eD.restLength += eD.updateRate;
                             if( eD.restLength > eD.length) {
+                                cout << eD.updateRate << " " << cD.growthSignal << " " << strainDiff << endl;
                                 mdxInfo << "WARNING: restLength is updated inmediately" << endl;
                                 eD.restLength = eD.length;
                             }
@@ -1114,8 +1115,8 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         cD.brassinosteroidSignal +=  1 * Dt;
         cD.brassinosteroidProd = 0;
     }
-    if(cD.brassinosteroids > 1)
-        cD.brassinosteroids = 1;
+    if(cD.brassinosteroidSignal > 1)
+        cD.brassinosteroidSignal = 1;
     if(brassinosteroidPermeability > 0) // avoid entering this loop if disabled
         for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
             int labeln = indexAttr[vn].label;
