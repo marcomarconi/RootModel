@@ -20,8 +20,8 @@ for(f in list.files(".","*.out")) {
 }
 
 df <- do.call(rbind, files)
-ggplot(df %>% filter(Time > 0)) + geom_line(aes(Time, GR, color=Type), linewidth=3) + scale_color_colorblind() + 
-    theme(text=element_text(size=48)) + facet_wrap(~Delay)
+ggplot(df %>% filter(Time > 0 & Delay==20)) + geom_line(aes(Time, GR, color=Type), linewidth=3) + scale_color_colorblind() + 
+    theme(text=element_text(size=48)) #+ facet_wrap(~Delay)
 
 
 

@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 -2.28837e-17 5.55112e-17 0 2.28837e-17 1 1.40552e-33 0 -5.55112e-17 -1.3522e-34 1 0 9.50565 85.55 -1156.48 1
+CameraFrame: 1 -2.28837e-17 5.55112e-17 0 2.28837e-17 1 1.40552e-33 0 -5.55112e-17 -1.35219e-34 1 0 9.50565 85.55 -1156.48 1
 SceneRadius: 500
 CameraZoom: -2.016
 
@@ -79,7 +79,7 @@ CameraZoom: -2.016
 [Clip1]
 Enable: false
 Grid: false
-Width: 240.615
+Width: 240.916
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 240.615
+Width: 240.916
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 240.615
+Width: 240.916
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06344 1.06344 1.06344
+Size: 1.0637 1.0637 1.0637
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1447,7 +1447,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 96
+NumParms: 99
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1590,9 +1590,15 @@ ParmName: WOX5 Degradation by Auxin
 ParmString: 10
 ParmName: WOX5 Decay Rate
 ParmString: 0.1
-ParmName: Brassinosteroid Delay
+ParmName: Brassinosteroid Basal Production
+ParmString: 0.01
+ParmName: Brassinosteroid Induced Production
 ParmString: 1
 ParmName: Brassinosteroid Permeability
+ParmString: 1
+ParmName: Brassinosteroid Decay
+ParmString: 0.1
+ParmName: Brassinosteroid Delay
 ParmString: 1
 ParmName: Phosphorilation
 ParmString: 

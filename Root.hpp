@@ -337,8 +337,11 @@ public:
         addParm("WOX5 Induction by Auxin", "WOX5 Induction by Auxin", "1");
         addParm("WOX5 Degradation by Auxin", "WOX5 Degradation by Auxin", "10");
         addParm("WOX5 Decay Rate", "WOX5 Decay Rate", "0.1");        
-        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
+        addParm("Brassinosteroid Basal Production", "Brassinosteroid Basal Production", "0");
+        addParm("Brassinosteroid Induced Production", "Induced Delay", "0");
         addParm("Brassinosteroid Permeability", "Brassinosteroid Permeability", "0");
+        addParm("Brassinosteroid Decay", "Brassinosteroid Decay", "0");
+        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");

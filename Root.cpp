@@ -1100,13 +1100,16 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
 
     // Brassinosteroids
     double brassinosteroidDelay = parm("Brassinosteroid Delay").toDouble();
+    double brassinosteroidBasal = parm("Brassinosteroid Basal Production").toDouble();
+    double brassinosteroidInduced = parm("Brassinosteroid Induced Production").toDouble();
     double brassinosteroidPermeability = parm("Brassinosteroid Permeability").toDouble();
+    double brassinosteroidDecay = parm("Brassinosteroid Decay").toDouble();
     if(cD.brassinosteroidTarget == 1 && cD.lastDivision < brassinosteroidDelay) {
         cD.brassinosteroidSignal +=  1 * Dt;
         cD.brassinosteroidProd = 0;
     }  else if (cD.brassinosteroidTarget == -1 && cD.lastDivision < brassinosteroidDelay){
         cD.brassinosteroidSignal = 0;
-        cD.brassinosteroidProd +=  1 * Dt;
+        cD.brassinosteroidProd +=  brassinosteroidInduced * Dt;
     } else {
         cD.brassinosteroidSignal +=  1 * Dt;
         cD.brassinosteroidProd = 0;
@@ -1124,7 +1127,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
                 cDn.brassinosteroids -= diffusion * Dt;
             }
         }
-    cD.brassinosteroids += (cD.brassinosteroidProd - 0.1 * cD.brassinosteroids) * Dt;
+    cD.brassinosteroids += (brassinosteroidBasal + cD.brassinosteroidProd - brassinosteroidDecay * cD.brassinosteroids) * Dt;
     if(cD.brassinosteroids > 1)
         cD.brassinosteroids = 1;
 
@@ -2540,7 +2543,7 @@ bool Root::step() {
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
-                                         "Chems: Brassinosterois",
+                                         "Chems: Brassinosteroids",
                                          "Chems: Brassinosteoroid Signal",
                                          "Chems: Growth Signal",
                                          "Mechs: Growth Rate"
