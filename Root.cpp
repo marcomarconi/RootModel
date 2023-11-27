@@ -580,7 +580,6 @@ bool MechanicalGrowth::step(double Dt) {
                             eD.updateRate *= cD.growthSignal * strainDiff * Dt;
                             eD.restLength += eD.updateRate;
                             if( eD.restLength > eD.length) {
-                                cout << eD.updateRate << " " << cD.growthSignal << " " << strainDiff << endl;
                                 mdxInfo << "WARNING: restLength is updated inmediately" << endl;
                                 eD.restLength = eD.length;
                             }
@@ -2188,13 +2187,10 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             // Brassinosteoroids after cell division
             if(brControl) {
                 cD1.brassinosteroidMother = cD2.brassinosteroidMother = cD.label;
-                cout << cD1.centroid << " " << cD2.centroid << " " <<  QCcm << endl;
                 if(norm(cD1.centroid - QCcm) > norm(cD2.centroid - QCcm)) {
-                    cout << "first top" << endl;
                     cD1.brassinosteroidTop = true;
                     cD2.brassinosteroidTop = false;
                 } else {
-                    cout << "second top" << endl;
                     cD1.brassinosteroidTop = false;
                     cD2.brassinosteroidTop = true;
                 }
@@ -2809,12 +2805,12 @@ bool Root::step() {
                 }
                 else if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
                     lrc = cD.centroid.y();
-                /*
+
                 if(cD.lastDivision > 0 && cD.brassinosteroidMother > 0) {
                     cerr << "Brassino" << "," << cD.type << "," << cD.brassinosteroidMother << ","  << cD.lastDivision << ","
                          << cD.brassinosteroidTop << "," << cD.area << "," << cD.growthRate <<
                          "," << cD.brassinosteroidSignal << "," << cD.auxin/cD.area << endl;
-                }*/
+                }
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
             double root_length = norm(SOURCEcm - QCcm) ;

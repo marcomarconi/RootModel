@@ -6,22 +6,23 @@ theme_set(theme_bw())
 #for f in `ls output*_`; do grep "Root length [^ ]* Meristem length [^ ]* Time [0-9]*" $f  -o | sed 's/Root length \([0-9\.]*\) Meristem length \([0-9\.]*\) Time \([0-9]*\)/\3,\1,\2/' | uniq | grep -v nan > $f.out; done
 
 
-dir <- "/home/marco/trabajo/Models/RootModel/Brassino/Brassino_New//"
+dir <- "/home/marco/trabajo/Models/RootModel/Brassino/Brassino_New_Basal/"
 setwd(dir)
 files <- list()
 for(f in list.files(".","*.out")) {
   df <- read_csv(f, show_col_types = FALSE, col_names = FALSE) 
   values <- sub("output.", "", f) %>% sub("_.out", "", .) %>% gsub("_", " ",.) %>% strsplit(., " ") %>% unlist
+  df$Basal <- values[1]
   df$Type <- values[2] %>% factor()
   df$Delay <- values[3]
-  colnames(df) <- c("Time", "Root", "Meristem", "Type", "Delay")
+  colnames(df) <- c("Time", "Root", "Meristem", "Basal", "Type", "Delay")
   df$GR <- EMA(c(0, diff((df$Root))), 20)
   files[[f]] <- df
 }
 
 df <- do.call(rbind, files)
-ggplot(df %>% filter(Time > 0 & Delay==20)) + geom_line(aes(Time, GR, color=Type), linewidth=3) + scale_color_colorblind() + 
-    theme(text=element_text(size=48)) #+ facet_wrap(~Delay)
+ggplot(df %>% filter(Time > 0 & Basal == 0.1)) + geom_line(aes(Time, GR, color=Type), linewidth=3) + scale_color_colorblind() + 
+    theme(text=element_text(size=32)) + facet_wrap(~Delay) #+ ylim(c(0.3, 0.7))
 
 
 
