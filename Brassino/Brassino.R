@@ -60,12 +60,12 @@ ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0")) + geom_bar(aes(Type, Cou
     colnames(df) <- c("Brassino", "CellType", "Mother", "Last", "Top", "Area", "CellGR", "Signal", "Auxin", "Basal", "Type", "Delay", "WGR")
     files[[f]] <- df %>% group_by(Type, Delay, Basal, WGR, CellType, Time=ceiling(Last), Top) %>% summarize(Area=mean(Area), .groups = "drop")
   }
-  df <- do.call(rbind, files)%>% mutate(Delay = fct_reorder(Delay, as.numeric(Delay))) %>% 
+  df <- do.call(rbind, files)%>% mutate(Top=factor(Top), Delay = fct_reorder(Delay, as.numeric(Delay))) %>% 
     group_by(CellType, Time, Delay, Basal, WGR, Top, Type) %>% summarize(M=mean(Area), SD=sd(Area)/sqrt(n()))
-  df %>% filter(Basal == "0.01" & WGR == "10.0" & CellType==9 & Type=="Upper") %>% ggplot() + 
-             geom_line(aes(Time, M, color=factor(Top)), linewidth=2) + 
+  df %>% filter(Basal == "0.01" & WGR == "10.0" & Delay==1 & Type=="Upper" & CellType %in% c(6,7,8,9,12,13)) %>% ggplot() + 
+             geom_line(aes(Time, M, color=Top), linewidth=2) + 
              geom_errorbar(aes(Time, ymin=M-SD, ymax=M+SD), color="gray")  + 
-      facet_wrap(~Delay) +     theme(text=element_text(size=32))
+      facet_wrap(~CellType) +     theme(text=element_text(size=32))
 }
 
 
