@@ -58,12 +58,20 @@ ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0")) + geom_bar(aes(Type, Cou
     df$Delay <- values[3]
     df$WGR <- values[4] %>% factor()
     colnames(df) <- c("Brassino", "CellType", "Mother", "Last", "Top", "Area", "CellGR", "Signal", "Auxin", "Basal", "Type", "Delay", "WGR")
-    files[[f]] <- df %>% group_by(Type, Delay, Basal, WGR, CellType, Time=ceiling(Last), Top) %>% summarize(Area=mean(Area), .groups = "drop")
+    files[[f]] <- df %>% group_by(Type, Delay, Basal, WGR, CellType, Time=ceiling(Last), Top) %>% 
+      summarize(Area=mean(Area), .groups = "drop")
   }
+<<<<<<< HEAD
   df <- do.call(rbind, files)%>% mutate(Top=factor(Top), Delay = fct_reorder(Delay, as.numeric(Delay))) %>% 
     group_by(CellType, Time, Delay, Basal, WGR, Top, Type) %>% summarize(M=mean(Area), SD=sd(Area)/sqrt(n()))
   df %>% filter(Basal == "0.01" & WGR == "10.0" & Delay==1 & Type=="Upper" & CellType %in% c(6,7,8,9,12,13)) %>% ggplot() + 
              geom_line(aes(Time, M, color=Top), linewidth=2) + 
+=======
+  df <- do.call(rbind, files)%>% mutate(Delay = fct_reorder(Delay, as.numeric(Delay))) %>% 
+    group_by(CellType, Time, Delay, Basal, WGR, Top, Type) %>% summarize(M=mean(Area), SD=sd(Area)/sqrt(n()), n())
+  df %>% filter(Basal == "0.01" & WGR == "1.0" & CellType==12 & Type=="None") %>% ggplot() + 
+             geom_line(aes(Time, M, color=factor(Top)), linewidth=2) + 
+>>>>>>> 5064876b6aff965952a5b8b5d748fe07adda5575
              geom_errorbar(aes(Time, ymin=M-SD, ymax=M+SD), color="gray")  + 
       facet_wrap(~CellType) +     theme(text=element_text(size=32))
 }
@@ -86,11 +94,11 @@ group_by(df, CellType, Time=ceiling(Last), Top) %>% filter(CellType>5 & !between
   plot.ts(diff(b))
 }
 
-
-system("grep Bras _out > _a")
-a <- read_csv("_a", col_names=F) %>% mutate(Type=factor(X5), X=ceiling(X4)) %>% filter(!X2 %in% c(0:5, 10:11, 14:15))
-z <- group_by(a, Type, X, X2) %>% summarize(Y=median(X6), SD=2*mad(X6)/sqrt(n()), N=n())
+{
+system("grep ^Bras _out > _a")
+a <- read_csv("_a", col_names=F) %>% mutate(Type=factor(X5), X=ceiling(X4), CellType=X2) %>% filter(!CellType %in% c(0:5, 10:11, 14:15))
+z <- group_by(a, Type, X, CellType) %>% summarize(Y=median(X6), SD=2*mad(X6)/sqrt(n()), N=n())
 ggplot(z %>% filter(X<20)) + geom_line(aes(X, Y, col=Type), linewidth=2) + 
-    geom_errorbar(aes(x=X, ymin=Y-SD, ymax=Y+SD), width=0.5, color="gray")+ facet_wrap(~X2) #+ ylim(c(0,0.03))
-
+    geom_errorbar(aes(x=X, ymin=Y-SD, ymax=Y+SD), width=0.5, color="gray")+ facet_wrap(~CellType) #+ ylim(c(0,0.03))
+}
 
