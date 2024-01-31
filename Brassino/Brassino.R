@@ -5,6 +5,7 @@ theme_set(theme_bw())
 
 #for f in `ls output*_`; do grep "Root length [^ ]* Meristem length [^ ]* Time [0-9]*" $f  -o | sed 's/Root length \([0-9\.]*\) Meristem length \([0-9\.]*\) Time \([0-9]*\)/\3,\1,\2/' | uniq | grep -v nan > $f.out; done
 
+# Growth rate
 {
 dir <- "/home/marco/trabajo/Models/RootModel/Brassino/Brassino_Auxin_Basal_2h_30steps/"
 setwd(dir)
@@ -21,14 +22,23 @@ for(f in list.files(".","*.out")) {
   files[[f]] <- df
 }
 df <- do.call(rbind, files) %>% mutate(Delay = fct_reorder(Delay, as.numeric(Delay)))
-ggplot(df %>% filter(Time > 0 & Basal == "0.01" & WGR == "1.0")) + geom_line(aes(Time, GR, color=Type), linewidth=3) + scale_color_colorblind() + 
-    theme(text=element_text(size=32)) + facet_wrap(~Delay) + ylim(c(0, 1.6))
+levels(df$Type) <- c("Scen. 1", "Scen. 3-LO", "Scen. 2", "Scen. 3-UP"); df$Type <- factor(df$Type, c("Scen. 1", "Scen. 2", "Scen. 3-UP", "Scen. 3-LO")); 
+levels(df$Delay) <- c("Delay 0", "Delay 20min", "Delay 1.5h", "Delay 3h", "Delay 6h");
+df$Time <- df$Time * 0.03
+ggplot(df %>% filter(Time > 0 & Basal == "0.01" & WGR == "1.0" & Delay!="Delay 0")) + 
+    geom_line(aes(Time, GR, color=Type), linewidth=3) + 
+    scale_color_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) + 
+    theme(text=element_text(size=28), legend.title = element_blank(), legend.text = element_text(size = 18), legend.key.width = unit(x = 1, units = "cm")) + facet_wrap(~Delay) + 
+    ylim(c(0.5, 1.6)) + ylab("Root Growth Rate")+ xlab("Time (h)")
+
+#ggsave("~/GR.pdf", width = 12, height = 9)
 }
 
 
 
 
 #for f in `ls output*_`; do grep trig $f | cut -f 39 -d " " > $f.div; done
+# Cell division
 {
 files <- list()
 for(f in list.files(".","*.div")) {
@@ -41,10 +51,39 @@ for(f in list.files(".","*.div")) {
   colnames(df) <- c("Time", "Basal", "Type", "Delay", "WGR")
   files[[f]] <- df 
 }
-df <- do.call(rbind, files) %>% filter(Time < 900 & Time > 300)%>% mutate(Delay = fct_reorder(Delay, as.numeric(Delay))) %>% 
-    group_by(Type, Delay, Basal, WGR) %>% summarize(Count=n())
-ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0")) + geom_bar(aes(Type, Count), stat="identity") + facet_wrap(~Delay) +     theme(text=element_text(size=32))
+    
+df <- do.call(rbind, files) %>% filter(Time < 900 & Time > 300)%>% mutate(Delay = fct_reorder(Delay, as.numeric(Delay))) %>%     group_by(Type, Delay, Basal, WGR) %>% summarize(Count=n())
+    levels(df$Type) <- c("Scen. 1", "Scen. 3-LO", "Scen. 2", "Scen. 3-UP"); df$Type <- factor(df$Type, c("Scen. 1", "Scen. 2", "Scen. 3-UP", "Scen. 3-LO")); 
+levels(df$Delay) <- c("Delay 0", "Delay 20min", "Delay 1.5h", "Delay 3h", "Delay 6h");
+
+ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0" & Delay != "Delay 0")) + 
+        geom_bar(aes(Delay, Count, fill=Type), color="gray1", stat="identity", position = position_dodge()) +    
+        theme(text=element_text(size=28), axis.text.x = element_text(size=20, angle = 45, vjust = 0.5), axis.title.y = element_text(size=32),legend.text = element_text(size = 18), legend.title = element_blank()) + 
+            xlab("")+  ylab("Cell Divisions")+   scale_fill_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) 
+
 }
+
+
+# Some cartoon plots
+{
+    curve(invlogit((x+50)*10) * invlogit((-x-30)*0.5) * -1, -100, 10, col="blue", lwd=5, xaxt = "n",yaxt = "n", xlab="", ylab="",bty="n"); 
+    curve(invlogit((x+50)*10) * invlogit((-x-30)*0.5) * -1 - 0.03, -100, 10, col="blue", lwd=5, lty=2, xaxt = "n",yaxt = "n", xlab="", ylab="",bty="n", add=T); 
+    curve(invlogit((x+45)*1) * invlogit((x+30)*-1) - 1 , -100, 10, col="red", lwd=5, xaxt = "n",yaxt = "n", xlab="", ylab="", add = T); 
+    curve(invlogit((x+45)*1) * invlogit((x+30)*-1) - 1 - 0.03, -100, 10, col="red", lwd=5, lty=2, xaxt = "n",yaxt = "n", xlab="", ylab="", add = T); 
+}
+{
+    curve(x*0-1, -100, 10, col="blue", lwd=5, xaxt = "n",yaxt = "n", xlab="", ylab="",bty="n", ylim=c(1,-1)); 
+    curve(x*0-1+0.03, -100, 10, col="blue", lwd=5, lty=2, xaxt = "n",yaxt = "n", xlab="", ylab="",bty="n", add=T); 
+    curve(x*0+1, -100, 10, col="red", lwd=5, xaxt = "n",yaxt = "n", xlab="", ylab="", add = T); 
+    curve(x*0+1 + 0.03, -100, 10, col="red", lwd=5, lty=2, xaxt = "n",yaxt = "n", xlab="", ylab="", add = T); 
+}    
+{
+    curve(x*0-1, -100, 10, col="blue", lwd=5, xaxt = "n",yaxt = "n", xlab="", ylab="",bty="n", ylim=c(1,-1)); 
+    curve(invlogit((x+50)*10) * invlogit((-x-30)*0.5) * -1 + 0.03, -100, 10, col="blue", lwd=5, lty=2, xaxt = "n",yaxt = "n", xlab="", ylab="",bty="n", add=T); 
+    curve(x*0 , -100, 10, col="red", lwd=5, xaxt = "n",yaxt = "n", xlab="", ylab="", add = T); 
+    curve(invlogit((x+45)*1) * invlogit((x+30)*-1) - 1 + 0.03, -100, 10, col="red", lwd=5, lty=2, xaxt = "n",yaxt = "n", xlab="", ylab="", add = T); 
+    
+}   
 
 
 #for f in `ls output*_`; do grep ^Brassino $f  > $f.brassino; done
