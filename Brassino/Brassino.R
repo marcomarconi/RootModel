@@ -2,13 +2,14 @@ library(tidyverse)
 library(TTR)
 library(ggthemes)
 library(LaplacesDemon)
+library(forcats)
 theme_set(theme_bw())
 
 #for f in `ls output*_`; do grep "Root length [^ ]* Meristem length [^ ]* Time [0-9]*" $f  -o | sed 's/Root length \([0-9\.]*\) Meristem length \([0-9\.]*\) Time \([0-9]*\)/\3,\1,\2/' | uniq | grep -v nan > $f.out; done
 
 # Growth rate
 {
-dir <- "/home/marco/trabajo/Models/RootModel/Brassino/Brassino_noAuxin_lowEK_2h_10steps//"
+dir <- "/home/marco/trabajo/Models/RootModel/Brassino/Brassino_noAuxin_EK_2h_10steps/"
 setwd(dir)
 files <- list()
 for(f in list.files(".","*.out")) {
@@ -33,10 +34,10 @@ df$Time <- df$Time * 0.03
 ggplot(df %>% filter(Time < 40 & Basal == "0.01" & WGR == "1.0" & Delay!="Delay 0")) + 
     geom_line(aes(Time, GR, color=Type), linewidth=3) + 
     scale_color_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) + 
-    theme(text=element_text(size=28), axis.text = element_text(size=18), legend.title = element_blank(), legend.text = element_text(size = 18), legend.key.width = unit(x = 1, units = "cm")) + facet_wrap(~Delay) + 
+    theme(text=element_text(size=32), axis.text = element_text(size=18), legend.title = element_blank(), legend.text = element_text(size = 18), legend.key.width = unit(x = 1, units = "cm")) + facet_wrap(~Delay) + 
     ylim(c(0.5, 1.6)) + ylab("Root Growth Rate")+ xlab("Time (h)")
 
-#ggsave("~/GR.pdf", width = 12, height = 9)
+ggsave("~/GR.svg", width=6.51*2, height=5.76*1)
 }
 
 
@@ -56,15 +57,17 @@ for(f in list.files(".","*.div")) {
   colnames(df) <- c("Time", "Basal", "Type", "Delay", "WGR")
   files[[f]] <- df 
 }
-    
-    levels(df$Type) <- c("Scen. 1", "Scen. 3-LO", "Scen. 2", "Scen. 3-UP"); df$Type <- factor(df$Type, c("Scen. 1", "Scen. 2", "Scen. 3-UP", "Scen. 3-LO")); 
+  df <- do.call(rbind, files) %>% filter(Time < 900 & Time > 300)%>% mutate(Delay = fct_reorder(Delay, as.numeric(Delay))) %>%     group_by(Type, Delay, Basal, WGR) %>% summarize(Count=n())
+  
+    levels(df$Type) <- c("Scen. 1", "Scen. 3-LO", "Scen. 2", "Scen. 3-UP"); 
+    df$Type <- factor(df$Type, c("Scen. 1", "Scen. 2", "Scen. 3-UP", "Scen. 3-LO")); 
 levels(df$Delay) <- c("0", "20min", "1.5h", "3h", "6h");
 
 ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0" & Delay != "0")) + 
         geom_bar(aes(Delay, Count, fill=Type), color="gray1", stat="identity", position = position_dodge()) +    
         theme(text=element_text(size=28), axis.text.x = element_text(size=20, angle = 45, vjust = 0.5),legend.text = element_text(size = 18), legend.title = element_blank()) + 
-            xlab("")+  ylab("Cell Divisions")+   scale_fill_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) 
-
+            xlab("Delay")+  ylab("Cell Divisions")+   scale_fill_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) 
+    ggsave("~/GR.svg", width=6.51*2, height=5.76*1.25)
 }
 
 

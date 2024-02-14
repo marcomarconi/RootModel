@@ -2541,7 +2541,7 @@ bool Root::step() {
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
                                          "Chems: Brassinosteroids",
-                                         "Chems: Brassinosteoroid Signal",
+                                         "Chems: Brassinosteroid Signal",
                                          "Chems: Growth Signal",
                                          "Mechs: Growth Rate"
                                         };
