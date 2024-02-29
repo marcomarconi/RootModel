@@ -1092,10 +1092,12 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         double wox5_d = parm("WOX5 Decay Rate").toDouble();
         double wox5_pa = parm("WOX5 Induction by Auxin").toDouble();
         double wox5_da = parm("WOX5 Degradation by Auxin").toDouble();
+        double wox5_ta = parm("WOX5 Induction to Auxin").toDouble();
         cD.wox5 += (  wox5_p
                     + pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
                     - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2))
                     - cD.wox5 * wox5_d) * Dt;
+        cD.auxin += cD.wox5 * wox5_ta * Dt;
     }
 
     // Brassinosteroids

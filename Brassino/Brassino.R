@@ -31,13 +31,13 @@ df <- do.call(rbind, files) %>% mutate(Delay = fct_reorder(Delay, as.numeric(Del
 levels(df$Type) <- c("Scen. 1", "Scen. 3-LO", "Scen. 2", "Scen. 3-UP"); df$Type <- factor(df$Type, c("Scen. 1", "Scen. 2", "Scen. 3-UP", "Scen. 3-LO")); 
 levels(df$Delay) <- c("Delay 0", "Delay 20min", "Delay 1.5h", "Delay 3h", "Delay 6h");
 df$Time <- df$Time * 0.03
-ggplot(df %>% filter(Time < 40 & Basal == "0.01" & WGR == "1.0" & Delay!="Delay 0")) + 
+ggplot(df %>% filter(Time < 40 & Basal == "0.1" & WGR == "1.0" & Delay!="Delay 0")) + 
     geom_line(aes(Time, GR, color=Type), linewidth=3) + 
     scale_color_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) + 
     theme(text=element_text(size=32), axis.text = element_text(size=18), legend.title = element_blank(), legend.text = element_text(size = 18), legend.key.width = unit(x = 1, units = "cm")) + facet_wrap(~Delay) + 
     ylim(c(0.5, 1.6)) + ylab("Root Growth Rate")+ xlab("Time (h)")
 
-ggsave("~/GR.svg", width=6.51*2, height=5.76*1)
+#ggsave("~/GR.svg", width=6.51*2, height=5.76*1.25)
 }
 
 
@@ -65,9 +65,9 @@ levels(df$Delay) <- c("0", "20min", "1.5h", "3h", "6h");
 
 ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0" & Delay != "0")) + 
         geom_bar(aes(Delay, Count, fill=Type), color="gray1", stat="identity", position = position_dodge()) +    
-        theme(text=element_text(size=28), axis.text.x = element_text(size=20, angle = 45, vjust = 0.5),legend.text = element_text(size = 18), legend.title = element_blank()) + 
+        theme(text=element_text(size=32), axis.text.x = element_text(size=20, angle = 45, vjust = 0.5),legend.text = element_text(size = 18), legend.title = element_blank()) + 
             xlab("Delay")+  ylab("Cell Divisions")+   scale_fill_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) 
-    ggsave("~/GR.svg", width=6.51*2, height=5.76*1.25)
+    ggsave("~/CD.svg", width=6.51*2, height=5.76*1.25)
 }
 
 
