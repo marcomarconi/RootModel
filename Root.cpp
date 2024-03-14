@@ -1093,9 +1093,14 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         double wox5_pa = parm("WOX5 Induction by Auxin").toDouble();
         double wox5_da = parm("WOX5 Degradation by Auxin").toDouble();
         double wox5_ta = parm("WOX5 Induction to Auxin").toDouble();
+        /*
         cD.wox5 += (  wox5_p
                     + pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
                     - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2))
+                    - cD.wox5 * wox5_d) * Dt;
+                    */
+        cD.wox5 += (  wox5_p
+                    + (wox5_pa / (1/pow(cD.auxin/cD.area, 2) + wox5_pa) * (-pow(wox5_da, 2) / (1/pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2)) + 1))
                     - cD.wox5 * wox5_d) * Dt;
         if(cD.wox5 > 10) cD.wox5 = 10;
         cD.auxin += cD.wox5 * wox5_ta * Dt;
@@ -2073,7 +2078,7 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             if(cD.wox5 > 10)
                 mdxInfo << "WOX5 higher than 10: " << cD.wox5 << endl;
             double f1 = 1 - 0.75 * exp(-2 * cD.wox5);
-            double f2 = (1 - 0.75 * exp(2 * (cD.wox5 - 10)));
+            double f2 = (1 - 0.25 * exp(2 * (cD.wox5 - 10)));
             cD.divProb = -((f1 + f2) - 2);
             double r = ((double) rand() / (RAND_MAX));
             if(r < cD.divProb*0.01)
