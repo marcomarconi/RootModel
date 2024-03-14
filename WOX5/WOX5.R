@@ -13,18 +13,6 @@ group_by(df, Type) %>% summarise(Mean=sum(Divisions)/(3*n()), SD=sd(Divisions)/3
   geom_bar(aes(Type, Mean), stat="identity") + geom_errorbar(aes(Type, ymin=Mean-SD, ymax=Mean+SD), width=0.25) +
   theme(axis.title.x = element_blank()) + ylab("QC Division (%)")
 
-df <- read_csv("~/trabajo/Models/RootModel/WOX5/WOX5_2.csv") %>% mutate(Type = as.character(Type), Type = case_when(Type == "1" ~ "WT",Type == "0.001" ~ "OE",Type == "100" ~ "wox5",TRUE~NA)) 
-df$Type <- factor(df$Type, levels=c("WT", "wox5", "OE"))
-df$Divisions <- df$Divisions / 2
-group_by(df, Type) %>% summarise(Mean=sum(Divisions)/(3*n()), SD=sd(Divisions)*1/sqrt(n()))
-group_by(df , Type) %>% summarise(Mean=sum(Divisions)/(3*n()), SD=sd(Divisions)/3/sqrt(n())*1) %>% ggplot() +
-    geom_bar(aes(Type, Mean), stat="identity") + geom_errorbar(aes(Type, ymin=Mean-SD, ymax=Mean+SD), width=0.25) +
-    theme(axis.title.x = element_blank()) + ylab("QC Division (%)") + ylim(c(0, 1))
-group_by(df, Type) %>% summarise(Mean=sum(Divisions)/(3*n()), SD=sd(Divisions)/3/sqrt(n())*1) %>% 
-  ggplot(aes(fill=Induction)) +
-  geom_bar(aes(Type, Mean), stat="identity", position = position_dodge(width=0.9)) + 
-  geom_errorbar(aes(Type, ymin=Mean-SD, ymax=Mean+SD), width=0.25, position = position_dodge(width=0.9)) +
-  theme(axis.title.x = element_blank()) + ylab("QC Division (%)") + ylim(c(0, 1))
 
 df <- read_csv("~/trabajo/Models/RootModel/WOX5/WOX5_3.csv") %>% mutate(Type = as.character(Type), Type = case_when(Type == "1" ~ "WT",Type == "0.001" ~ "OE",Type == "100" ~ "wox5",TRUE~NA), Induction=factor(Induction)) 
 df$Type <- factor(df$Type, levels=c("WT", "wox5", "OE"))

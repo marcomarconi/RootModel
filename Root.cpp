@@ -1097,6 +1097,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
                     + pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
                     - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2))
                     - cD.wox5 * wox5_d) * Dt;
+        if(cD.wox5 > 10) cD.wox5 = 10;
         cD.auxin += cD.wox5 * wox5_ta * Dt;
     }
 
@@ -2071,8 +2072,8 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             cD.divisionAllowed = false;
             if(cD.wox5 > 10)
                 mdxInfo << "WOX5 higher than 10: " << cD.wox5 << endl;
-            double f1 = 1 - exp(-2 * cD.wox5);
-            double f2 = (1 - exp(5 * (cD.wox5 - 10)));
+            double f1 = 1 - 0.75 * exp(-2 * cD.wox5);
+            double f2 = (1 - 0.75 * exp(2 * (cD.wox5 - 10)));
             cD.divProb = -((f1 + f2) - 2);
             double r = ((double) rand() / (RAND_MAX));
             if(r < cD.divProb*0.01)
