@@ -2543,10 +2543,13 @@ bool Root::step() {
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
-                                         "Chems: Brassinosteroids",
-                                         "Chems: Brassinosteroid Signal",
-                                         "Chems: Growth Signal",
-                                         "Mechs: Growth Rate"
+                                        //"Chems: Brassinosteroids",
+                                        //"Chems: Brassinosteroid Signal",
+                                        //"Chems: Growth Signal",
+                                        "Mechs: Growth Rate",
+                                        "Chems: Auxin By Area",
+                                        "Chems: Division Probability",
+                                        "Chems: WOX5"
                                         };
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
