@@ -32,3 +32,8 @@ res %>%  ggplot(aes(fill=factor(WOX5, levels="Low", "Medium", "High"))) +
   geom_errorbar(aes(Type, ymin=Mean-SD, ymax=Mean+SD), width=0.25, position = position_dodge(width=0.9)) +
   theme(axis.title.x = element_blank(), text=element_text(size = 24), legend.position = c(0.85,0.85), legend.background = element_rect(colour = "black")) + 
   ylab("QC Division (%)") + ylim(c(0, 1)) + labs(fill='WOX4 prod') 
+
+df <- read_csv("~/trabajo/Models/RootModel/WOX5/WOX5_test.csv")
+
+
+
