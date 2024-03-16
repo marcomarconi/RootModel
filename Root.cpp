@@ -2077,12 +2077,23 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             cD.divisionAllowed = false;
             if(cD.wox5 > 10)
                 mdxInfo << "WOX5 higher than 10: " << cD.wox5 << endl;
-            double f1 = 1 - 0.75 * exp(-2 * cD.wox5);
-            double f2 = (1 - 0.25 * exp(2 * (cD.wox5 - 10)));
+            double f1 = 1 - (0.80 - 0.1) * exp(-2 * cD.wox5) - 0.05;
+            double f2 = (1 - (0.30 - 0.1) * exp(2 * (cD.wox5 - 10))) - 0.05;
             cD.divProb = -((f1 + f2) - 2);
             double r = ((double) rand() / (RAND_MAX));
+            /*
             if(r < cD.divProb*0.01)
                 cD.divisionAllowed = true;
+            */
+            if(!cD.QCwox5Flag && cD.area > cD.cellMaxArea) {
+                if(r < cD.divProb) {
+                    cD.divisionAllowed = true;
+                    cD.QCwox5Flag = true;
+                } else {
+                    cD.divisionAllowed = false;
+                    cD.QCwox5Flag = true;
+                }
+            }
         }
         // Cell division
         if(
@@ -3419,7 +3430,7 @@ bool PrintCellAttr::step() {
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
-                    << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " Brassinosteroids: " << cD.brassinosteroids << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
+                    << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " QCwox5Flag: " << cD.QCwox5Flag << " Brassinosteroids: " << cD.brassinosteroids << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "

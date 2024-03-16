@@ -345,7 +345,7 @@ public:
         double PP2A = 0;
         double divInhibitor = 0, divPromoter = 0;
         double quasimodo = 0;
-        double wox5 = 0;
+        double wox5 = 0; bool QCwox5Flag = false;
         double pressure = 1, pressureMax = -1;
         double auxinProdRate = -1;
         double auxinDecayRate = 0;
