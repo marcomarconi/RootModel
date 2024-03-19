@@ -1203,7 +1203,7 @@ ParmString: Model/Root/23 Set Global Attr
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 36000
+ParmString: 3600
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
