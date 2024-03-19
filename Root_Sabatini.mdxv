@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.99995 -0.00315863 0.00943718 0 0.00309206 0.99997 0.00706055 0 -0.0094592 -0.00703102 0.999931 0 12.5953 -373.13 -2307.69 1
+CameraFrame: 0.99995 -0.00315863 0.00943718 0 0.00309206 0.99997 0.00706055 0 -0.0094592 -0.00703102 0.999931 0 1.64021 11.4715 -2307.69 1
 SceneRadius: 500
-CameraZoom: -0.576
+CameraZoom: -0.672
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 243.162
+Width: 276.505
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.99995 -0.00998078 -0.000235337 0 0.00998065 0.99995 -0.000571525 0 0.00
 [Clip2]
 Enable: false
 Grid: false
-Width: 243.162
+Width: 276.505
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 243.162
+Width: 276.505
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -143,7 +143,7 @@ CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -0.375047 204.671 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 0.160375 -94.5201 0 1
 
 
 [Stack2]
@@ -1198,10 +1198,12 @@ ParmName: Debug File
 ParmString: debug.csv
 ParmName: Frame fixed on QC
 ParmString: 0,200
+ParmName: Set Global Attr Process
+ParmString: Model/Root/23 Set Global Attr
 ParmName: Frame fixed on Substrate
 ParmString: 0,0
 ParmName: Execution Time
-ParmString: 3600
+ParmString: 36000
 ParmName: Output Mesh
 ParmString: mesh.mdxm
 ParmName: Tissue Process
@@ -1222,8 +1224,6 @@ ParmName: Delete Cell Process
 ParmString: Model/Root/31 Delete Cell
 ParmName: Execute Test Process
 ParmString: Model/Root/4 Execute Test
-ParmName: Set Global Attr Process
-ParmString: Model/Root/23 Set Global Attr
 ParmName: Triangulate Faces
 ParmString: Model/Root/Triangulate Faces
 ParmName: Remesh
@@ -1237,17 +1237,13 @@ ParmString: Tools/System/Save View
 ParmName: SaveMesh
 ParmString: Mesh/System/Save
 ProcessName: Model/Root/02 Remesh
-NumParms: 10
+NumParms: 8
 ParmName: Destructive
 ParmString: False
 ParmName: Type
 ParmString: Hard
 ParmName: Split Edges Max Length
 ParmString: 3
-ParmName: Remeshing Min Area
-ParmString: 0
-ParmName: Remeshing Max Area
-ParmString: 20
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ParmName: Triangulate Faces
@@ -1285,7 +1281,7 @@ ParmString: 0.04
 ParmName: Verbose
 ParmString: False
 ProcessName: Model/Root/04 Divide Cells
-NumParms: 32
+NumParms: 35
 ParmName: Cell Max Area
 ParmString: 250000
 ParmName: Cell Wall Min
@@ -1306,6 +1302,8 @@ ParmName: Division Algorithm
 ParmString: 1
 ParmName: Max Joining Distance
 ParmString: 1.5
+ParmName: Split Division Plane
+ParmString: False
 ParmName: Sabatinis's parameters
 ParmString: 
 ParmName: Sabatini Control
@@ -1334,6 +1332,12 @@ ParmName: Division half-probability by Cell Size Ratio
 ParmString: 1
 ParmName: Division half-probability by Inhibitor
 ParmString: 0.03
+ParmName: Brassinosteroids Control
+ParmString: False
+ParmName: Brassinosteroids Signalling
+ParmString: None
+ParmName: WOX5 Control
+ParmString: False
 ParmName: Ignore Cell Type
 ParmString: False
 ParmName: Root Process
@@ -1346,12 +1350,10 @@ ParmName: ClearCells Process
 ParmString: Model/Root/ClearCells
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
-ParmName: Cell Division Enabled
-ParmString: True
 ParmName: Manual Cell Division Enabled
 ParmString: True
 ProcessName: Model/Root/05 Mechanics
-NumParms: 24
+NumParms: 26
 ParmName: Dt
 ParmString: 0.03
 ParmName: Converge Threshold
@@ -1373,9 +1375,11 @@ ParmString: 0.01
 ParmName: Shear CK
 ParmString: 1
 ParmName: Auxin-induced wall relaxation K1
-ParmString: 0
+ParmString: 0.05
 ParmName: Auxin-induced wall relaxation K2
 ParmString: 3
+ParmName: Auxin-relaxation Minimum Wall EK
+ParmString: 0.2
 ParmName: Quasimodo wall relaxation K
 ParmString: 10
 ParmName: Hydrostatic Parameters
@@ -1383,7 +1387,7 @@ ParmString:
 ParmName: Turgor Pressure
 ParmString: 2
 ParmName: Turgor Pressure non-Meristem Reduction
-ParmString: 1
+ParmString: 0.8
 ParmName: Turgor Pressure Intra-LRC Multiplier
 ParmString: 1.00
 ParmName: Turgor Pressure Rate
@@ -1400,8 +1404,10 @@ ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ParmName: PBD Engine
 ParmString: Model/Root/07 PBD Engine
+ParmName: Set Global Attr Process
+ParmString: Model/Root/23 Set Global Attr
 ProcessName: Model/Root/052 Mechanical Growth
-NumParms: 18
+NumParms: 19
 ParmName: Verbose
 ParmString: False
 ParmName: Polarity Method
@@ -1434,12 +1440,14 @@ ParmName: Elongation Zone
 ParmString: 30
 ParmName: Differentiation Zone
 ParmString: 1000
+ParmName: Brassinosteroids Control
+ParmString: False
 ParmName: Mechanics Process
 ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 90
+NumParms: 100
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1573,7 +1581,27 @@ ParmString: 1
 ParmName: Quasimodo Decay Rate
 ParmString: 1
 ParmName: Quasimodo Tissue
-ParmString: None
+ParmString: Epidermis
+ParmName: WOX5 Basal Production Rate
+ParmString: 1
+ParmName: WOX5 Induction by Auxin
+ParmString: 1
+ParmName: WOX5 Degradation by Auxin
+ParmString: 10
+ParmName: WOX5 Decay Rate
+ParmString: 0.1
+ParmName: WOX5 Induction to Auxin
+ParmString: 0
+ParmName: Brassinosteroid Basal Production
+ParmString: 0
+ParmName: Brassinosteroid Induced Production
+ParmString: 0
+ParmName: Brassinosteroid Permeability
+ParmString: 0
+ParmName: Brassinosteroid Decay
+ParmString: 0
+ParmName: Brassinosteroid Delay
+ParmString: 0
 ParmName: Phosphorilation
 ParmString: 
 ParmName: PINOID Basal Production Rate
