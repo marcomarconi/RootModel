@@ -88,7 +88,7 @@ public:
         addParm("Shear CK", "Compression Stiffness of the shear edge springs", "1");
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
         addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "300");
-        addParm("Minimum Wall EK", "Minimum Wall EK", "0");
+        addParm("Auxin-relaxation Minimum Wall EK", "Auxin-relaxation Minimum Wall EK", "0");
         addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
