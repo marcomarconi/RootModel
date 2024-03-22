@@ -37,4 +37,16 @@ df <- read_csv("~/trabajo/Models/RootModel/WOX5/WOX5_test.csv")
 df  %>% mutate(Divisions=Divisions/6, Type = case_when(Induction == 0 & WOX5 == 0 ~ "wox5", Induction == 1 & between(WOX5, 0.4, 0.8) ~ "WT", Induction == 1 &WOX5 > 0.8 ~ "OE")) %>% na.omit %>% 
     group_by(Type) %>% summarise(Mean=mean(Divisions), SD=sd(Divisions)/sqrt(n())*2)
 
+df <- read_csv("~/trabajo/Models/RootModel/WOX5/WOX5_test_2.csv")
+df  %>% mutate(Divisions=Divisions/6, Type = case_when(Induction == 0 & WOX5 == 0 ~ "wox5", Induction == 1 & between(WOX5, 0.4, 0.8) ~ "WT", Induction == 1 &WOX5 > 0.8 ~ "OE")) %>% na.omit %>% 
+    group_by(Type) %>% summarise(Mean=mean(Divisions), SD=sd(Divisions)/sqrt(n())*2)
+
+
+
+df <- read_csv("~/trabajo/Models/RootModel/WOX5/WOX5_test_4.csv")
+df  %>% filter(To==0) %>% mutate(Divisions=Divisions/6, Type = case_when(By == 0 & WOX5 == 0 ~ "wox5", 
+                                                       By == 1 & between(WOX5, 0.4, 0.8) ~ "WT", 
+                                                       By == 1 & WOX5 > 0.8 ~ "OE")) %>% na.omit %>% 
+    group_by(Type) %>% summarise(Mean=mean(Divisions), SD=sd(Divisions)/sqrt(n())*2)
+
 
