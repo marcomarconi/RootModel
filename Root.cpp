@@ -124,7 +124,7 @@ bool Mechanics::step() {
     double shearEK = parm("Shear EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
-    double auxinMinimumWallEK = parm("Auxin-relaxation Minimum Wall EK").toDouble();
+    double minimumWallEK = parm("Minimum Wall EK").toDouble();
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
@@ -163,13 +163,10 @@ bool Mechanics::step() {
             double face_stiffness = eD.eStiffness;
             if(eD.type == Tissue::Wall) {
                 double auxinByArea =  cD.auxin / cD.area;
-                if(auxinWallK1 > 0) {
+                if(auxinWallK1 > 0)
                     face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
                                                                         pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
                                                                         );
-                    if(face_stiffness < auxinMinimumWallEK)
-                        face_stiffness = auxinMinimumWallEK;
-                }
                 if(quasimodoK > 0)
                     face_stiffness *= exp(-quasimodoK * cD.quasimodo);
             }
@@ -177,6 +174,8 @@ bool Mechanics::step() {
         }
         stiffness /= cs.incidentCells(e, 2).size();
         eD.eStiffness = stiffness;
+        if(eD.type == Tissue::Wall && eD.eStiffness < minimumWallEK)
+            eD.eStiffness = minimumWallEK;
     }
 
     // Apply external/internal forces on vertices
@@ -1094,10 +1093,16 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         double wox5_pa = parm("WOX5 Induction by Auxin").toDouble();
         double wox5_da = parm("WOX5 Degradation by Auxin").toDouble();
         double wox5_ta = parm("WOX5 Induction to Auxin").toDouble();
+        /*
         cD.wox5 += (  wox5_p
                     + pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
                     - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2))
                     - cD.wox5 * wox5_d) * Dt;
+                    */
+        cD.wox5 += (  wox5_p
+                    + (wox5_pa / (1/pow(cD.auxin/cD.area, 2) + wox5_pa) * (-pow(wox5_da, 2) / (1/pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2)) + 1))
+                    - cD.wox5 * wox5_d) * Dt;
+        if(cD.wox5 > 10) cD.wox5 = 10;
         cD.auxin += cD.wox5 * wox5_ta * Dt;
     }
 
@@ -2072,12 +2077,23 @@ bool CellDivision::step(Mesh* mesh, Subdivide* subdiv) {
             cD.divisionAllowed = false;
             if(cD.wox5 > 10)
                 mdxInfo << "WOX5 higher than 10: " << cD.wox5 << endl;
-            double f1 = 1 - exp(-2 * cD.wox5);
-            double f2 = (1 - exp(5 * (cD.wox5 - 10)));
+            double f1 = 1 - (0.80 - 0.1) * exp(-2 * cD.wox5) - 0.05;
+            double f2 = (1 - (0.30 - 0.1) * exp(2 * (cD.wox5 - 10))) - 0.05;
             cD.divProb = -((f1 + f2) - 2);
             double r = ((double) rand() / (RAND_MAX));
+            /*
             if(r < cD.divProb*0.01)
                 cD.divisionAllowed = true;
+            */
+            if(!cD.QCwox5Flag && cD.area > cD.cellMaxArea) {
+                if(r < cD.divProb) {
+                    cD.divisionAllowed = true;
+                    cD.QCwox5Flag = true;
+                } else {
+                    cD.divisionAllowed = false;
+                    cD.QCwox5Flag = true;
+                }
+            }
         }
         // Cell division
         if(
@@ -2543,13 +2559,13 @@ bool Root::step() {
     if(parm("Snapshots Timer").toInt() > 0 && stepCount % parm("Snapshots Timer").toInt()  == 0){
         mdxInfo << "Let's take a snapshot" << endl;
         std::set<QString> signals_set = {
-                                         //"Chems: Brassinosteroids",
-                                         //"Chems: Brassinosteroid Signal",
-                                         "Chems: Quasimodo",
-                                         //"Chems: Growth Signal",
-                                         "Mechs: Edge Stiffness",
-                                         "Chems: Auxin By Area",
-                                         "Mechs: Growth Rate"
+                                        //"Chems: Brassinosteroids",
+                                        //"Chems: Brassinosteroid Signal",
+                                        //"Chems: Growth Signal",
+                                        "Mechs: Growth Rate",
+                                        "Chems: Auxin By Area",
+                                        "Chems: Division Probability",
+                                        "Chems: WOX5"
                                         };
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
@@ -3414,7 +3430,7 @@ bool PrintCellAttr::step() {
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
-                    << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " Brassinosteroids: " << cD.brassinosteroids << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
+                    << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " QCwox5Flag: " << cD.QCwox5Flag << " Brassinosteroids: " << cD.brassinosteroids << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
