@@ -124,7 +124,7 @@ bool Mechanics::step() {
     double shearEK = parm("Shear EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
-    double minimumWallEK = parm("Minimum Wall EK").toDouble();
+    double auxinMinimumWallEK = parm("Auxin-relaxation Minimum Wall EK").toDouble();
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
@@ -163,10 +163,14 @@ bool Mechanics::step() {
             double face_stiffness = eD.eStiffness;
             if(eD.type == Tissue::Wall) {
                 double auxinByArea =  cD.auxin / cD.area;
-                if(auxinWallK1 > 0)
+                if(auxinWallK1 > 0) {
                     face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
                                                                         pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
                                                                         );
+                    if(face_stiffness < auxinMinimumWallEK)
+                        face_stiffness = auxinMinimumWallEK;
+
+                }
                 if(quasimodoK > 0)
                     face_stiffness *= exp(-quasimodoK * cD.quasimodo);
             }
@@ -174,8 +178,6 @@ bool Mechanics::step() {
         }
         stiffness /= cs.incidentCells(e, 2).size();
         eD.eStiffness = stiffness;
-        if(eD.type == Tissue::Wall && eD.eStiffness < minimumWallEK)
-            eD.eStiffness = minimumWallEK;
     }
 
     // Apply external/internal forces on vertices
