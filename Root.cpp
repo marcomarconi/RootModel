@@ -2560,8 +2560,9 @@ bool Root::step() {
                                         //"Chems: Growth Signal",
                                         "Mechs: Growth Rate",
                                         "Chems: Auxin By Area",
-                                        "Chems: Division Probability",
-                                        "Chems: WOX5"
+                                        "Mechs: Edge Stiffness"
+                                        //"Chems: Division Probability",
+                                        //"Chems: WOX5"
                                         };
         for(QString signalName: signals_set) {
             mesh->updateProperties("Tissue");
