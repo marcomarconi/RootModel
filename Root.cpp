@@ -128,7 +128,6 @@ bool Mechanics::step() {
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
-    double pressureLRC = parm("Turgor Pressure Intra-LRC Multiplier").toDouble();
     double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
 
     // Cell-wise updates
@@ -138,8 +137,6 @@ bool Mechanics::step() {
                 cD.pressureMax = 1;
             else if(cD.stage == 1)
                 cD.pressureMax = pressureMax * pressureKred;
-            if(cD.centroid.y() < lrc && cD.centroid.y() > qc)
-                cD.pressureMax = pressureMax * pressureLRC;
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
@@ -1060,6 +1057,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
 
     // Find the highest LRC cell (used later for zonation, to see how far the cells are from the QC)
     // ONLY WORKS IF the root grows from top to bottom, or change the code
+    /*
     double lrc = -BIG_VAL;
     Point3d qc = Point3d(0,0,0);
     Point3d source = Point3d(0,0,0); int source_cell = 0;
@@ -1095,12 +1093,6 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         double wox5_pa = parm("WOX5 Induction by Auxin").toDouble();
         double wox5_da = parm("WOX5 Degradation by Auxin").toDouble();
         double wox5_ta = parm("WOX5 Induction to Auxin").toDouble();
-        /*
-        cD.wox5 += (  wox5_p
-                    + pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_pa, 2))
-                    - pow(cD.auxin/cD.area, 2) / (pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2))
-                    - cD.wox5 * wox5_d) * Dt;
-                    */
         cD.wox5 += (  wox5_p
                     + (wox5_pa / (1/pow(cD.auxin/cD.area, 2) + wox5_pa) * (-pow(wox5_da, 2) / (1/pow(cD.auxin/cD.area, 2) + pow(wox5_da, 2)) + 1))
                     - cD.wox5 * wox5_d) * Dt;
@@ -1140,6 +1132,8 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     cD.brassinosteroids += (brassinosteroidBasal + cD.brassinosteroidProd - brassinosteroidDecay * cD.brassinosteroids) * Dt;
     if(cD.brassinosteroids > 1)
         cD.brassinosteroids = 1;
+    */
+
 
     // Undefined are like dead cells
     if(cD.type == Tissue::Undefined) {
