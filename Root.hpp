@@ -94,7 +94,6 @@ public:
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");
         addParm("Turgor Pressure non-Meristem Reduction", "Reduction of turgor pressure in non-meristem cells", "0.8");
-        addParm("Turgor Pressure Intra-LRC Multiplier", "Turgor Pressure Intra-LRC Multiplier", "1.00");
         addParm("Turgor Pressure Rate", "Value of the rate of turgor pressure in the cells", "0.5");
         // External Forces
         addParm("External Forces", "", "");

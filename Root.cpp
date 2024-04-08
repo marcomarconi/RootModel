@@ -2436,8 +2436,6 @@ bool Root::step() {
         throw(QString("Root::run Error, please tun the model on the Tissue Complex"));
     CCStructure& cs = mesh->ccStructure("Tissue");
     CCIndexDataAttr& indexAttr = mesh->indexAttr();
-    Tissue::VertexDataAttr& vMAttr =
-        mesh->attributes().attrMap<CCIndex, Tissue::VertexData>("VertexData");
     Tissue::EdgeDataAttr& edgeAttr =
         mesh->attributes().attrMap<CCIndex, Tissue::EdgeData>("EdgeData");
     Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
