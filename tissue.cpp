@@ -666,6 +666,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& growthSignal = mesh->signalAttr<double>("Chems: Growth Signal");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
+    CCIndexDoubleAttr& cellStiffnessSignal = mesh->signalAttr<double>("Mechs: Cell Stiffness");
     CCIndexDoubleAttr& edgeStrainSignal = mesh->signalAttr<double>("Mechs: Edge Strain Rate");
     CCIndexDoubleAttr& edgeRestLengthUpdateSignal = mesh->signalAttr<double>("Mechs: Edge RestLength Update Rate");
     CCIndexDoubleAttr& growthRateSignal = mesh->signalAttr<double>("Mechs: Growth Rate");
@@ -703,6 +704,7 @@ bool Tissue::step(double Dt) {
     pressureSignal.clear();
     edgeStrainSignal.clear();
     edgeStiffnessSignal.clear();
+    cellStiffnessSignal.clear();
     edgeRestLengthUpdateSignal.clear();
     growthRateSignal.clear();
 
@@ -888,6 +890,7 @@ bool Tissue::step(double Dt) {
         brassinosteroidSignal[f] = cD.brassinosteroidSignal;
         brassinosteroidTopSignal[f] = cD.brassinosteroidTop;
         growthSignal[f] = cD.growthSignal;
+        cellStiffnessSignal[f] = cD.totalStiffness;
 
         fD.auxin = cD.auxin;
         fD.intercellularAuxin = 0;

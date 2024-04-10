@@ -381,6 +381,7 @@ public:
         std::map<int, Point3d> auxinFluxes;
         Point3d auxinFluxVector;
         Point3d auxinGradientVector;
+        double totalStiffness = 0;
 
         // visuals
         CCIndex a1_v1, a1_v2, a1_e, a2_v1, a2_v2, a2_e,
@@ -622,10 +623,13 @@ public:
             E /= i;
             G /= i;
 
-            // perimeter length
+            // perimeter length and total stiffness
             perimeter = 0;
-            for(CCIndex e : perimeterEdges)
+            for(CCIndex e : perimeterEdges) {
                 perimeter += edgeAttr[e].length;
+                totalStiffness += edgeAttr[e].eStiffness;
+            }
+            totalStiffness /= perimeterEdges.size();
 
             // cell growth rate
             if(Dt > 0)
