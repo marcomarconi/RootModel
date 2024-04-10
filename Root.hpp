@@ -200,6 +200,12 @@ public:
         addParm("Zonation", "Zonation", "");
         addParm("Elongation Zone", "Elongation Zone", "50");
         addParm("Differentiation Zone", "Differentiation Zone", "100");
+        addParm("Auxin Control",
+                "Auxin Control",
+                "False",
+                                QStringList() << "True"
+                                              << "False");
+        addParm("Auxin inhibition on growth", "Auxin inhibition on growth", "10");
         addParm("Brassinosteroids Control",
                 "Brassinosteroids Control",
                 "False",

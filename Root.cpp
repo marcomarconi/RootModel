@@ -544,11 +544,15 @@ bool MechanicalGrowth::step(double Dt) {
                 cD.stage = 2;
 
         }
-        // Brassinosteroids
+        cD.growthSignal = 1;
+        // Auxin control on wall growth
+        if(parm("Auxin Control") == "True") {
+            double auxinK = parm("Auxin inhibition on growth").toDouble();
+            cD.growthSignal *= pow(auxinK, 4) / (pow(auxinK, 4) + pow(cD.auxin/cD.area, 4)) ;
+        }
+        // Brassinosteroids control on wall growth
         if(parm("Brassinosteroids Control") == "True") {
-            cD.growthSignal = cD.brassinosteroids * cD.brassinosteroidSignal;
-        } else {
-            cD.growthSignal = 1;
+            cD.growthSignal *= cD.brassinosteroids * cD.brassinosteroidSignal;
         }
 
         // Growth rates, rest lengths....
@@ -591,7 +595,8 @@ bool MechanicalGrowth::step(double Dt) {
         }
     }
 
-    // synchonize columella initials and latep initials
+    // synchonize columella initials and latep initials// disabled?
+    /*
     bool synchronized = true;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
@@ -603,6 +608,7 @@ bool MechanicalGrowth::step(double Dt) {
                 synchronized = true;
         }
     }
+    */
 
     // disabled?
     /*
