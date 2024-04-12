@@ -2,6 +2,11 @@ library(tidyverse)
 library(TTR)
 theme_set(theme_bw())
 
+# NOTES: 
+# the original model runs without auxin, we set walls EK to 0.20, quasimoso relax the further
+# the trick is in the Turgor Pressure non-Meristem Reduction option, it looks that 0.80 gives good results. We need to reduce the elongation zone turgor pressure otherwise it overcome the meristem and we see no difference between mutants
+
+
 #for f in `ls output*_`; do grep "root length [^ ]* meristem_length [^ ]* time [0-9]*" $f  -o | sed 's/root length \([0-9\.]*\) meristem_length \([0-9\.]*\) time \([0-9]*\)/\3,\1,\2/' | uniq > $f.out; done
 
 
