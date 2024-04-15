@@ -1048,7 +1048,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     divK = parm("Division Inhibitor Half-max Promoter-induced K").toDouble();
     divN = parm("Division Inhibitor Half-max Promoter-induced n").toInt();
     divInduced = 0;
-    if(cD.divInhibitor/cD.area < 5)
+    if(cD.divInhibitor/cD.area < 5) 
         //if(cD.type == Tissue::QC || cD.type == Tissue::ColumellaInitial || cD.type == Tissue::VascularInitial || cD.type == Tissue::CEI || cD.type == Tissue::CEID || cD.type == Tissue::Columella || cD.type == Tissue::EpLrcInitial)
             divInduced = divKmax *
                                     (
