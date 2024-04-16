@@ -2576,11 +2576,11 @@ bool Root::step() {
         std::set<QString> signals_set = {
                                         //"Chems: Brassinosteroids",
                                         //"Chems: Brassinosteroid Signal",
-                                        //"Chems: Growth Signal",
+                                        "Chems: Growth Signal",
                                         "Mechs: Growth Rate",
                                         "Chems: Auxin By Area",
-                                        "Mechs: Edge Stiffness"
-                                        "Chems: Quasimodo"
+                                        "Mechs: Cell Stiffness"
+                                        //"Chems: Quasimodo"
                                         //"Chems: Division Probability",
                                         //"Chems: WOX5"
                                         };
