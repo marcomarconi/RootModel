@@ -89,7 +89,32 @@ public:
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
         addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "5");
         addParm("Auxin-relaxation Minimum Wall EK", "Auxin-relaxation Minimum Wall EK", "0");
-        addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
+        addParm("Quasimodo wall relaxation K1", "Quasimodo wall relaxation K1", "0");
+        addParm("ccvTIR wall relaxation K2", "ccvTIR wall relaxation K2", "0");
+        addParm("ccvTIR wall relaxation Tissue",
+                "ccvTIR wall relaxation Tissue",
+                "None",
+                QStringList()
+                              << "None"
+                              << "All"
+                              << "EpidermisCortex"
+                              << "Undefined"
+                              << "QC"
+                              << "Columella"
+                              << "ColumellaInitial"
+                              << "CEI"
+                              << "CEID"
+                              << "Cortex"
+                              << "Endodermis"
+                              << "VascularInitial"
+                              << "Vascular"
+                              << "Pericycle"
+                              << "EpLrcInitial"
+                              << "Epidermis"
+                              << "LRC"
+                              << "Columella"
+                              << "Substrate"
+                              << "Source");
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");
@@ -200,12 +225,37 @@ public:
         addParm("Zonation", "Zonation", "");
         addParm("Elongation Zone", "Elongation Zone", "50");
         addParm("Differentiation Zone", "Differentiation Zone", "100");
-        addParm("Auxin Control",
-                "Auxin Control",
+        addParm("Auxin Control on Growth",
+                "Auxin Control on Growth",
                 "False",
                                 QStringList() << "True"
                                               << "False");
         addParm("Auxin inhibition on growth", "Auxin inhibition on growth", "10");
+        addParm("ccvTIR inhibition on growth", "ccvTIR inhibition on growth", "0");
+        addParm("ccvTIR growth Tissue",
+                "ccvTIR growth Tissue",
+                "None",
+                QStringList()
+                              << "None"
+                              << "All"
+                              << "EpidermisCortex"
+                              << "Undefined"
+                              << "QC"
+                              << "Columella"
+                              << "ColumellaInitial"
+                              << "CEI"
+                              << "CEID"
+                              << "Cortex"
+                              << "Endodermis"
+                              << "VascularInitial"
+                              << "Vascular"
+                              << "Pericycle"
+                              << "EpLrcInitial"
+                              << "Epidermis"
+                              << "LRC"
+                              << "Columella"
+                              << "Substrate"
+                              << "Source");
         addParm("Brassinosteroids Control",
                 "Brassinosteroids Control",
                 "False",
@@ -347,7 +397,7 @@ public:
         addParm("Brassinosteroid Induced Production", "Induced Delay", "0");
         addParm("Brassinosteroid Permeability", "Brassinosteroid Permeability", "0");
         addParm("Brassinosteroid Decay", "Brassinosteroid Decay", "0");
-        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");
+        addParm("Brassinosteroid Delay", "Brassinosteroid Delay", "0");        
         addParm("Phosphorilation", "Phosphorilation", "");
         addParm("PINOID Basal Production Rate", "PINOID Basal Production Rate", "10");
         addParm("PP2A Basal Production Rate", "PP2A Basal Production Rate", "10");

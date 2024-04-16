@@ -128,7 +128,9 @@ bool Mechanics::step() {
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
-    double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
+    double quasimodoK = parm("Quasimodo wall relaxation K1").toDouble();
+    double ccvTIRK2 = parm("ccvTIR wall relaxation K2").toDouble();
+    QString ccvTIRtissueEK = parm("ccvTIR wall relaxation Tissue");
 
     // Cell-wise updates
     for(auto c : cellAttr) {
@@ -161,10 +163,13 @@ bool Mechanics::step() {
             if(eD.type == Tissue::Wall) {
                 double auxinByArea =  cD.auxin / cD.area;
                 if(auxinWallK1 > 0) {
+                    double K2 = auxinWallK2;
+                    if(QString(Tissue::ToString(cD.type)) == ccvTIRtissueEK && ccvTIRK2 > 0)
+                        K2 = ccvTIRK2;
                     face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
-                                                                        pow(auxinByArea, 8) / ( pow(auxinWallK2, 8) +  pow(auxinByArea, 8))
-                                                                        );
-                    if(face_stiffness < auxinMinimumWallEK)
+                                                                pow(auxinByArea, 8) / ( pow(K2, 8) +  pow(auxinByArea, 8))
+                                                                );
+                if(face_stiffness < auxinMinimumWallEK)
                         face_stiffness = auxinMinimumWallEK;
 
                 }
@@ -532,9 +537,16 @@ bool MechanicalGrowth::step(double Dt) {
     bool preventElengation = parm("Prevent Cell Elongation") == "True";
     double elongationZone = parm("Elongation Zone").toDouble();
     double differentiationZone = parm("Differentiation Zone").toDouble();
+    QString brassinoControl = parm("Brassinosteroids Control");
+    QString auxinControl = parm("Auxin Control on Growth");
+    double auxinK = parm("Auxin inhibition on growth").toDouble();
+    double ccvTIRK = parm("ccvTIR inhibition on growth").toDouble();
+    QString ccvTIRtissueGR = parm("ccvTIR growth Tissue");
+
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         cD.lifeTime += Dt;
+
         // Zonation, I assume that the root is at least some size
         if(norm(source - qc) > 200 && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
             double dist = cD.centroid.y() - lrc;
@@ -545,13 +557,17 @@ bool MechanicalGrowth::step(double Dt) {
 
         }
         cD.growthSignal = 1;
+
         // Auxin control on wall growth
-        if(parm("Auxin Control") == "True") {
-            double auxinK = parm("Auxin inhibition on growth").toDouble();
-            cD.growthSignal *= pow(auxinK, 4) / (pow(auxinK, 4) + pow(cD.auxin/cD.area, 4)) ;
+        if(auxinControl == "True") {
+            double K = auxinK;
+            if(QString(Tissue::ToString(cD.type)) == ccvTIRtissueGR && ccvTIRK > 0)
+                K = ccvTIRK;
+            cD.growthSignal *= pow(K, 4) / (pow(K, 4) + pow(cD.auxin/cD.area, 4)) ;
         }
+
         // Brassinosteroids control on wall growth
-        if(parm("Brassinosteroids Control") == "True") {
+        if(brassinoControl == "True") {
             cD.growthSignal *= cD.brassinosteroids * cD.brassinosteroidSignal;
         }
 
