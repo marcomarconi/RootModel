@@ -624,7 +624,7 @@ public:
             G /= i;
 
             // perimeter length and total stiffness
-            perimeter = 0;
+            perimeter = 0; totalStiffness = 0;
             for(CCIndex e : perimeterEdges) {
                 perimeter += edgeAttr[e].length;
                 totalStiffness += edgeAttr[e].eStiffness;
