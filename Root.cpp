@@ -611,8 +611,7 @@ bool MechanicalGrowth::step(double Dt) {
         }
     }
 
-    // synchonize columella initials and latep initials// disabled?
-    /*
+    // synchonize columella initials and latep initials
     bool synchronized = true;
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
@@ -624,7 +623,7 @@ bool MechanicalGrowth::step(double Dt) {
                 synchronized = true;
         }
     }
-    */
+
 
     // disabled?
     /*
