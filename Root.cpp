@@ -124,7 +124,7 @@ bool Mechanics::step() {
     double shearEK = parm("Shear EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
-    double c = parm("Auxin-relaxation Minimum Wall EK").toDouble();
+    double auxinMinimumWallEK = parm("Auxin-relaxation Minimum Wall EK").toDouble();
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
@@ -164,7 +164,7 @@ bool Mechanics::step() {
                 double auxinByArea =  cD.auxin / cD.area;
                 if(auxinWallK1 > 0) {
                     double K2 = auxinWallK2;
-                    if((QString(Tissue::ToString(cD.type)) == ccvTIRtissueEK || ccvTIRtissueEK == "All") && ccvTIRK2 > 0)
+                    if(QString(Tissue::ToString(cD.type)) == ccvTIRtissueEK && ccvTIRK2 > 0)
                         K2 = ccvTIRK2;
                     face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
                                                                 pow(auxinByArea, 8) / ( pow(K2, 8) +  pow(auxinByArea, 8))
@@ -561,7 +561,7 @@ bool MechanicalGrowth::step(double Dt) {
         // Auxin control on wall growth
         if(auxinControl == "True") {
             double K = auxinK;
-            if((QString(Tissue::ToString(cD.type)) == ccvTIRtissueGR || ccvTIRtissueGR == "All") && ccvTIRK > 0)
+            if(QString(Tissue::ToString(cD.type)) == ccvTIRtissueGR && ccvTIRK > 0)
                 K = ccvTIRK;
             cD.growthSignal *= pow(K, 4) / (pow(K, 4) + pow(cD.auxin/cD.area, 4)) ;
         }
