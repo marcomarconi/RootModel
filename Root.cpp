@@ -124,7 +124,7 @@ bool Mechanics::step() {
     double shearEK = parm("Shear EK").toDouble();
     double auxinWallK1 = parm("Auxin-induced wall relaxation K1").toDouble();
     double auxinWallK2 = parm("Auxin-induced wall relaxation K2").toDouble();
-    double auxinMinimumWallEK = parm("Auxin-relaxation Minimum Wall EK").toDouble();
+    double c = parm("Auxin-relaxation Minimum Wall EK").toDouble();
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
