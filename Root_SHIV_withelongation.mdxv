@@ -79,7 +79,7 @@ CameraZoom: -0.288
 [Clip1]
 Enable: false
 Grid: false
-Width: 179.592
+Width: 179.862
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.999796 -0.0201819 0.000138489 0 0.0201818 0.999796 0.000546789 0 -0.000
 [Clip2]
 Enable: false
 Grid: false
-Width: 179.592
+Width: 179.862
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 179.592
+Width: 179.862
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: Root_SHIV.mdxm
+MeshFile: Root_SHIV_withelongation.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
