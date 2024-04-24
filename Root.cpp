@@ -2555,7 +2555,7 @@ bool Root::step() {
             int minimum = remeshAvg / 2;
             int range = remeshAvg - minimum + 1;
             int num = rand() % range + minimum;
-            if(/*cD.area > cD.cellMaxArea &&*/ cD.remeshTime > num) {
+            if(/*cD.area > cD.cellMaxArea &&*/ cD.remeshTime > num && cD.stage == 1) { //// I am only considering elongating cells
                 mdxInfo << "Remeshing Cell: " << cD.label << endl;
                 remeshCellProcess->step(cD.label);
                 cD.pressure = 0;
