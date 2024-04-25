@@ -89,32 +89,24 @@ public:
         addParm("Auxin-induced wall relaxation K1", "Auxin-induced wall relaxation K1", "0.05");
         addParm("Auxin-induced wall relaxation K2", "Auxin-induced wall relaxation K2", "5");
         addParm("Auxin-relaxation Minimum Wall EK", "Auxin-relaxation Minimum Wall EK", "0");
-        addParm("Quasimodo wall relaxation K1", "Quasimodo wall relaxation K1", "0");
+        addParm("Quasimodo wall relaxation K", "Quasimodo wall relaxation K", "0");
         addParm("ccvTIR wall relaxation K2", "ccvTIR wall relaxation K2", "0");
         addParm("ccvTIR wall relaxation Tissue",
                 "ccvTIR wall relaxation Tissue",
                 "None",
                 QStringList()
                               << "None"
-                              << "All"
-                              << "EpidermisCortex"
-                              << "Undefined"
-                              << "QC"
-                              << "Columella"
-                              << "ColumellaInitial"
-                              << "CEI"
-                              << "CEID"
-                              << "Cortex"
-                              << "Endodermis"
-                              << "VascularInitial"
-                              << "Vascular"
-                              << "Pericycle"
-                              << "EpLrcInitial"
-                              << "Epidermis"
-                              << "LRC"
-                              << "Columella"
-                              << "Substrate"
-                              << "Source");
+                              << "TIR1" // Everywhere
+                              << "KNOLLE" // Dividing cells
+                              << "SMB" // LRC
+                              << "GL2" // Meristem epidermis
+                              << "COBL9" // EZ epidermis
+                              << "PEP" // Cortex
+                              << "NGR2" // Endodermis
+                              << "SHR" // Vascular
+                              << "GLV5" // Columella
+                              << "PIN2" // LRC-epidermis-cortex
+                              );
         // Hydrostatics
         addParm("Hydrostatic Parameters", "", "");
         addParm("Turgor Pressure", "Value of the turgor pressure in the cells", "2");
@@ -126,6 +118,7 @@ public:
         addParm("Gravity Direction", "Gravity Direction", "0,-1,0");
         addParm("Friction", "Friction", "0");
         // Misc
+        addParm("Root Process", "Name of the process for the Root", "Model/Root/01 Root");
         addParm("Tissue Process", "Name of Tissue Process", "Model/Root/03 Cell Tissue");
         addParm("PBD Engine",
                 "Name of PBD Engine",
@@ -158,6 +151,7 @@ private:
         const CCStructure& cs, const CCIndexDataAttr& indexAttr, CCIndex e, CCIndex v, int label);
 
     CCIndexDataAttr* indexAttr = 0;
+    Process* rootProcess = 0;
     Tissue* tissueProcess = 0;
     Point3d gravity;
     double convergeThresh = 1e-6;
@@ -204,8 +198,7 @@ public:
         addParm("Strain Tensor",
                 "Strain Tensor",
                 "Green Strain Tensor",
-                QStringList() << "Green Strain Tensor"
-                              << "Shape Strain Tensor");
+                QStringList() << "Green Strain Tensor");
         addParm("Walls Growth", "Walls Growth", "");
         addParm("Strain Threshold for Growth", "Strain Threshold for Growth", "0.01");
         addParm("Walls Growth Rate", "Walls Growth Rate", "10");

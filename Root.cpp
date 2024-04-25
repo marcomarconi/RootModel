@@ -9,6 +9,8 @@ bool Mechanics::initialize(QWidget* parent) {
     if(!mesh)
         throw(QString("Mechanics::step No current mesh"));
 
+    if(!getProcess(parm("Root Process"), rootProcess))
+            throw(QString("Root::initialize Cannot make root process"));
     if(!getProcess(parm("PBD Engine"), PBDProcess))
         throw(QString("Mechanics::initialize Cannot make PBD Engine") +
               parm("Mechanical Solver Process"));
@@ -128,13 +130,14 @@ bool Mechanics::step() {
     double pressureMax = parm("Turgor Pressure").toDouble();
     double pressureK = parm("Turgor Pressure Rate").toDouble();
     double pressureKred = parm("Turgor Pressure non-Meristem Reduction").toDouble();
-    double quasimodoK = parm("Quasimodo wall relaxation K1").toDouble();
+    double quasimodoK = parm("Quasimodo wall relaxation K").toDouble();
     double ccvTIRK2 = parm("ccvTIR wall relaxation K2").toDouble();
     QString ccvTIRtissueEK = parm("ccvTIR wall relaxation Tissue");
 
     // Cell-wise updates
     for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
+            // Turgor Pressure
             if(cD.stage == 2)
                 cD.pressureMax = 1;
             else if(cD.stage == 1)
@@ -142,7 +145,43 @@ bool Mechanics::step() {
             cD.pressure += pressureK * Dt;
             if(cD.pressure > cD.pressureMax)
                 cD.pressure = cD.pressureMax;
+            // TIR1 tissue
+            {
+                cD.is_ccvTIR1tissue = false;
+                if(ccvTIRtissueEK == "TIR1") {
+                    cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "KNOLLE"){
+                    if(cD.lastDivision < 2)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "SMB"){
+                    if(cD.type == Tissue::LRC)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "GL2"){
+                    if(cD.type == Tissue::Epidermis && cD.stage == 0)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "COBL9"){
+                    if(cD.type == Tissue::Epidermis && cD.stage == 1)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "PEP"){
+                    if(cD.type == Tissue::Cortex)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "NGR2"){
+                    if(cD.type == Tissue::Endodermis)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "SHR"){
+                    if(cD.type == Tissue::Vascular)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "GLV5"){
+                    if(cD.type == Tissue::Columella || cD.type == Tissue::ColumellaInitial)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueEK == "PIN2"){
+                    if(cD.type == Tissue::Cortex || cD.type == Tissue::LRC || cD.type == Tissue::Epidermis)
+                        cD.is_ccvTIR1tissue = true;
+                }
+            }
+
     }
+
     // Edge-wise updates
     for(CCIndex e: cs.edges()) {
         Tissue::EdgeData& eD = edgeAttr[e];
@@ -164,7 +203,7 @@ bool Mechanics::step() {
                 double auxinByArea =  cD.auxin / cD.area;
                 if(auxinWallK1 > 0) {
                     double K2 = auxinWallK2;
-                    if(QString(Tissue::ToString(cD.type)) == ccvTIRtissueEK && ccvTIRK2 > 0)
+                    if(cD.is_ccvTIR1tissue && ccvTIRK2 > 0)
                         K2 = ccvTIRK2;
                     face_stiffness *=  ( pow(auxinWallK1, 4) / ( pow(auxinWallK1, 4) +  pow(auxinByArea, 4)) +
                                                                 pow(auxinByArea, 8) / ( pow(K2, 8) +  pow(auxinByArea, 8))
@@ -209,6 +248,7 @@ bool Mechanics::step() {
     if(growthRatesVector.size() > 30)
         growthRatesVector.erase(growthRatesVector.begin());
 
+    // Debugs
     if(++debug_step > parm("Debug Steps").toInt()) {
         double rootGR = 0;
         for(double gr : growthRatesVector)
@@ -236,7 +276,7 @@ Point3d Mechanics::calcForcesFace(CCIndex f,
     Tissue::CellData& cD, Tissue::FaceData& fD, Tissue::EdgeData& eD, Tissue::VertexData& vD ) {
     Point3d dx;
 
-    // Hydrostatics
+    // Hydrostatics (replaced by PBD)
     /*
     if(eD.type == Tissue::Wall) {
         eD.pressureForce = cD.pressure * eD.outwardNormal[f] * eD.length;
@@ -431,13 +471,7 @@ bool MechanicalGrowth::step(double Dt) {
                     a1_inc = Rotate(Point3d(cD.gMax,0,0), cD.gAngle);
                 if(cD.gMin > threshold)
                     a2_inc = Rotate(Point3d(cD.gMin,0,0), cD.gAngle+(M_PI/2));
-            } else if (parm("Strain Tensor") == "Shape Strain Tensor") {
-                if(cD.sMax > threshold)
-                    a1_inc = Rotate(Point3d(cD.sMax,0,0), cD.sAngle);
-                if(cD.sMin > threshold)
-                    a2_inc = Rotate(Point3d(cD.sMin,0,0), cD.sAngle+(M_PI/2));
-            } else
-                 throw(QString("Wrong Tensor"));
+            }
         // Cell Axis method
         } else if(parm("Polarity Method") == "Cell Axis") {
             if(cD.mfRORate > 0) {
@@ -487,12 +521,12 @@ bool MechanicalGrowth::step(double Dt) {
             cD.a1 = cD.a2;
             cD.a2 = tmp;
         }
-
+        // Avoid zeros?
         if(norm(cD.a1) == 0)
             cD.a1[1] = EPS;
         if(norm(cD.a2) == 0)
             cD.a2[0] = EPS;
-
+        // For visuals on faces
         for(CCIndex f : (*cD.cellFaces)) {
             Tissue::FaceData& fD = faceAttr[f];
             fD.a1 = cD.a1;
@@ -542,11 +576,9 @@ bool MechanicalGrowth::step(double Dt) {
     double auxinK = parm("Auxin inhibition on growth").toDouble();
     double ccvTIRK = parm("ccvTIR inhibition on growth").toDouble();
     QString ccvTIRtissueGR = parm("ccvTIR growth Tissue");
-
     for(auto c : cellAttr) {
         Tissue::CellData& cD = cellAttr[c.first];
         cD.lifeTime += Dt;
-
         // Zonation, I assume that the root is at least some size
         if(norm(source - qc) > 200 && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
             double dist = cD.centroid.y() - lrc;
@@ -570,6 +602,7 @@ bool MechanicalGrowth::step(double Dt) {
         if(brassinoControl == "True") {
             cD.growthSignal *= cD.brassinosteroids * cD.brassinosteroidSignal;
         }
+
 
         // Growth rates, rest lengths....
         // Disable growth update if this variable is zero, for debugging mostly
@@ -1152,7 +1185,6 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     cD.brassinosteroids += (brassinosteroidBasal + cD.brassinosteroidProd - brassinosteroidDecay * cD.brassinosteroids) * Dt;
     if(cD.brassinosteroids > 1)
         cD.brassinosteroids = 1;
-
 
 
     // Undefined are like dead cells
@@ -3446,11 +3478,12 @@ bool PrintCellAttr::step() {
                     << " auxin: " << cD.auxin << " " << " auxin by area: " << cD.auxin/cD.area << " "
                     << " Aux1: " << cD.Aux1 << " "
                     << " Pin1: " << cD.Pin1 << " " << " Pin1 by area: " << cD.Pin1/cD.area << " "
-                    << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " QCwox5Flag: " << cD.QCwox5Flag << " Brassinosteroids: " << cD.brassinosteroids << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Auxin Signal: " << cD.auxinSignal << " " << " Growth Signal: " << cD.growthSignal << " "
+                    << " Quasimodo: " << cD.quasimodo << " " << " WOX5: " << cD.wox5 << " " << " QCwox5Flag: " << cD.QCwox5Flag << " Brassinosteroids: " << cD.brassinosteroids << " Brassinosteroid Signal: " << cD.brassinosteroidSignal << " " << " Growth Signal: " << cD.growthSignal << " "
                     << " Division Promoter: " << cD.divPromoter/cD.area << " " << " Division Inhibitor: " << cD.divInhibitor/cD.area << " "<< " Division Probability: " << cD.divProb << " "
                     << " PINOID: " << cD.PINOID << " "   << " PP2A: " << cD.PP2A << " "
                     << " pinProdRate: " << cD.pinProdRate << " " << " aux1ProdRate: " << cD.aux1ProdRate << " "<< " pinInducedRate: " << cD.pinInducedRate << " " << " aux1InducedRate: " << cD.aux1InducedRate << " "<< " aux1MaxEdge: " << cD.aux1MaxEdge << " "
                     << " auxinProdRate: " << cD.auxinProdRate << " " << " auxinFluxVector: " << cD.auxinFluxVector
+                    << " is_ccvTIR1tissue: " << cD.is_ccvTIR1tissue
                     << endl;
             for(auto p : cD.auxinFluxes)
                 mdxInfo << " auxinFlux with " << p.first << " : " << p.second << " ";

@@ -663,6 +663,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& brassinosteroidsSignal = mesh->signalAttr<double>("Chems: Brassinosteroids");
     CCIndexDoubleAttr& brassinosteroidSignal = mesh->signalAttr<double>("Chems: Brassinosteroid Signal");
     CCIndexDoubleAttr& brassinosteroidTopSignal = mesh->signalAttr<double>("Chems: Brassinosteroid Top");
+    CCIndexDoubleAttr& ccvTIR1Signal = mesh->signalAttr<double>("Chems: ccvTIR1");
     CCIndexDoubleAttr& growthSignal = mesh->signalAttr<double>("Chems: Growth Signal");
     CCIndexDoubleAttr& pressureSignal = mesh->signalAttr<double>("Mechs: Turgor Pressure");
     CCIndexDoubleAttr& edgeStiffnessSignal = mesh->signalAttr<double>("Mechs: Edge Stiffness");
@@ -701,6 +702,7 @@ bool Tissue::step(double Dt) {
     PP2ACytSignal.clear();
     PINOIDMemSignal.clear();
     PP2AMemSignal.clear();
+    ccvTIR1Signal.clear();
     pressureSignal.clear();
     edgeStrainSignal.clear();
     edgeStiffnessSignal.clear();
@@ -889,6 +891,7 @@ bool Tissue::step(double Dt) {
         brassinosteroidsSignal[f] = cD.brassinosteroids;
         brassinosteroidSignal[f] = cD.brassinosteroidSignal;
         brassinosteroidTopSignal[f] = cD.brassinosteroidTop;
+        ccvTIR1Signal[f] = cD.is_ccvTIR1tissue;
         growthSignal[f] = cD.growthSignal;
         cellStiffnessSignal[f] = cD.totalStiffness;
 
@@ -1108,7 +1111,6 @@ void Tissue::CellData::division(const CCStructure &cs, const CCIndexDataAttr& in
     cD1.brassinosteroidTarget = false;
     cD1.brassinosteroidSignal = 0;
     cD1.brassinosteroidProd = 0;
-    cD1.auxinSignal = 0;
 
     cD2.tissue = tissue;
     cD2.type = type2;
@@ -1147,7 +1149,6 @@ void Tissue::CellData::division(const CCStructure &cs, const CCIndexDataAttr& in
     cD2.brassinosteroidTarget = false;
     cD2.brassinosteroidSignal = 0;
     cD2.brassinosteroidProd = 0;
-    cD2.auxinSignal = 0;
 
     std::vector<CCIndex> edges;
     edges.insert(edges.end(), cD1.perimeterEdges.begin(), cD1.perimeterEdges.end());

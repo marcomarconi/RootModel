@@ -338,6 +338,7 @@ public:
         Point3d restCm;
         Matrix3d invRestMat;
         std::vector<Point3d> restX0;
+        double growthSignal = 1;
         double auxin = 0, prevAuxin = 0;
         double Pin1 = 0;
         double Aux1 = 0;
@@ -360,8 +361,7 @@ public:
         double brassinosteroidSignal = 1;
         int brassinosteroidTop = -1;
         int brassinosteroidMother = 0;
-        double auxinSignal = 1;
-        double growthSignal = 1;
+        bool is_ccvTIR1tissue = false;
 
         // other dinamically loaded attribute
         bool selected = false;
@@ -375,7 +375,7 @@ public:
         double growthRate = 0, axisMin_growthRate = 0, axisMax_growthRate = 0;
         std::vector<double> growthRates, axisMin_grs, axisMax_grs;
         Matrix3d G, E, U = Matrix3d().identity();
-        double gMax = 0, gMin = 0, gAngle = 0, sMax = 0, sMin = 0, sAngle = 0;
+        double gMax = 0, gMin = 0, gAngle = 0;
         bool divisionAllowed = true;
         double divProb = 0;
         std::map<int, Point3d> auxinFluxes;
