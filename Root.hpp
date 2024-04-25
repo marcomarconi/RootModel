@@ -310,7 +310,7 @@ public:
         addParm("Pin1-auxin export rate", "Pin1-auxin export rate", "1.4");
         addParm("Pin Lateralization", "Pin spillover to adjecient membranes", "0");
         addParm("Pin1 Sensitivity Suppression by Auxin Max Cell",
-                "Pin1 Sensitivity Suppression by Auxin Max Cell (auxin per nm squared)", "True", QStringList() << "True" << "False" ); //// be careful
+                "Pin1 Sensitivity Suppression by Auxin Max Cell (auxin per nm squared)", "False", QStringList() << "True" << "False" ); //// be careful
         addParm("Simulate PIN4", "Simulate PIN4", "False", QStringList() << "True" << "False" );
         addParm("Columella Auto-Efflux", "Columella Auto-Efflux", "True", QStringList() << "True" << "False" );
         addParm("Pin1 Sensitivity MF K", "Pin1 Sensitivity MF K", "0");
