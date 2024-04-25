@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999183 0.00186009 0.0403792 0 0.000388284 0.998453 -0.0556024 0 -0.0404201 0.0555726 0.997636 0 -10.1596 -87.4682 -1156.48 1
+CameraFrame: 0.999992 0.00236823 0.00309782 0 -0.00237138 0.999997 0.00101199 0 -0.00309541 -0.00101933 0.999995 0 -18.458 -203.03 -3180.24 1
 SceneRadius: 500
-CameraZoom: 0.096
+CameraZoom: -1.152
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 378.222
+Width: 5.19648
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 378.222
+Width: 5.19648
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 378.222
+Width: 5.19648
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,14 +136,14 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -3.70629 214.246 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -4.56896 204.734 0 1
 
 
 [Stack2]
@@ -1441,7 +1441,7 @@ ParmString: True
 ParmName: Zonation
 ParmString: 
 ParmName: Elongation Zone
-ParmString: 50
+ParmString: 30
 ParmName: Differentiation Zone
 ParmString: 1000
 ParmName: Auxin Control on Growth
@@ -1665,7 +1665,7 @@ NumParms: 20
 ParmName: Print Stats
 ParmString: True
 ParmName: Substrate Fixed
-ParmString: True
+ParmString: False
 ParmName: Velocity Update
 ParmString: First Order
 ParmName: Max Velocity
@@ -1755,7 +1755,7 @@ ParmString: -1
 ParmName: QC Shear CK
 ParmString: -1
 ParmName: QC Turgor Pressure
-ParmString: 0.9
+ParmString: 1
 ParmName: QC Wall Max GR
 ParmString: -1
 ParmName: QC Max area
@@ -1791,11 +1791,11 @@ ParmString: -1
 ParmName: Columella Turgor Pressure
 ParmString: 1.1
 ParmName: Columella MF reorientation rate
-ParmString: 1.25
-ParmName: Columella Max area
 ParmString: -1
-ParmName: VascularInitial Wall EK
+ParmName: Columella Max area
 ParmString: 5000
+ParmName: VascularInitial Wall EK
+ParmString: -1
 ParmName: VascularInitial Wall CK
 ParmString: -1
 ParmName: VascularInitial Shear EK
@@ -1809,9 +1809,9 @@ ParmString: -1
 ParmName: VascularInitial MF reorientation rate
 ParmString: -1
 ParmName: VascularInitial Max area
-ParmString: -1
-ParmName: Vascular Wall EK
 ParmString: 70
+ParmName: Vascular Wall EK
+ParmString: -1
 ParmName: Vascular Wall CK
 ParmString: -1
 ParmName: Vascular Shear EK
@@ -1825,9 +1825,9 @@ ParmString: -1
 ParmName: Vascular MF reorientation rate
 ParmString: -1
 ParmName: Vascular Max area
-ParmString: -1
-ParmName: Pericycle Wall EK
 ParmString: 100
+ParmName: Pericycle Wall EK
+ParmString: -1
 ParmName: Pericycle Wall CK
 ParmString: -1
 ParmName: Pericycle Shear EK
@@ -1841,9 +1841,9 @@ ParmString: -1
 ParmName: Pericycle MF reorientation rate
 ParmString: -1
 ParmName: Pericycle Max area
-ParmString: -1
-ParmName: Cortex Wall EK
 ParmString: 60
+ParmName: Cortex Wall EK
+ParmString: -1
 ParmName: Cortex Wall CK
 ParmString: -1
 ParmName: Cortex Shear EK
@@ -1855,9 +1855,9 @@ ParmString: -1
 ParmName: Cortex Wall Max GR
 ParmString: -1
 ParmName: Cortex Max area
-ParmString: -1
-ParmName: Cortex MF reorientation rate
 ParmString: 70
+ParmName: Cortex MF reorientation rate
+ParmString: -1
 ParmName: Endodermis Wall EK
 ParmString: -1
 ParmName: Endodermis Wall CK
@@ -1871,9 +1871,9 @@ ParmString: -1
 ParmName: Endodermis Wall Max GR
 ParmString: -1
 ParmName: Endodermis Max area
-ParmString: -1
-ParmName: Endodermis MF reorientation rate
 ParmString: 70
+ParmName: Endodermis MF reorientation rate
+ParmString: -1
 ParmName: Epidermis Wall EK
 ParmString: -1
 ParmName: Epidermis Wall CK
@@ -1887,9 +1887,9 @@ ParmString: -1
 ParmName: Epidermis Wall Max GR
 ParmString: -1
 ParmName: Epidermis Max area
-ParmString: -1
-ParmName: Epidermis MF reorientation rate
 ParmString: 80
+ParmName: Epidermis MF reorientation rate
+ParmString: -1
 ParmName: CEI Wall EK
 ParmString: -1
 ParmName: CEI Wall CK
@@ -1903,9 +1903,9 @@ ParmString: -1
 ParmName: CEI Wall Max GR
 ParmString: -1
 ParmName: CEI Max area
-ParmString: -1
-ParmName: CEI MF reorientation rate
 ParmString: 70
+ParmName: CEI MF reorientation rate
+ParmString: -1
 ParmName: CEID Wall EK
 ParmString: -1
 ParmName: CEID Wall CK
@@ -1919,9 +1919,9 @@ ParmString: -1
 ParmName: CEID Wall Max GR
 ParmString: -1
 ParmName: CEID Max area
-ParmString: -1
-ParmName: CEID MF reorientation rate
 ParmString: 70
+ParmName: CEID MF reorientation rate
+ParmString: -1
 ParmName: EpLrcInitial Wall EK
 ParmString: -1
 ParmName: EpLrcInitial Wall CK
@@ -1935,9 +1935,9 @@ ParmString: -1
 ParmName: EpLrcInitial Wall Max GR
 ParmString: -1
 ParmName: EpLrcInitial Max area
-ParmString: -1
-ParmName: EpLrcInitial MF reorientation rate
 ParmString: 60
+ParmName: EpLrcInitial MF reorientation rate
+ParmString: -1
 ParmName: LRC Wall EK
 ParmString: -1
 ParmName: LRC Wall CK
@@ -1951,11 +1951,11 @@ ParmString: -1
 ParmName: LRC Wall Max GR
 ParmString: -1
 ParmName: LRC Max area
-ParmString: -1
-ParmName: LRC MF reorientation rate
 ParmString: 70
-ParmName: Substrate Wall EK
+ParmName: LRC MF reorientation rate
 ParmString: -1
+ParmName: Substrate Wall EK
+ParmString: 1
 ParmName: Substrate Wall CK
 ParmString: 1
 ParmName: Substrate Shear EK
@@ -1963,15 +1963,15 @@ ParmString: 1
 ParmName: Substrate Shear CK
 ParmString: 1
 ParmName: Substrate Turgor Pressure
-ParmString: 1
+ParmString: 0
 ParmName: Substrate Wall Max GR
-ParmString: 0
-ParmName: Substrate MF reorientation rate
 ParmString: -1
-ParmName: Substrate Max area
+ParmName: Substrate MF reorientation rate
 ParmString: 0
-ParmName: Source Wall EK
+ParmName: Substrate Max area
 ParmString: 1000
+ParmName: Source Wall EK
+ParmString: 1
 ParmName: Source Wall CK
 ParmString: 1
 ParmName: Source Shear EK
@@ -1979,35 +1979,35 @@ ParmString: 1
 ParmName: Source Shear CK
 ParmString: 1
 ParmName: Source Turgor Pressure
-ParmString: 1
+ParmString: -1
 ParmName: Source Wall Max GR
 ParmString: -1
 ParmName: Source MF reorientation rate
-ParmString: -1
-ParmName: Source Max area
 ParmString: 0
+ParmName: Source Max area
+ParmString: 1000
 ProcessName: Model/Root/24 PrintVertexAttr
 NumParms: 0
 ProcessName: Model/Root/25 Highlight Cell
 NumParms: 1
 ParmName: Face Label
-ParmString: 1000
+ParmString: 126
 ProcessName: Model/Root/31 Delete Cell
 NumParms: 1
 ParmName: Tissue Process
-ParmString: 126
+ParmString: Model/Root/03 Cell Tissue
 ProcessName: Model/Root/4 Execute Test
 NumParms: 17
 ParmName: QC Ablation
-ParmString: Model/Root/03 Cell Tissue
+ParmString: 0
 ParmName: Source Removal
 ParmString: 0
 ParmName: Alternate Source Removal
 ParmString: 0
 ParmName: Auxin Overflow
-ParmString: 0
-ParmName: TIP Removal Time
 ParmString: 0,0,0,0
+ParmName: TIP Removal Time
+ParmString: 0
 ParmName: LRC Removal Time
 ParmString: 0
 ParmName: PIN2 Knockdown Time
@@ -2023,25 +2023,25 @@ ParmString: 0
 ParmName: Endodermal Cells Delete
 ParmString: 0
 ParmName: Tissue Process
-ParmString: 0
-ParmName: Delete Cell Process
 ParmString: Model/Root/03 Cell Tissue
-ParmName: Mechanical Growth Process
+ParmName: Delete Cell Process
 ParmString: Model/Root/31 Delete Cell
-ParmName: Remesh Process
+ParmName: Mechanical Growth Process
 ParmString: Model/Root/052 Mechanical Growth
-ParmName: Delete Selection Process
+ParmName: Remesh Process
 ParmString: Model/Root/02 Remesh
+ParmName: Delete Selection Process
+ParmString: Mesh/System/Delete Selection
 ProcessName: Model/Root/Add Face
 NumParms: 2
 ParmName: Orientation
-ParmString: Mesh/System/Delete Selection
-ParmName: Label
 ParmString: Clock-wise
+ParmName: Label
+ParmString: 0
 ProcessName: Model/Root/ClearCells
 NumParms: 1
 ParmName: AddFace
-ParmString: 0
+ParmString: Model/Root/Add Face
 ProcessName: Model/Root/Create Edge
 NumParms: 0
 ProcessName: Model/Root/Delete Edges
@@ -2049,45 +2049,45 @@ NumParms: 0
 ProcessName: Model/Root/Remesh Cell
 NumParms: 5
 ParmName: Root Process
-ParmString: Model/Root/Add Face
-ParmName: Remesh
 ParmString: Model/Root/01 Root
-ParmName: Tissue Process
+ParmName: Remesh
 ParmString: Model/Root/02 Remesh
-ParmName: Triangulate Faces Process
+ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
-ParmName: ClearCells Process
+ParmName: Triangulate Faces Process
 ParmString: Model/Root/Triangulate Faces
+ParmName: ClearCells Process
+ParmString: Model/Root/ClearCells
 ProcessName: Model/Root/Reverse Cell
 NumParms: 0
 ProcessName: Model/Root/Triangulate Faces
 NumParms: 2
 ParmName: Max Area
-ParmString: Model/Root/ClearCells
-ParmName: Destructive
 ParmString: 100
+ParmName: Destructive
+ParmString: False
 ProcessName: Stack/Analyses/Compute Volumes
 NumParms: 1
 ParmName: File Name
-ParmString: False
+ParmString: 
 ProcessName: Stack/CImage/Gaussian Blur
 NumParms: 1
 ParmName: Radius
-ParmString: 
+ParmString: 5
 ProcessName: Stack/CImage/Laplace Transform
 NumParms: 0
 ProcessName: Stack/CImage/Median Blur
 NumParms: 1
 ParmName: Radius
-ParmString: 5
+ParmString: 3
 ProcessName: Stack/Canvas/AutoTrim
 NumParms: 1
 ParmName: Threshold
-ParmString: 3
+ParmString: 0
 ProcessName: Stack/Canvas/Change Voxel Size
 NumParms: 3
 ParmName: X
-ParmString: 0
+ParmString: 1.0
 ParmName: Y
 ParmString: 1.0
 ParmName: Z
@@ -2095,15 +2095,15 @@ ParmString: 1.0
 ProcessName: Stack/Canvas/Clip Stack
 NumParms: 1
 ParmName: Trim Canvas
-ParmString: 1.0
+ParmString: No
 ProcessName: Stack/Canvas/Resize Canvas
 NumParms: 5
 ParmName: Relative
-ParmString: No
+ParmString: Yes
 ParmName: Center
 ParmString: Yes
 ParmName: X
-ParmString: Yes
+ParmString: 0
 ParmName: Y
 ParmString: 0
 ParmName: Z
@@ -2111,17 +2111,17 @@ ParmString: 0
 ProcessName: Stack/Canvas/Reverse Axes
 NumParms: 3
 ParmName: X
-ParmString: 0
+ParmString: No
 ParmName: Y
 ParmString: No
 ParmName: Z
-ParmString: No
+ParmString: Yes
 ProcessName: Stack/Canvas/Scale Stack
 NumParms: 4
 ParmName: Percent
 ParmString: Yes
 ParmName: X
-ParmString: Yes
+ParmString: 0.0
 ParmName: Y
 ParmString: 0.0
 ParmName: Z
@@ -2129,9 +2129,9 @@ ParmString: 0.0
 ProcessName: Stack/Canvas/Shift Stack
 NumParms: 4
 ParmName: Origin
-ParmString: 0.0
-ParmName: X
 ParmString: No
+ParmName: X
+ParmString: 0
 ParmName: Y
 ParmString: 0
 ParmName: Z
@@ -2139,7 +2139,7 @@ ParmString: 0
 ProcessName: Stack/Filters/Apply Separable Kernel
 NumParms: 3
 ParmName: X Kernel
-ParmString: 0
+ParmString: -.1 1.2 -.11
 ParmName: Y Kernel
 ParmString: -.1 1.2 -.11
 ParmName: Z Kernel
@@ -2147,13 +2147,13 @@ ParmString: -.1 1.2 -.11
 ProcessName: Stack/Filters/Apply Transfer Function
 NumParms: 4
 ParmName: Red
-ParmString: -.1 1.2 -.11
+ParmString: 0
 ParmName: Green
 ParmString: 0
 ParmName: Blue
 ParmString: 0
 ParmName: Alpha
-ParmString: 0
+ParmString: 1
 ProcessName: Stack/Filters/Autoscale Stack
 NumParms: 0
 ProcessName: Stack/Filters/Average
@@ -2169,25 +2169,25 @@ ParmString: 1
 ProcessName: Stack/Filters/Binarize
 NumParms: 1
 ParmName: Threshold
-ParmString: 1
+ParmString: 5000
 ProcessName: Stack/Filters/Brighten Darken
 NumParms: 1
 ParmName: Amount
-ParmString: 5000
+ParmString: 16.0
 ProcessName: Stack/Filters/Color Gradient
 NumParms: 1
 ParmName: Z Divisor
-ParmString: 16.0
+ParmString: 5.0
 ProcessName: Stack/Filters/Diff Gaussians
 NumParms: 6
 ParmName: X1 Sigma
-ParmString: 5.0
+ParmString: 0.3
 ParmName: Y1 Sigma
 ParmString: 0.3
 ParmName: Z1 Sigma
 ParmString: 0.3
 ParmName: X2 Sigma
-ParmString: 0.3
+ParmString: 10.0
 ParmName: Y2 Sigma
 ParmString: 10.0
 ParmName: Z2 Sigma
@@ -2195,7 +2195,7 @@ ParmString: 10.0
 ProcessName: Stack/Filters/Gaussian Blur Stack
 NumParms: 3
 ParmName: X Sigma
-ParmString: 10.0
+ParmString: 0.3
 ParmName: Y Sigma
 ParmString: 0.3
 ParmName: Z Sigma
@@ -2205,7 +2205,7 @@ NumParms: 0
 ProcessName: Stack/Filters/Median
 NumParms: 3
 ParmName: X Radius
-ParmString: 0.3
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
@@ -2221,51 +2221,51 @@ ParmString: 1
 ProcessName: Stack/Filters/Normalize Stack
 NumParms: 8
 ParmName: X Sigma
-ParmString: 1
+ParmString: 5.0
 ParmName: Y Sigma
 ParmString: 5.0
 ParmName: Z Sigma
 ParmString: 5.0
 ParmName: X Radius
-ParmString: 5.0
+ParmString: 0.5
 ParmName: Y Radius
 ParmString: 0.5
 ParmName: Z Radius
 ParmString: 0.5
 ParmName: Threshold
-ParmString: 0.5
-ParmName: Blur factor
 ParmString: 10000
+ParmName: Blur factor
+ParmString: 0.7
 ProcessName: Stack/Filters/Sharpen Stack
 NumParms: 5
 ParmName: X Sigma
-ParmString: 0.7
+ParmString: 0.2
 ParmName: Y Sigma
 ParmString: 0.2
 ParmName: Z Sigma
-ParmString: 0.2
+ParmString: 1.0
 ParmName: Amount
 ParmString: 1.0
 ParmName: Passes
-ParmString: 1.0
+ParmString: 1
 ProcessName: Stack/Filters/Swap Bytes
 NumParms: 0
 ProcessName: Stack/Filters/Top-hat
 NumParms: 4
 ParmName: X Radius
-ParmString: 1
+ParmString: 10
 ParmName: Y Radius
 ParmString: 10
 ParmName: Z Radius
 ParmString: 10
 ParmName: Round Nhbd
-ParmString: 10
+ParmString: No
 ProcessName: Stack/Filters/Trim high-low values
 NumParms: 2
 ParmName: Low Threshold
-ParmString: No
-ParmName: High Threshold
 ParmString: 1000
+ParmName: High Threshold
+ParmString: 0
 ProcessName: Stack/ITK/Filters/ITK Curvature Anisotropic Diffusion Image Filter
 NumParms: 3
 ParmName: Time Step
@@ -2337,21 +2337,21 @@ ParmString:
 ProcessName: Stack/Mesh Interaction/Annihilate
 NumParms: 4
 ParmName: Fill
-ParmString: 0
-ParmName: Fill Val
 ParmString: No
-ParmName: Min Dist
+ParmName: Fill Val
 ParmString: 30000
-ParmName: Max Dist
+ParmName: Min Dist
 ParmString: 1.0
+ParmName: Max Dist
+ParmString: 5.0
 ProcessName: Stack/Mesh Interaction/Fill Stack from 3D Mesh
 NumParms: 0
 ProcessName: Stack/Mesh Interaction/Fill Stack from Mesh
 NumParms: 2
 ParmName: Fill Value
-ParmString: 5.0
-ParmName: Label
 ParmString: 32767
+ParmName: Label
+ParmString: -1
 ProcessName: Stack/Mesh Interaction/Trim Stack
 NumParms: 1
 ParmName: Label
@@ -2359,57 +2359,57 @@ ParmString: -1
 ProcessName: Stack/Morphology/Apply Mask to Labels
 NumParms: 2
 ParmName: Invert
-ParmString: -1
-ParmName: Threshold
 ParmString: No
+ParmName: Threshold
+ParmString: 1
 ProcessName: Stack/Morphology/Apply Mask to Stack
 NumParms: 2
 ParmName: Mode
-ParmString: 1
-ParmName: Threshold
 ParmString: Normal
+ParmName: Threshold
+ParmString: 0
 ProcessName: Stack/Morphology/Close by Label
 NumParms: 4
 ParmName: X Radius
-ParmString: 0
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Round Nhbd
-ParmString: 1
+ParmString: No
 ProcessName: Stack/Morphology/Closing
 NumParms: 4
 ParmName: X Radius
-ParmString: No
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Round Nhbd
-ParmString: 1
+ParmString: No
 ProcessName: Stack/Morphology/Dilate
 NumParms: 5
 ParmName: X Radius
-ParmString: No
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Auto Resize
-ParmString: 1
+ParmString: No
 ParmName: Round Nhbd
 ParmString: No
 ProcessName: Stack/Morphology/Edge Detect
 NumParms: 4
 ParmName: Threshold
-ParmString: No
-ParmName: Multiplier
 ParmString: 10000.0
-ParmName: Adapt Factor
+ParmName: Multiplier
 ParmString: 2.0
-ParmName: Fill Value
+ParmName: Adapt Factor
 ParmString: 0.3
+ParmName: Fill Value
+ParmString: 30000
 ProcessName: Stack/Morphology/Edge Detect Angle
 NumParms: 1
 ParmName: Fill Holes
@@ -2417,65 +2417,65 @@ ParmString: No
 ProcessName: Stack/Morphology/Erode
 NumParms: 5
 ParmName: X Radius
-ParmString: 30000
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Auto Resize
-ParmString: 1
+ParmString: No
 ParmName: Round Nhbd
 ParmString: No
 ProcessName: Stack/Morphology/Erode by Label
 NumParms: 4
 ParmName: X Radius
-ParmString: No
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Round Nhbd
-ParmString: 1
+ParmString: No
 ProcessName: Stack/Morphology/Fill Holes
 NumParms: 5
 ParmName: X Radius
-ParmString: No
+ParmString: 10
 ParmName: Y Radius
 ParmString: 10
 ParmName: Threshold
-ParmString: 10
-ParmName: Depth
 ParmString: 10000
-ParmName: Fill Value
+ParmName: Depth
 ParmString: 0
+ParmName: Fill Value
+ParmString: 30000
 ProcessName: Stack/Morphology/Open by Label
 NumParms: 4
 ParmName: X Radius
-ParmString: 30000
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Round Nhbd
-ParmString: 1
+ParmString: No
 ProcessName: Stack/Morphology/Opening
 NumParms: 4
 ParmName: X Radius
-ParmString: No
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Round Nhbd
-ParmString: 1
+ParmString: No
 ProcessName: Stack/MultiStack/Align Canvas
 NumParms: 1
 ParmName: Change Both
-ParmString: No
+ParmString: Yes
 ProcessName: Stack/MultiStack/Combine Stacks
 NumParms: 1
 ParmName: Method
-ParmString: Yes
+ParmString: Max
 ProcessName: Stack/MultiStack/Copy Main to Work Stack
 NumParms: 0
 ProcessName: Stack/MultiStack/Copy Work to Main Stack
@@ -2489,49 +2489,49 @@ NumParms: 0
 ProcessName: Stack/MultiStack/Swap or Copy Stack 1 and 2
 NumParms: 2
 ParmName: Store
-ParmString: Max
-ParmName: Action
 ParmString: Main
+ParmName: Action
+ParmString: 1 -> 2
 ProcessName: Stack/Segmentation/Consolidate Regions
 NumParms: 2
 ParmName: Threshold
-ParmString: 1 -> 2
-ParmName: Min Voxels
 ParmString: 5000
+ParmName: Min Voxels
+ParmString: 100
 ProcessName: Stack/Segmentation/Consolidate Regions Normalized
 NumParms: 1
 ParmName: Tolerance
-ParmString: 100
+ParmString: 0.3
 ProcessName: Stack/Segmentation/Delete Labels by Threshold
 NumParms: 2
 ParmName: Min Voxels
-ParmString: 0.3
-ParmName: Max Voxels
 ParmString: 1000
+ParmName: Max Voxels
+ParmString: 0
 ProcessName: Stack/Segmentation/Erase at Border
 NumParms: 0
 ProcessName: Stack/Segmentation/Fill Label
 NumParms: 2
 ParmName: Filled Label
-ParmString: 0
-ParmName: New Label
 ParmString: 1
+ParmName: New Label
+ParmString: 0
 ProcessName: Stack/Segmentation/Local Maxima
 NumParms: 5
 ParmName: X Radius
-ParmString: 0
+ParmString: 1
 ParmName: Y Radius
 ParmString: 1
 ParmName: Z Radius
 ParmString: 1
 ParmName: Start Label
-ParmString: 1
-ParmName: Min Color
 ParmString: 2
+ParmName: Min Color
+ParmString: 10000
 ProcessName: Stack/Segmentation/Relabel
 NumParms: 2
 ParmName: Start Label
-ParmString: 10000
+ParmString: 1
 ParmName: Step
 ParmString: 1
 ProcessName: Stack/Segmentation/Watershed3D
@@ -2539,7 +2539,7 @@ NumParms: 0
 ProcessName: Stack/System/Clear Main Stack
 NumParms: 1
 ParmName: Fill Value
-ParmString: 1
+ParmString: 0
 ProcessName: Stack/System/Clear Work Stack
 NumParms: 1
 ParmName: Fill Value
@@ -2547,35 +2547,35 @@ ParmString: 0
 ProcessName: Stack/System/Export
 NumParms: 6
 ParmName: Filename
-ParmString: 0
-ParmName: Store
 ParmString: 
-ParmName: Type
+ParmName: Store
 ParmString: Main
-ParmName: Gen Spacing
+ParmName: Type
 ParmString: CImg Auto
-ParmName: Stack Id
+ParmName: Gen Spacing
 ParmString: No
+ParmName: Stack Id
+ParmString: 0
 ParmName: Num Digits
 ParmString: 0
 ProcessName: Stack/System/Import
 NumParms: 4
 ParmName: File Name
-ParmString: 0
-ParmName: Store
 ParmString: 
-ParmName: Stack Id
+ParmName: Store
 ParmString: Main
-ParmName: Auto Scale
+ParmName: Stack Id
 ParmString: 0
+ParmName: Auto Scale
+ParmString: Yes
 ProcessName: Stack/System/Import Series
 NumParms: 7
 ParmName: Stack
-ParmString: Yes
-ParmName: Store
 ParmString: -1
-ParmName: X Step
+ParmName: Store
 ParmString: Current
+ParmName: X Step
+ParmString: 1.0
 ParmName: Y Step
 ParmString: 1.0
 ParmName: Z Step
@@ -2583,47 +2583,47 @@ ParmString: 1.0
 ParmName: Brightness
 ParmString: 1.0
 ParmName: Profile File
-ParmString: 1.0
+ParmString: 
 ProcessName: Stack/System/Open
 NumParms: 3
 ParmName: File Name
 ParmString: 
 ParmName: Store
-ParmString: 
-ParmName: Stack Id
 ParmString: Main
+ParmName: Stack Id
+ParmString: 0
 ProcessName: Stack/System/Save
 NumParms: 4
 ParmName: File Name
-ParmString: 0
-ParmName: Store
 ParmString: 
-ParmName: Stack Id
+ParmName: Store
 ParmString: Main
-ParmName: Compression
+ParmName: Stack Id
 ParmString: 0
+ParmName: Compression
+ParmString: 5
 ProcessName: Stack/System/Set Current Stack
 NumParms: 2
 ParmName: Store
-ParmString: 5
-ParmName: Stack Id
 ParmString: Main
+ParmName: Stack Id
+ParmString: 0
 ProcessName: Stack/Test/Create Rand Attr Map
 NumParms: 2
 ParmName: Number of Points
-ParmString: 0
-ParmName: Create Point Cloud Mesh
 ParmString: 1
+ParmName: Create Point Cloud Mesh
+ParmString: No
 ProcessName: Stack/Test/Random Voxel in 3D Cell
 NumParms: 2
 ParmName: Cell Label
-ParmString: No
-ParmName: Ignore Z
 ParmString: 0
+ParmName: Ignore Z
+ParmString: No
 ProcessName: Stack/Transform/Load Transform
 NumParms: 1
 ParmName: File Name
-ParmString: No
+ParmString: 
 ProcessName: Stack/Transform/Save Transform
 NumParms: 1
 ParmName: File Name
@@ -2631,57 +2631,57 @@ ParmString:
 ProcessName: Tools/Animate/Add Key Frame
 NumParms: 1
 ParmName: Name
-ParmString: 
+ParmString: Animation
 ProcessName: Tools/Animate/Play
 NumParms: 2
 ParmName: Name
 ParmString: Animation
 ParmName: Steps
-ParmString: Animation
+ParmString: 100
 ProcessName: Tools/Bezier/Load Bezier
 NumParms: 1
 ParmName: File Name
-ParmString: 100
+ParmString: 
 ProcessName: Tools/Bezier/New Bezier
 NumParms: 6
 ParmName: Controls X
-ParmString: 
+ParmString: 5
 ParmName: Controls Y
 ParmString: 5
 ParmName: Size X
-ParmString: 5
+ParmString: 200
 ParmName: Size Y
 ParmString: 200
 ParmName: Lines Y
-ParmString: 200
+ParmString: 15
 ParmName: Lines X
 ParmString: 15
 ProcessName: Tools/Bezier/Save Bezier
 NumParms: 1
 ParmName: File Name
-ParmString: 15
+ParmString: 
 ProcessName: Tools/CSV/Load CSV File
 NumParms: 2
 ParmName: File Name
 ParmString: 
 ParmName: CSV Attribute
-ParmString: 
+ParmString: CSV
 ProcessName: Tools/CSV/Make CSV Labeling
 NumParms: 4
 ParmName: Labeling Column
-ParmString: CSV
+ParmString: 
 ParmName: Labeling Name
 ParmString: 
 ParmName: Label Column
-ParmString: 
-ParmName: CSV Attribute
 ParmString: Label
+ParmName: CSV Attribute
+ParmString: CSV
 ProcessName: Tools/CSV/Save CSV File
 NumParms: 2
 ParmName: File Name
-ParmString: CSV
-ParmName: CSV Attribute
 ParmString: 
+ParmName: CSV Attribute
+ParmString: CSV
 ProcessName: Tools/CSV/View CSV Data
 NumParms: 1
 ParmName: CSV Attribute
@@ -2689,229 +2689,229 @@ ParmString: CSV
 ProcessName: Tools/Cell Maker/Mesh 2D/Cell Grids/Grid of Hexagonal Cells
 NumParms: 5
 ParmName: Rows
-ParmString: CSV
+ParmString: 10
 ParmName: Columns
 ParmString: 10
 ParmName: Row Length
-ParmString: 10
-ParmName: Col Length
 ParmString: 6.0
-ParmName: Shape
+ParmName: Col Length
 ParmString: 4.0
+ParmName: Shape
+ParmString: Rectangle
 ProcessName: Tools/Cell Maker/Mesh 2D/Cell Grids/Grid of Rectangular Cells
 NumParms: 9
 ParmName: Rows
-ParmString: Rectangle
+ParmString: 6
 ParmName: Columns
 ParmString: 6
 ParmName: Row Segments
-ParmString: 6
+ParmString: 4
 ParmName: Col Segments
 ParmString: 4
 ParmName: Row Seg Length
-ParmString: 4
+ParmString: 2.5
 ParmName: Col Seg Length
 ParmString: 2.5
 ParmName: Y Size Func
-ParmString: 2.5
-ParmName: Stagger
 ParmString: 
-ParmName: Shape
+ParmName: Stagger
 ParmString: 0
+ParmName: Shape
+ParmString: Rectangle
 ProcessName: Tools/Cell Maker/Mesh 2D/Shapes/Polygon
 NumParms: 5
 ParmName: Radius X
-ParmString: Rectangle
+ParmString: 10
 ParmName: Radius Y
 ParmString: 10
 ParmName: Sides
-ParmString: 10
-ParmName: Section
 ParmString: 36
-ParmName: CC Name
+ParmName: Section
 ParmString: 360
+ParmName: CC Name
+ParmString: Polygon
 ProcessName: Tools/Cell Maker/Mesh 2D/Tools/Map 2D Mesh On Bezier
 NumParms: 0
 ProcessName: Tools/Cell Maker/Mesh 2D/Tools/Polygonize Triangles
 NumParms: 1
 ParmName: Max Length
-ParmString: Polygon
+ParmString: -1.0
 ProcessName: Tools/Cell Maker/Mesh 2D/Tools/Rotate Mesh
 NumParms: 1
 ParmName: Angle
-ParmString: -1.0
+ParmString: 45
 ProcessName: Tools/Cell Maker/Mesh 2D/Voronoi/Free Form
 NumParms: 2
 ParmName: Point Cloud
-ParmString: 45
-ParmName: Indirect Bounding
 ParmString: Point Cloud
+ParmName: Indirect Bounding
+ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 2D/Voronoi/Voronoi Cells
 NumParms: 5
 ParmName: X Size
-ParmString: No
+ParmString: 100
 ParmName: Y Size
 ParmString: 100
 ParmName: Cells
-ParmString: 100
-ParmName: Min Distance
 ParmString: 50
-ParmName: Indirect Bounding
+ParmName: Min Distance
 ParmString: 10
+ParmName: Indirect Bounding
+ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Bezier Cell Layers
 NumParms: 6
 ParmName: File Name
-ParmString: No
-ParmName: Add Cells
 ParmString: Layers.v
-ParmName: U-Scale
+ParmName: Add Cells
 ParmString: No
-ParmName: V-Scale
+ParmName: U-Scale
 ParmString: 18.0
-ParmName: X-Scale
+ParmName: V-Scale
 ParmString: 120.0
+ParmName: X-Scale
+ParmString: 1.0
 ParmName: Y-Scale
 ParmString: 1.0
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Block Cell Layers
 NumParms: 4
 ParmName: File Name
-ParmString: 1.0
-ParmName: SegY Func
 ParmString: Layers.v
-ParmName: SegZ Func
+ParmName: SegY Func
 ParmString: segY.func
-ParmName: Add Cells
+ParmName: SegZ Func
 ParmString: segZ.func
+ParmName: Add Cells
+ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Create Default File/Block Cell Layers File
 NumParms: 10
 ParmName: File Name
-ParmString: No
-ParmName: X Segment Size
 ParmString: Layers.v
+ParmName: X Segment Size
+ParmString: 5.0
 ParmName: Y Segment Size
 ParmString: 5.0
 ParmName: Z Segment Size
 ParmString: 5.0
 ParmName: X Num Segments
-ParmString: 5.0
+ParmString: 5
 ParmName: Y Num Segments
 ParmString: 5
 ParmName: Z Num Segments
-ParmString: 5
-ParmName: X Num Cells
 ParmString: 10
-ParmName: Y Num Cells
+ParmName: X Num Cells
 ParmString: 3
-ParmName: Z Num Cells
+ParmName: Y Num Cells
 ParmString: 5
+ParmName: Z Num Cells
+ParmString: 10
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Create Default File/Radial Cell Layers File
 NumParms: 1
 ParmName: File Name
-ParmString: 10
+ParmString: Layers.v
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Create Default File/Segment Size Function Files
 NumParms: 2
 ParmName: Y Cell Size
-ParmString: Layers.v
-ParmName: Z Cell Size
 ParmString: segY.func
+ParmName: Z Cell Size
+ParmString: segZ.func
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Hejnowicz Cell Layers
 NumParms: 6
 ParmName: File Name
-ParmString: segZ.func
-ParmName: SegY Func
 ParmString: Layers.v
-ParmName: Add Cells
+ParmName: SegY Func
 ParmString: segY.func
-ParmName: UV-Scale
+ParmName: Add Cells
 ParmString: No
-ParmName: XY-Scale
+ParmName: UV-Scale
 ParmString: 50.0
-ParmName: A-Parm
+ParmName: XY-Scale
 ParmString: 8.0
+ParmName: A-Parm
+ParmString: 10.0
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Radial Cell Layers
 NumParms: 4
 ParmName: File Name
-ParmString: 10.0
-ParmName: SegY Func
 ParmString: Layers.v
-ParmName: SegZ Func
+ParmName: SegY Func
 ParmString: segY.func
-ParmName: Add Cells
+ParmName: SegZ Func
 ParmString: segZ.func
+ParmName: Add Cells
+ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 3D/Cell Layers/Spherical Cell Layers
 NumParms: 4
 ParmName: File Name
-ParmString: No
-ParmName: SegY Func
 ParmString: Layers.v
-ParmName: SegZ Func
+ParmName: SegY Func
 ParmString: segY.func
-ParmName: Add Cells
+ParmName: SegZ Func
 ParmString: segZ.func
+ParmName: Add Cells
+ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 3D/From 2D Mesh/Extrude Faces
 NumParms: 5
 ParmName: Cell Size
-ParmString: No
-ParmName: Segment Size
 ParmString: 5
-ParmName: Number of Cells
+ParmName: Segment Size
 ParmString: 2.0
-ParmName: Stagger
+ParmName: Number of Cells
 ParmString: 2
-ParmName: Labeling
+ParmName: Stagger
 ParmString: 0
+ParmName: Labeling
+ParmString: Cells
 ProcessName: Tools/Cell Maker/Mesh 3D/Marching Cubes/Mesh
 NumParms: 4
 ParmName: Cube Size
-ParmString: Cells
-ParmName: Radius
 ParmString: 5.0
-ParmName: Use Lines
+ParmName: Radius
 ParmString: 15.0
-ParmName: Verbose
+ParmName: Use Lines
 ParmString: Yes
+ParmName: Verbose
+ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 3D/Marching Cubes/Sphere
 NumParms: 3
 ParmName: Cube Size
-ParmString: No
-ParmName: Radius
 ParmString: 5.0
-ParmName: Smooth Passes
+ParmName: Radius
 ParmString: 15.0
+ParmName: Smooth Passes
+ParmString: 3
 ProcessName: Tools/Cell Maker/Mesh 3D/Shapes/Icosphere
 NumParms: 3
 ParmName: Radius
-ParmString: 3
-ParmName: Subdivide Passes
 ParmString: 200.0
-ParmName: CC Name
+ParmName: Subdivide Passes
 ParmString: 3
+ParmName: CC Name
+ParmString: Sphere
 ProcessName: Tools/Cell Maker/Mesh 3D/Shapes/Platonic Solid
 NumParms: 2
 ParmName: Solid
-ParmString: Sphere
-ParmName: Radius
 ParmString: Cube (6 sides)
+ParmName: Radius
+ParmString: 200.0
 ProcessName: Tools/Cell Maker/Mesh 3D/Shapes/Sphere From Tetra
 NumParms: 4
 ParmName: Radius
 ParmString: 200.0
 ParmName: Subdivide Passes
-ParmString: 200.0
-ParmName: Smooth Passes
 ParmString: 5
-ParmName: CC Name
+ParmName: Smooth Passes
 ParmString: 0
+ParmName: CC Name
+ParmString: Sphere
 ProcessName: Tools/Cell Maker/Mesh 3D/Tetrahedra/Cube of Tetrahedra
 NumParms: 6
 ParmName: Cube Length X
-ParmString: Sphere
+ParmString: 1.0
 ParmName: Cube Length Y
 ParmString: 1.0
 ParmName: Cube Length Z
 ParmString: 1.0
 ParmName: Elements X
-ParmString: 1.0
+ParmString: 1
 ParmName: Elements Y
 ParmString: 1
 ParmName: Elements Z
@@ -2919,15 +2919,15 @@ ParmString: 1
 ProcessName: Tools/Cell Maker/Mesh 3D/Tools/Combine 3D Cells
 NumParms: 3
 ParmName: CC Name
-ParmString: 1
+ParmString: 
 ParmName: CC Out
 ParmString: 
 ParmName: Epsilon
-ParmString: 
+ParmString: 1e-6
 ProcessName: Tools/Cell Maker/Mesh 3D/Tools/Create Surface Mesh
 NumParms: 2
 ParmName: CC Name
-ParmString: 1e-6
+ParmString: 
 ParmName: CC Out
 ParmString: 
 ProcessName: Tools/Cell Maker/Mesh 3D/Tools/Separate 3D Cells
@@ -2937,111 +2937,111 @@ ParmString:
 ParmName: CC Out
 ParmString: 
 ParmName: 2D Mesh
-ParmString: 
+ParmString: No
 ParmName: Use Face Selection
 ParmString: No
 ProcessName: Tools/Cell Maker/Mesh 3D/Voronoi/Create Voronoi Cells
 NumParms: 9
 ParmName: X Size
-ParmString: No
+ParmString: 200
 ParmName: Y Size
 ParmString: 200
 ParmName: Z Size
 ParmString: 200
 ParmName: Points
-ParmString: 200
-ParmName: Min Distance
 ParmString: 500
-ParmName: Regular Border
+ParmName: Min Distance
 ParmString: 20
-ParmName: Border Distance
+ParmName: Regular Border
 ParmString: Yes
-ParmName: Type
+ParmName: Border Distance
 ParmString: 8
-ParmName: Randomize Cage Points
+ParmName: Type
 ParmString: Cube
+ParmName: Randomize Cage Points
+ParmString: 0
 ProcessName: Tools/Cell Maker/Mesh 3D/Voronoi/Voronoi Cells from Point Cloud
 NumParms: 6
 ParmName: Point Cloud
-ParmString: 0
-ParmName: Cage Points
 ParmString: Point Cloud
-ParmName: Min Distance Cage Points
+ParmName: Cage Points
 ParmString: 10000
-ParmName: Threshold Merging
+ParmName: Min Distance Cage Points
 ParmString: 4.0
-ParmName: Keep Point Cloud Labels
+ParmName: Threshold Merging
 ParmString: 0.01
+ParmName: Keep Point Cloud Labels
+ParmString: No
 ParmName: Use Weights
 ParmString: No
 ProcessName: Tools/Cell Maker/Point Cloud/Dart Throw On Mesh
 NumParms: 7
 ParmName: Points
-ParmString: No
-ParmName: Min Point Distance
 ParmString: 1000
+ParmName: Min Point Distance
+ParmString: 10.0
 ParmName: Shift Layer 1
-ParmString: 10.0
-ParmName: Layers
 ParmString: 0
-ParmName: Layer Thickness
+ParmName: Layers
 ParmString: 1
-ParmName: Min Border Distance
+ParmName: Layer Thickness
 ParmString: 10.0
-ParmName: Layer Weights
+ParmName: Min Border Distance
 ParmString: 0.0
+ParmName: Layer Weights
+ParmString: 0
 ProcessName: Tools/Cell Maker/Point Cloud/Dart Throw Under Mesh
 NumParms: 5
 ParmName: Points
-ParmString: 0
-ParmName: Min Point Distance
 ParmString: 1000
-ParmName: Keep Mesh
+ParmName: Min Point Distance
 ParmString: 10.0
-ParmName: Label Vertices
+ParmName: Keep Mesh
 ParmString: No
-ParmName: Weight
+ParmName: Label Vertices
 ParmString: Yes
+ParmName: Weight
+ParmString: 0
 ProcessName: Tools/Cell Maker/Point Cloud/Label Point Cloud
 NumParms: 1
 ParmName: Keep Labels
-ParmString: 0
+ParmString: Yes
 ProcessName: Tools/Cell Maker/Point Cloud/Load Point Cloud
 NumParms: 3
 ParmName: File Name
-ParmString: Yes
-ParmName: Keep Mesh
 ParmString: 
+ParmName: Keep Mesh
+ParmString: Yes
 ParmName: Load Labels
 ParmString: Yes
 ProcessName: Tools/Cell Maker/Point Cloud/Point Cloud Add
 NumParms: 1
 ParmName: Point Cloud Mesh
-ParmString: Yes
+ParmString: CC
 ProcessName: Tools/Cell Maker/Point Cloud/Point Cloud From Stack
 NumParms: 0
 ProcessName: Tools/Cell Maker/Point Cloud/Point Cloud Radial 2D
 NumParms: 3
 ParmName: Nr of Points
-ParmString: CC
-ParmName: Shift Angle
 ParmString: 6 12 18
-ParmName: Distance
+ParmName: Shift Angle
 ParmString: 0 30 30
+ParmName: Distance
+ParmString: 10 10 10
 ProcessName: Tools/Cell Maker/Point Cloud/Remove Points Outside Mesh
 NumParms: 1
 ParmName: Min Dis To Mesh
-ParmString: 10 10 10
+ParmString: 1.0
 ProcessName: Tools/Cell Maker/Point Cloud/Save Point Cloud
 NumParms: 2
 ParmName: File Name
-ParmString: 1.0
-ParmName: Save Labels
 ParmString: 
+ParmName: Save Labels
+ParmString: Yes
 ProcessName: Tools/Cell Maker/Test Scale Mesh With Func
 NumParms: 3
 ParmName: XScaleFunc
-ParmString: Yes
+ParmString: 
 ParmName: YScaleFunc
 ParmString: 
 ParmName: ZScaleFunc
@@ -3049,13 +3049,13 @@ ParmString:
 ProcessName: Tools/Cell Maker/Tools/Add Noise To Mesh
 NumParms: 6
 ParmName: Type
-ParmString: 
-ParmName: Mean
 ParmString: Equal
-ParmName: Variance
+ParmName: Mean
 ParmString: 0.5
-ParmName: X Dim
+ParmName: Variance
 ParmString: 1.0
+ParmName: X Dim
+ParmString: Yes
 ParmName: Y Dim
 ParmString: Yes
 ParmName: Z Dim
@@ -3063,52 +3063,52 @@ ParmString: Yes
 ProcessName: Tools/Cell Maker/Tools/Combine Meshes
 NumParms: 1
 ParmName: CC to Add
-ParmString: Yes
+ParmString: CC
 ProcessName: Tools/Cell Maker/Tools/Convex Hull From Mesh
 NumParms: 1
 ParmName: Work on Selection
-ParmString: CC
+ParmString: No
 ProcessName: Tools/Cell Maker/Tools/Rename Cell Complex
 NumParms: 1
 ParmName: New Name
-ParmString: No
+ParmString: Renamed CC
 ProcessName: Tools/Cell Maker/Tools/Triangulate Faces
 NumParms: 1
 ParmName: Max Area
-ParmString: Renamed CC
+ParmString: 10.0
 ProcessName: Tools/Python/Python Script
 NumParms: 1
 ParmName: File Name
-ParmString: 10.0
+ParmString: 
 ProcessName: Tools/System/Load All
 NumParms: 0
 ProcessName: Tools/System/Load View
 NumParms: 1
 ParmName: File Name
-ParmString: 
+ParmString: Root_model.mdxv
 ProcessName: Tools/System/Quick Save
 NumParms: 0
 ProcessName: Tools/System/Save View
 NumParms: 1
 ParmName: File Name
-ParmString: Root_model.mdxv
+ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxv
 ProcessName: Tools/System/Snapshot
 NumParms: 6
 ParmName: File Name
-ParmString: /home/marco/trabajo/MDX models/Root/Root_model.mdxv
-ParmName: Expand Frustum
 ParmString: 
-ParmName: Width
+ParmName: Expand Frustum
 ParmString: No
+ParmName: Width
+ParmString: 0
 ParmName: Height
 ParmString: 0
 ParmName: Oversampling
-ParmString: 0
-ParmName: Quality
 ParmString: 1.0
+ParmName: Quality
+ParmString: 95
 ProcessName: Tools/Transform/Save Global Transform
 NumParms: 1
 ParmName: File Name
-ParmString: 95
+ParmString: 
 
 [Tasks]
