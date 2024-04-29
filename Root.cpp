@@ -592,8 +592,44 @@ bool MechanicalGrowth::step(double Dt) {
 
         // Auxin control on wall growth
         if(auxinControl == "True") {
+            // Default auxin control on growth
             double K = auxinK;
-            if(QString(Tissue::ToString(cD.type)) == ccvTIRtissueGR && ccvTIRK > 0)
+            // TIR1 tissue
+            {
+                cD.is_ccvTIR1tissue = false;
+                if(ccvTIRtissueGR == "TIR1") {
+                    cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "KNOLLE"){
+                    if(cD.lastDivision < 2)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "SMB"){
+                    if(cD.type == Tissue::LRC)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "GL2"){
+                    if(cD.type == Tissue::Epidermis && cD.stage == 0)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "COBL9"){
+                    if(cD.type == Tissue::Epidermis && cD.stage == 1)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "PEP"){
+                    if(cD.type == Tissue::Cortex)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "NGR2"){
+                    if(cD.type == Tissue::Endodermis)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "SHR"){
+                    if(cD.type == Tissue::Vascular)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "GLV5"){
+                    if(cD.type == Tissue::Columella || cD.type == Tissue::ColumellaInitial)
+                        cD.is_ccvTIR1tissue = true;
+                } else if (ccvTIRtissueGR == "PIN2"){
+                    if(cD.type == Tissue::Cortex || cD.type == Tissue::LRC || cD.type == Tissue::Epidermis)
+                        cD.is_ccvTIR1tissue = true;
+                }
+            }
+            // Replace auxin control on growth with ccv if set
+            if(cD.is_ccvTIR1tissue && ccvTIRK > 0)
                 K = ccvTIRK;
             cD.growthSignal *= pow(K, 4) / (pow(K, 4) + pow(cD.auxin/cD.area, 4)) ;
         }

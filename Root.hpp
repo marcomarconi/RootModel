@@ -230,25 +230,17 @@ public:
                 "None",
                 QStringList()
                               << "None"
-                              << "All"
-                              << "EpidermisCortex"
-                              << "Undefined"
-                              << "QC"
-                              << "Columella"
-                              << "ColumellaInitial"
-                              << "CEI"
-                              << "CEID"
-                              << "Cortex"
-                              << "Endodermis"
-                              << "VascularInitial"
-                              << "Vascular"
-                              << "Pericycle"
-                              << "EpLrcInitial"
-                              << "Epidermis"
-                              << "LRC"
-                              << "Columella"
-                              << "Substrate"
-                              << "Source");
+                              << "TIR1" // Everywhere
+                              << "KNOLLE" // Dividing cells
+                              << "SMB" // LRC
+                              << "GL2" // Meristem epidermis
+                              << "COBL9" // EZ epidermis
+                              << "PEP" // Cortex
+                              << "NGR2" // Endodermis
+                              << "SHR" // Vascular
+                              << "GLV5" // Columella
+                              << "PIN2" // LRC-epidermis-cortex
+                              );
         addParm("Brassinosteroids Control",
                 "Brassinosteroids Control",
                 "False",

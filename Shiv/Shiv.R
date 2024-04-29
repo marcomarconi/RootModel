@@ -6,7 +6,7 @@ library(zoo)
 
 # Growth rate
 {
-    dir <- "/home/marco/trabajo/Models/RootModel/Shiv/SHIV_Auxin_on_EK_tissues/"
+    dir <- "/home/marco/trabajo/Models/RootModel/Shiv/SHIV_Auxin_on_EK_newtissued_2h/"
     setwd(dir)
     files <- list()
     for(f in list.files(".","_x.*")) {
@@ -20,14 +20,15 @@ library(zoo)
         df$Auxin <- values[1] %>% as.integer()
         df$K <- values[2] %>% as.numeric()
         df$Tissue <- values[3] %>% as.factor()
-        colnames(df) <- c("Time", "GR", "Auxin", "L", "Tissue")
+        df$Pressure <- values[4] %>% as.numeric()
+        colnames(df) <- c("Time", "GR", "Auxin", "L", "Tissue", "Pressure")
         df$GR_EMA <- EMA(df$GR %>% na.locf(na.rm=F), 30)
         files[[f]] <- df
     }
     df <- do.call(rbind, files) 
 }
 
-df %>% filter(Auxin==200 & L == 1.0 & Time > 10) %>% ggplot(aes(Time, GR_EMA, color=Tissue)) + geom_line(size=3) + scale_color_colorblind()
+df %>% arrange(Time) %>% filter(Auxin==200 & L == 1.0 & Time > 10) %>% ggplot(aes(Time, GR_EMA, color=Tissue)) + geom_line(size=3) + scale_color_colorblind()
 
 
     
