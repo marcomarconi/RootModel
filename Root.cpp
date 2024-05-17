@@ -151,7 +151,7 @@ bool Mechanics::step() {
                 if(ccvTIRtissueEK == "TIR1") {
                     cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "KNOLLE"){
-                    if(cD.lastDivision < 10)
+                    if(cD.lastDivision < 20)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "SMB"){
                     if(cD.type == Tissue::LRC)
@@ -162,7 +162,7 @@ bool Mechanics::step() {
                 } else if (ccvTIRtissueEK == "COBL9"){
                     if(cD.type == Tissue::Epidermis && cD.stage == 1)
                         cD.is_ccvTIR1tissue = true;
-                } else if (ccvTIRtissueEK == "PEP"){
+                } else if (ccvTIRtissueEK == "PEP" && cD.stage == 1){
                     if(cD.type == Tissue::Cortex)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "NGR2"){
@@ -600,7 +600,7 @@ bool MechanicalGrowth::step(double Dt) {
                 if(ccvTIRtissueGR == "TIR1") {
                     cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "KNOLLE"){
-                    if(cD.lastDivision < 10)
+                    if(cD.lastDivision < 20)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "SMB"){
                     if(cD.type == Tissue::LRC)
