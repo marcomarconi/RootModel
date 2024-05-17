@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.99995 -0.00315863 0.00943718 0 0.00309206 0.99997 0.00706055 0 -0.0094592 -0.00703102 0.999931 0 1.64021 11.4715 -2307.69 1
+CameraFrame: 0.99995 -0.00315863 0.00943718 0 0.00309206 0.99997 0.00706055 0 -0.0094592 -0.00703102 0.999931 0 15.7999 200.82 -2307.69 1
 SceneRadius: 500
-CameraZoom: -0.672
+CameraZoom: -1.248
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 276.643
+Width: 227.404
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.99995 -0.00998078 -0.000235337 0 0.00998065 0.99995 -0.000571525 0 0.00
 [Clip2]
 Enable: false
 Grid: false
-Width: 276.643
+Width: 227.404
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 276.643
+Width: 227.404
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -143,7 +143,7 @@ CCName: Tissue
 MainColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,0,1\n
 WorkColorMap: Interpolation:\srgb\nClamp:\strue\nExteriorColor:\s0,0,0,0\nColoredPos:\s0-0,0,0,0\nColoredPos:\s1-0,1,1,1\n
 Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-Trans: 1 0 0 0 0 1 0 0 0 0 1 0 0.160375 -94.5201 0 1
+Trans: 1 0 0 0 0 1 0 0 0 0 1 0 -0.18671 -166.952 0 1
 
 
 [Stack2]
@@ -1189,7 +1189,7 @@ ParmString: 40
 ParmName: Mesh Update Timer
 ParmString: 20
 ParmName: Snapshots Timer
-ParmString: 20
+ParmString: 0
 ParmName: Snapshots Directory
 ParmString: Test
 ParmName: Debug
@@ -1353,7 +1353,7 @@ ParmString: Model/Root/03 Cell Tissue
 ParmName: Manual Cell Division Enabled
 ParmString: True
 ProcessName: Model/Root/05 Mechanics
-NumParms: 26
+NumParms: 28
 ParmName: Dt
 ParmString: 0.03
 ParmName: Converge Threshold
@@ -1382,14 +1382,16 @@ ParmName: Auxin-relaxation Minimum Wall EK
 ParmString: 0.2
 ParmName: Quasimodo wall relaxation K
 ParmString: 10
+ParmName: ccvTIR wall relaxation K2
+ParmString: 0
+ParmName: ccvTIR wall relaxation Tissue
+ParmString: None
 ParmName: Hydrostatic Parameters
 ParmString: 
 ParmName: Turgor Pressure
 ParmString: 2
 ParmName: Turgor Pressure non-Meristem Reduction
 ParmString: 0.8
-ParmName: Turgor Pressure Intra-LRC Multiplier
-ParmString: 1.00
 ParmName: Turgor Pressure Rate
 ParmString: 0.5
 ParmName: External Forces
@@ -1400,6 +1402,8 @@ ParmName: Gravity Direction
 ParmString: 0,-1,0
 ParmName: Friction
 ParmString: 0
+ParmName: Root Process
+ParmString: Model/Root/01 Root
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ParmName: PBD Engine
@@ -1407,7 +1411,7 @@ ParmString: Model/Root/07 PBD Engine
 ParmName: Set Global Attr Process
 ParmString: Model/Root/23 Set Global Attr
 ProcessName: Model/Root/052 Mechanical Growth
-NumParms: 19
+NumParms: 23
 ParmName: Verbose
 ParmString: False
 ParmName: Polarity Method
@@ -1440,6 +1444,14 @@ ParmName: Elongation Zone
 ParmString: 30
 ParmName: Differentiation Zone
 ParmString: 1000
+ParmName: Auxin Control on Growth
+ParmString: False
+ParmName: Auxin inhibition on growth
+ParmString: 10
+ParmName: ccvTIR inhibition on growth
+ParmString: 0
+ParmName: ccvTIR growth Tissue
+ParmString: None
 ParmName: Brassinosteroids Control
 ParmString: False
 ParmName: Mechanics Process

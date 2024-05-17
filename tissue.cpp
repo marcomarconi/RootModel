@@ -638,6 +638,7 @@ bool Tissue::step(double Dt) {
     CCIndexDoubleAttr& divisionCountSignal = mesh->signalAttr<double>("Division Count");
     CCIndexDoubleAttr& lifeTimeSignal = mesh->signalAttr<double>("Life Time");
     CCIndexDoubleAttr& areaSignal = mesh->signalAttr<double>("Cell Area");
+    CCIndexDoubleAttr& stageSignal = mesh->signalAttr<double>("Stage");
     CCIndexDoubleAttr& auxinSignal = mesh->signalAttr<double>("Chems: Auxin");
     CCIndexDoubleAttr& auxinByAreaSignal = mesh->signalAttr<double>("Chems: Auxin By Area");
     CCIndexDoubleAttr& intercellularAuxinSignal = mesh->signalAttr<double>("Chems: Intercellular Auxin");
@@ -680,6 +681,7 @@ bool Tissue::step(double Dt) {
     cellTypeSignal.clear();
     cellLineageSignal.clear();
     divisionCountSignal.clear();
+    stageSignal.clear();
     auxinSignal.clear();
     auxinByAreaSignal.clear();
     intercellularAuxinSignal.clear();
@@ -872,6 +874,7 @@ bool Tissue::step(double Dt) {
         divisionCountSignal[f] = cellAttr[indexAttr[f].label].divisionCount;
         areaSignal[f] = cD.area;
         lifeTimeSignal[f] = cD.lifeTime;
+        stageSignal[f] = cD.stage;
         auxinSignal[f] = cD.auxin;
         auxinByAreaSignal[f] = cD.auxin / cD.area;
         Aux1CytSignal[f] = fD.Aux1Cyt;

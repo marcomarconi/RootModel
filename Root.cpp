@@ -151,7 +151,7 @@ bool Mechanics::step() {
                 if(ccvTIRtissueEK == "TIR1") {
                     cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "KNOLLE"){
-                    if(cD.lastDivision < 2)
+                    if(cD.lastDivision < 10)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "SMB"){
                     if(cD.type == Tissue::LRC)
@@ -169,7 +169,7 @@ bool Mechanics::step() {
                     if(cD.type == Tissue::Endodermis)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "SHR"){
-                    if(cD.type == Tissue::Vascular)
+                    if(cD.type == Tissue::Vascular && cD.stage == 0)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "GLV5"){
                     if(cD.type == Tissue::Columella || cD.type == Tissue::ColumellaInitial)
@@ -550,6 +550,7 @@ bool MechanicalGrowth::step(double Dt) {
     // Find the highest LRC cell (used later for zonation, to see how far the cells are from the QC)
     ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
     double lrc = -BIG_VAL;
+    //uint epidermis_count = -BIG_VAL;
     Point3d qc = Point3d(0,0,0);
     Point3d source = Point3d(0,0,0); int source_cell = 0;
     for(auto c : cellAttr) {
@@ -580,13 +581,12 @@ bool MechanicalGrowth::step(double Dt) {
         Tissue::CellData& cD = cellAttr[c.first];
         cD.lifeTime += Dt;
         // Zonation, I assume that the root is at least some size
-        if(norm(source - qc) > 200 && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone) {
+        if(norm(source - qc) > 200/* && elongationZone > 0 && differentiationZone > 0 && elongationZone < differentiationZone*/) {
             double dist = cD.centroid.y() - lrc;
-            if(dist >  elongationZone)
+            if(cD.stage == 0 && elongationZone > 0 && dist > elongationZone)
                 cD.stage = 1;
-            if(dist >  differentiationZone)
+            if(cD.stage == 1 && cD.lifeTime > differentiationZone/*dist >  differentiationZone*/)
                 cD.stage = 2;
-
         }
         cD.growthSignal = 1;
 
@@ -600,7 +600,7 @@ bool MechanicalGrowth::step(double Dt) {
                 if(ccvTIRtissueGR == "TIR1") {
                     cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "KNOLLE"){
-                    if(cD.lastDivision < 2)
+                    if(cD.lastDivision < 10)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "SMB"){
                     if(cD.type == Tissue::LRC)
@@ -612,13 +612,13 @@ bool MechanicalGrowth::step(double Dt) {
                     if(cD.type == Tissue::Epidermis && cD.stage == 1)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "PEP"){
-                    if(cD.type == Tissue::Cortex)
+                    if(cD.type == Tissue::Cortex && cD.stage == 1)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "NGR2"){
                     if(cD.type == Tissue::Endodermis)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "SHR"){
-                    if(cD.type == Tissue::Vascular)
+                    if(cD.type == Tissue::Vascular && cD.stage == 0)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "GLV5"){
                     if(cD.type == Tissue::Columella || cD.type == Tissue::ColumellaInitial)
@@ -2623,7 +2623,7 @@ bool Root::step() {
             int minimum = remeshAvg / 2;
             int range = remeshAvg - minimum + 1;
             int num = rand() % range + minimum;
-            if(/*cD.area > cD.cellMaxArea &&*/ cD.remeshTime > num && cD.stage == 1) {
+            if(/*cD.area > cD.cellMaxArea &&*/ cD.remeshTime > num /* && cD.stage == 1*/) {
                 mdxInfo << "Remeshing Cell: " << cD.label << endl;
                 remeshCellProcess->step(cD.label);
                 cD.pressure = 0;

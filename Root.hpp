@@ -101,9 +101,9 @@ public:
                               << "SMB" // LRC
                               << "GL2" // Meristem epidermis
                               << "COBL9" // EZ epidermis
-                              << "PEP" // Cortex
+                              << "PEP" // EZ Cortex
                               << "NGR2" // Endodermis
-                              << "SHR" // Vascular
+                              << "SHR" // Meristem Vascular
                               << "GLV5" // Columella
                               << "PIN2" // LRC-epidermis-cortex
                               );
