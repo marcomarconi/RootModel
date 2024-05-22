@@ -1431,6 +1431,8 @@ bool Chemicals::update() {
     }
 
     // update miscellaneous cell chemicals attributes
+    double qc_prodrate = parm("Auxin QC Basal Production Rate").toDouble();
+    double scn_prodrate = parm("Auxin SCN Basal Production Rate").toDouble();
     double avg_auxin_conc = 0; // needed for later debug print
     for(uint i = 0; i < cellAttr.size(); i++) {
         auto it = cellAttr.begin();
@@ -1438,11 +1440,13 @@ bool Chemicals::update() {
         Tissue::CellData& cD = it->second;
         cD.auxinDecayRate = parm("Auxin Decay Rate").toDouble();
         if(cD.type == Tissue::QC) {
-            cD.auxinProdRate = parm("Auxin QC Basal Production Rate").toDouble();
+            if(qc_prodrate >= 0)
+                cD.auxinProdRate = qc_prodrate;
             for(CCIndex vn : csDual.neighbors(cD.dualVertex)) {
                 int labeln = indexAttr[vn].label;
                 Tissue::CellData& cDn = cellAttr[labeln];
-                cDn.auxinProdRate = parm("Auxin SCN Basal Production Rate").toDouble();
+                if(scn_prodrate >= 0)
+                    cDn.auxinProdRate = scn_prodrate;
             }
         }
         if(cD.type == Tissue::Substrate)

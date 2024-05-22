@@ -79,7 +79,7 @@ CameraZoom: -1.92
 [Clip1]
 Enable: false
 Grid: false
-Width: 10.28
+Width: 10.2927
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 10.28
+Width: 10.2927
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 10.28
+Width: 10.2927
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05972 1.05972 1.05972
+Size: 1.05997 1.05997 1.05997
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1173,7 +1173,7 @@ NumParms: 33
 ParmName: Max Mechanical Iterations
 ParmString: 1
 ParmName: Max Chemical Iterations
-ParmString: 10
+ParmString: 30
 ParmName: Mechanics Enabled
 ParmString: True
 ParmName: Chemicals Enabled
@@ -1471,7 +1471,7 @@ ParmString: 10
 ParmName: Auxin
 ParmString: 
 ParmName: Auxin Source
-ParmString: 100
+ParmString: 10
 ParmName: Auxin Intercellular Diffusion
 ParmString: 1
 ParmName: Auxin Cell Permeability
@@ -1479,9 +1479,9 @@ ParmString: 0
 ParmName: Auxin Basal Production Rate
 ParmString: 0
 ParmName: Auxin QC Basal Production Rate
-ParmString: 0
+ParmString: -1
 ParmName: Auxin SCN Basal Production Rate
-ParmString: 0
+ParmString: -1
 ParmName: Auxin Decay Rate
 ParmString: 0.0125
 ParmName: Auxin Max Decay Rate
