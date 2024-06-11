@@ -151,7 +151,7 @@ bool Mechanics::step() {
                 if(ccvTIRtissueEK == "TIR1") {
                     cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "KNOLLE"){
-                    if(cD.lastDivision < 20)
+                    if(cD.lastDivision < 30)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueEK == "SMB"){
                     if(cD.type == Tissue::LRC)
@@ -600,7 +600,7 @@ bool MechanicalGrowth::step(double Dt) {
                 if(ccvTIRtissueGR == "TIR1") {
                     cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "KNOLLE"){
-                    if(cD.lastDivision < 20)
+                    if(cD.lastDivision < 30)
                         cD.is_ccvTIR1tissue = true;
                 } else if (ccvTIRtissueGR == "SMB"){
                     if(cD.type == Tissue::LRC)
