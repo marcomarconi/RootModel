@@ -355,6 +355,7 @@ public:
                 QStringList()
                               << "None"
                               << "All"
+                              << "Meristem"
                               << "EpidermisCortex"
                               << "Undefined"
                               << "QC"
@@ -366,6 +367,8 @@ public:
                               << "Endodermis"
                               << "VascularInitial"
                               << "Vascular"
+                              << "VascularMeristem"
+                              << "VascularEZ"
                               << "Pericycle"
                               << "EpLrcInitial"
                               << "Epidermis"

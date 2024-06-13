@@ -1146,7 +1146,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     //// END Crisanto's stuff
 
     // Find the highest LRC cell (used later for zonation, to see how far the cells are from the QC)
-    // ONLY WORKS IF the root grows from top to bottom, or change the code    
+    // ONLY WORKS IF the root grows from top to bottom, or change the code        
     double lrc = -BIG_VAL;
     Point3d qc = Point3d(0,0,0);
     Point3d source = Point3d(0,0,0); int source_cell = 0;
@@ -1163,15 +1163,24 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     }
     qc /= 2; source /= source_cell;
 
+
     // Quasimodo
     QString quasimodo_tissue = parm("Quasimodo Tissue");
-    if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") &&  (quasimodo_tissue != "EpidermisCortex") && (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
+    if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") && (quasimodo_tissue != "Meristem") &&
+            (quasimodo_tissue != "EpidermisCortex") && (quasimodo_tissue != "VascularMeristem") && (quasimodo_tissue != "VascularEZ") &&
+            (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 2 / (1 + exp(-0.04*((cD.centroid.y()-lrc) - 0))) * Dt;
-    }
-    else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC && cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) ){       if(cD.centroid.y() > lrc)
+    } else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC &&
+                                             cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) ){       if(cD.centroid.y() > lrc)
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
-    }else if( quasimodo_tissue == "EpidermisCortex" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) ){
+    } else if( quasimodo_tissue == "EpidermisCortex" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) ){
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "Meristem" && cD.centroid.y()-qc.y() > 0 && cD.stage == 0){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "VascularMeristem" && cD.type == Tissue::Vascular && cD.stage == 0){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "VascularEZ" && cD.type == Tissue::Vascular && cD.stage == 1){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
     }
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
 
@@ -2650,9 +2659,10 @@ bool Root::step() {
                                         "Chems: Growth Signal",
                                         "Mechs: Growth Rate",
                                         //"Chems: Auxin By Area",
-                                        "Mechs: Cell Stiffness"
-                                        "Chems: Quasimodo"
-                                        "Chems: Division Probability"
+                                        "Mechs: Cell Stiffness",
+                                        "Chems: Quasimodo",
+                                        "Chems: Division Probability",
+                                        "Mechs: Edge Strain Rate"
                                         //"Chems: WOX5"
                                         };
         for(QString signalName: signals_set) {
