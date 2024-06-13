@@ -2649,10 +2649,10 @@ bool Root::step() {
                                         //"Chems: Brassinosteroid Signal",
                                         "Chems: Growth Signal",
                                         "Mechs: Growth Rate",
-                                        "Chems: Auxin By Area",
+                                        //"Chems: Auxin By Area",
                                         "Mechs: Cell Stiffness"
-                                        //"Chems: Quasimodo"
-                                        //"Chems: Division Probability",
+                                        "Chems: Quasimodo"
+                                        "Chems: Division Probability"
                                         //"Chems: WOX5"
                                         };
         for(QString signalName: signals_set) {
