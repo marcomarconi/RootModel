@@ -372,6 +372,8 @@ public:
                               << "Pericycle"
                               << "EpLrcInitial"
                               << "Epidermis"
+                              << "EpidermisMeristem"
+                              << "EpidermisEZ"
                               << "LRC"
                               << "Columella"
                               << "Substrate"

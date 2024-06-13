@@ -1167,7 +1167,9 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     // Quasimodo
     QString quasimodo_tissue = parm("Quasimodo Tissue");
     if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") && (quasimodo_tissue != "Meristem") &&
-            (quasimodo_tissue != "EpidermisCortex") && (quasimodo_tissue != "VascularMeristem") && (quasimodo_tissue != "VascularEZ") &&
+            (quasimodo_tissue != "EpidermisCortex") &&
+            (quasimodo_tissue != "VascularMeristem") && (quasimodo_tissue != "VascularEZ") &&
+            (quasimodo_tissue != "EpidermisMeristem") && (quasimodo_tissue != "EpidermisEZ") &&
             (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 2 / (1 + exp(-0.04*((cD.centroid.y()-lrc) - 0))) * Dt;
     } else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC &&
@@ -1180,6 +1182,10 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     } else if( quasimodo_tissue == "VascularMeristem" && cD.type == Tissue::Vascular && cD.stage == 0){
         cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
     } else if( quasimodo_tissue == "VascularEZ" && cD.type == Tissue::Vascular && cD.stage == 1){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "EpidermisMeristem" && cD.type == Tissue::Epidermis && cD.stage == 0){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "EpidermisEZ" && cD.type == Tissue::Epidermis && cD.stage == 1){
         cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
     }
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
