@@ -1170,6 +1170,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             (quasimodo_tissue != "EpidermisCortex") &&
             (quasimodo_tissue != "VascularMeristem") && (quasimodo_tissue != "VascularEZ") &&
             (quasimodo_tissue != "EpidermisMeristem") && (quasimodo_tissue != "EpidermisEZ") &&
+            (quasimodo_tissue != "EpidermisCortexMeristem") && (quasimodo_tissue != "EpidermisCortexEZ") &&
             (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
             cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * 2 / (1 + exp(-0.04*((cD.centroid.y()-lrc) - 0))) * Dt;
     } else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC &&
