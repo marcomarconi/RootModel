@@ -1187,6 +1187,12 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
     } else if( quasimodo_tissue == "EpidermisEZ" && cD.type == Tissue::Epidermis && cD.stage == 1){
         cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "EpidermisEZ" && cD.type == Tissue::Epidermis && cD.stage == 1){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "EpidermisCortexMeristem" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) && cD.stage == 0){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
+    } else if( quasimodo_tissue == "EpidermisCortexEZ" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) && cD.stage == 1){
+        cD.quasimodo += parm("Quasimodo Basal Production Rate").toDouble() * Dt;
     }
     cD.quasimodo -= cD.quasimodo * parm("Quasimodo Decay Rate").toDouble() * Dt;
 

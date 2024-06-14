@@ -357,6 +357,8 @@ public:
                               << "All"
                               << "Meristem"
                               << "EpidermisCortex"
+                              << "EpidermisCortexMeristem"
+                              << "EpidermisCortexEZ"
                               << "Undefined"
                               << "QC"
                               << "Columella"
