@@ -1167,12 +1167,11 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
 
     // Quasimodo
     QString quasimodo_tissue = parm("Quasimodo Tissue");
-    bool quasimodo_WT_background_active = parm("Quasimodo WT Background Active") == "True";
-    double quasimodo_basal_rate = parm("Quasimodo Basal Production Rate").toDouble();
-    double quasimodo_secondary_rate = parm("Quasimodo Secondary Production Rate").toDouble();
+    double quasimodo_WT_prod_rate = parm("Quasimodo WT Production Rate").toDouble();
+    double quasimodo_tissue_prod_rate = parm("Quasimodo Tissue Production Rate").toDouble();
     double quasimodo_decay_rate = parm("Quasimodo Decay Rate").toDouble();
-    if(quasimodo_WT_background_active && cD.type == Tissue::Epidermis){
-        cD.quasimodo += quasimodo_basal_rate * 2 / (1 + exp(-0.04*((cD.centroid.y()-lrc) - 0))) * Dt;
+    if(quasimodo_WT_prod_rate > 0 && cD.type == Tissue::Epidermis){
+        cD.quasimodo += quasimodo_WT_prod_rate * 2 / (1 + exp(-0.04*((cD.centroid.y()-lrc) - 0))) * Dt;
     }
     if((quasimodo_tissue != "None") && (quasimodo_tissue != "All") && (quasimodo_tissue != "Meristem") &&
             (quasimodo_tissue != "EpidermisCortex") &&
@@ -1180,26 +1179,26 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             (quasimodo_tissue != "EpidermisMeristem") && (quasimodo_tissue != "EpidermisEZ") &&
             (quasimodo_tissue != "EpidermisCortexMeristem") && (quasimodo_tissue != "EpidermisCortexEZ") &&
             (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC &&
                                              cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) ){       if(cD.centroid.y() > lrc)
-            cD.quasimodo += quasimodo_secondary_rate * Dt;
+            cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisCortex" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) ){
-            cD.quasimodo += quasimodo_secondary_rate * Dt;
+            cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "Meristem" && cD.centroid.y()-qc.y() > 0 && cD.stage == 0){
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "VascularMeristem" && cD.type == Tissue::Vascular && cD.stage == 0){
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "VascularEZ" && cD.type == Tissue::Vascular && cD.stage == 1){
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisMeristem" && cD.type == Tissue::Epidermis && cD.stage == 0){
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisEZ" && cD.type == Tissue::Epidermis && cD.stage == 1){
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisCortexMeristem" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) && cD.stage == 0){
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisCortexEZ" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) && cD.stage == 1){
-        cD.quasimodo += quasimodo_secondary_rate * Dt;
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     }
     cD.quasimodo -= cD.quasimodo * quasimodo_decay_rate * Dt;
 

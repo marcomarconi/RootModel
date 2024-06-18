@@ -79,7 +79,7 @@ CameraZoom: -1.248
 [Clip1]
 Enable: false
 Grid: false
-Width: 227.404
+Width: 227.632
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 0.99995 -0.00998078 -0.000235337 0 0.00998065 0.99995 -0.000571525 0 0.00
 [Clip2]
 Enable: false
 Grid: false
-Width: 227.404
+Width: 227.632
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 227.404
+Width: 227.632
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -1185,7 +1185,7 @@ ParmString: True
 ParmName: Remesh at start
 ParmString: Hard
 ParmName: Remesh during execution
-ParmString: 40
+ParmString: 0
 ParmName: Mesh Update Timer
 ParmString: 20
 ParmName: Snapshots Timer
@@ -1459,7 +1459,7 @@ ParmString: Model/Root/05 Mechanics
 ParmName: Mechanical Solver Process
 ParmString: Model/Root/051 Mechanical Solver
 ProcessName: Model/Root/06 Chemicals
-NumParms: 100
+NumParms: 101
 ParmName: Dt
 ParmString: 0.01
 ParmName: Converge Threshold
@@ -1588,8 +1588,10 @@ ParmName: Division Promoter Decay Rate
 ParmString: 0.01
 ParmName: Division Promoter Permeability
 ParmString: 0
-ParmName: Quasimodo Basal Production Rate
-ParmString: 1
+ParmName: Quasimodo WT Production Rate
+ParmString: 0.5
+ParmName: Quasimodo Tissue Production Rate
+ParmString: 0.5
 ParmName: Quasimodo Decay Rate
 ParmString: 1
 ParmName: Quasimodo Tissue
