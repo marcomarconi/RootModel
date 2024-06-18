@@ -348,7 +348,11 @@ public:
         addParm("Division Promoter Decay Rate", "Division Promoter Decay Rate", "0.01");
         addParm("Division Promoter Permeability", "Division Promoter Permeability", "1"); // 1 for the data, 5 for the figure
         addParm("Quasimodo Basal Production Rate", "Quasimodo Basal Production Rate", "1");
+        addParm("Quasimodo Secondary Production Rate", "Quasimodo Secondary Production Rate", "1");
         addParm("Quasimodo Decay Rate", "Quasimodo Decay Rate", "0.1");
+        addParm("Quasimodo WT Background Active", "Quasimodo WT Background Active", "True",
+                QStringList() << "True"
+                              << "False");
         addParm("Quasimodo Tissue",
                 "Quasimodo Tissue",
                 "None",
