@@ -12,7 +12,7 @@ theme_set(theme_bw())
 
 
 dir <- "/home/marco/trabajo/Models/RootModel/Sabatini/Sabatini_WT_background_yesremesh/"
-#dir <- "/home/marco/trabajo/Models/RootModel/Sabatini/Sabatini_QuasExp_TurgorElongation_Tissue_YesRemesh_2hours_LRC100_4K/"
+dir <- "/home/marco/trabajo/Models/RootModel/Sabatini/Sabatini_QuasExp_TurgorElongation_Tissue_YesRemesh_2hours_LRC100_4K/"
 
 setwd(dir)
 files <- list()
@@ -39,7 +39,7 @@ for(f in c(
   print(f)    
   df <- read_csv(f, show_col_types = F) %>% head(-10)
   colnames(df) <- c("Time", "Root", "Meristem")
-  df$GR <- EMA(c(0, diff((df$Root))), 1)
+  df$GR <- EMA(c(NA, diff((df$Root))), 1)
   #files[[f %>% sub("output.*_([A-Z].*)_\\.out", "\\1", .)]] <- df
   files[[f]] <- df
 }
@@ -63,7 +63,7 @@ matplot(Mer[,1], Mer[,-1], type="o")
 third <- Mer %>% melt(id.vars = c("Time"), variable.name = "Tissue")  %>% mutate(Measure="Meristem") 
 final_df <- rbind(first, second, third)
 
-filter(final_df, Measure=="GR" & Time > 100) %>% group_by(Tissue) %>% summarise(M=mean(value, na.rm=T), S=1*sd(value, na.rm=T)) %>% 
+filter(final_df, Measure=="GR" & Time < 1000) %>% group_by(Tissue) %>% summarise(M=mean(value, na.rm=T), S=1*sd(value, na.rm=T)) %>% 
   ggplot() + geom_bar(aes(Tissue, M), stat = "identity", fill="purple") + geom_errorbar(aes(Tissue, ymin=M-S, ymax=M+S), width=0.25) + 
     theme(text = element_text(size=28), axis.title.x = element_blank(), axis.text.x = element_text( hjust = 1, angle = 45)) + 
     ylab("Growth Rate") + ggtitle("Root Growth Rate")
@@ -71,7 +71,7 @@ filter(final_df, Measure=="GR" & Time > 100) %>% group_by(Tissue) %>% summarise(
 filter(final_df, (Measure=="Meristem") & Time < 1000) %>% group_by(Tissue, Measure) %>% summarise(value=last(value %>% na.omit)) %>% 
   ggplot() + geom_bar(aes(Tissue, value), position = "dodge", stat = "identity") + theme(text = element_text(size=28), axis.title.x = element_blank(), axis.text.x = element_text( hjust = 1, angle = 45)) + ylab("Relative Size") 
 
-final_df %>% filter(Measure=="Meristem"& Time < 1000) %>% group_by(Time) %>% summarise(value=value/max(value, na.rm=T), Tissue=Tissue) %>% 
+final_df %>% filter(Measure=="Meristem"& Time > 1000) %>% group_by(Time) %>% summarise(value=value/max(value, na.rm=T), Tissue=Tissue) %>% 
     group_by(Tissue) %>% summarise(M=mean(value, na.rm=T), S=1*sd(value, na.rm=T)) %>% 
     ggplot() + geom_bar(aes(Tissue, M), position = "dodge", stat = "identity", fill="magenta")+ geom_errorbar(aes(Tissue, ymin=M-S, ymax=M+S), width=0.25)  + 
     theme(text = element_text(size=28), axis.title.x = element_blank(), axis.text.x = element_text( hjust = 1, angle = 45)) + 
@@ -79,7 +79,7 @@ final_df %>% filter(Measure=="Meristem"& Time < 1000) %>% group_by(Time) %>% sum
 
 filter(final_df %>% na.omit, (Measure=="Root") & Time ==2000) %>% group_by(Tissue, Measure) %>% summarise(value=last(value )) %>% 
     ggplot() + geom_bar(aes(Tissue, value), position = "dodge", stat = "identity") + theme(text = element_text(size=28), axis.title.x = element_blank(), axis.text.x = element_text( hjust = 1, angle = 45)) + ylab("Relative Size") 
-final_df %>% filter(Measure=="Root"& Time > 2000) %>% group_by(Time) %>% summarise(value=value/max(value, na.rm=T), Tissue=Tissue) %>% 
+final_df %>% filter(Measure=="Root"& Time < 1000) %>% group_by(Time) %>% summarise(value=value/max(value, na.rm=T), Tissue=Tissue) %>% 
     group_by(Tissue) %>% summarise(M=mean(value, na.rm=T), S=1*sd(value, na.rm=T)) %>% 
     ggplot() + geom_bar(aes(Tissue, M), position = "dodge", stat = "identity", fill="firebrick")+
     geom_errorbar(aes(Tissue, ymin=M-S, ymax=M+S), width=0.25)  + 
