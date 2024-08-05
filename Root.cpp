@@ -2931,6 +2931,7 @@ bool Root::step() {
             // Root length
             Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
             Point3d SOURCEcm = Point3d(0,0,0); int source_cell = 0;
+            Point3d SUBSTRATEcm = Point3d(0,0,0); int substrate_cell = 0;
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
                 if(cD.type == Tissue::QC) {
@@ -2940,6 +2941,10 @@ bool Root::step() {
                 else if(cD.type == Tissue::Source) {
                     SOURCEcm += cD.centroid;
                     source_cell++;
+                }
+                else if(cD.type == Tissue::Substrate) {
+                    SUBSTRATEcm += cD.centroid;
+                    substrate_cell++;
                 }
                 else if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
                     lrc = cD.centroid.y();
