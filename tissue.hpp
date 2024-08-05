@@ -590,6 +590,7 @@ public:
             a1 = Point3d(1, 1, 0) * EPS, a2 = Point3d(1, 1, 0) * EPS;
             restArea = area;
             restCm = centroid;
+            pressure = 0;
             pressureMax = -1;
             shapeInit = false;
             invmassVertices = 1;            

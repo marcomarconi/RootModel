@@ -111,3 +111,8 @@ Process.Mesh__Structure__Smooth_Border('1')
 Process.Mesh__Structure__Smooth_Border('1')
 Process.Mesh__Structure__Smooth_Border('1')
 Process.Mesh__System__Load('/home/marco/trabajo/Models/RootModel/Hook/A.mdxm', 'No', 'No', '0')
+Process.Tools__System__Load_View('')
+Process.Mesh__System__Load('/home/marco/trabajo/Models/RootModel/Hook/Hook_final.mdxm', 'no', 'no', '0')
+Process.Mesh__System__Export('/home/marco/trabajo/Models/RootModel/Hook/Hook_final.mdxm', 'Text', 'No', '0')
+######## New MorphoDynamX session v2.0 r2-793: 2024-07-30 12:30:55
+Process.Mesh__System__Import('0', '', 'Imported', 'No', 'No')
