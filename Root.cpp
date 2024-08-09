@@ -2927,11 +2927,13 @@ bool Root::step() {
         // Crisanto's data
         ///////// ONLY WORKS IF the root grows from top to bottom, or change the code
         double lrc = -BIG_VAL;
-        if(stepCount % 5 == 0) {
+        if(stepCount % 10 == 0 && debugging) {
             // Root length
             Point3d QCcm = Point3d(0,0,0); int qc_cell = 0;
             Point3d SOURCEcm = Point3d(0,0,0); int source_cell = 0;
             Point3d SUBSTRATEcm = Point3d(0,0,0); int substrate_cell = 0;
+            Point3d substrate_normal, source_normal;
+
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
                 if(cD.type == Tissue::QC) {
@@ -2941,10 +2943,26 @@ bool Root::step() {
                 else if(cD.type == Tissue::Source) {
                     SOURCEcm += cD.centroid;
                     source_cell++;
+                    for(CCIndex e : cD.perimeterEdges) {
+                        Tissue::EdgeData& eD = edgeAttr[e];
+                        for(CCIndex fn : cs.incidentCells(e, 2)){
+                            Tissue::CellData& cDn = cellAttr[indexAttr[fn].label];
+                            if(cD.type != cDn.type)
+                                source_normal += eD.outwardNormal[fn];
+                        }
+                    }
                 }
                 else if(cD.type == Tissue::Substrate) {
                     SUBSTRATEcm += cD.centroid;
                     substrate_cell++;
+                    for(CCIndex e : cD.perimeterEdges) {
+                        Tissue::EdgeData& eD = edgeAttr[e];
+                        for(CCIndex fn : cs.incidentCells(e, 2)){
+                            Tissue::CellData& cDn = cellAttr[indexAttr[fn].label];
+                            if(cD.type != cDn.type)
+                                substrate_normal += eD.outwardNormal[fn];
+                        }
+                    }
                 }
                 else if(cD.type == Tissue::LRC && cD.centroid.y() > lrc)
                     lrc = cD.centroid.y();
@@ -2957,7 +2975,9 @@ bool Root::step() {
             }
             QCcm /= qc_cell; SOURCEcm /= source_cell;
             double root_length = norm(SOURCEcm - QCcm) ;
-            mdxInfo << "Root length " << root_length << " Meristem length " <<  lrc-QCcm.y()  << " Time " << stepCount << endl;
+            double root_angle = angle(substrate_normal/substrate_normal.norm(), source_normal/source_normal.norm()) * (180. / M_PI);
+            //mdxInfo << "Root length " << root_length << " Meristem length " <<  lrc-QCcm.y()  << " Time " << stepCount << endl;
+            cout << "Angle: " << 180-root_angle << endl;
             /*
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
@@ -2984,7 +3004,8 @@ bool Root::step() {
             mdxInfo << "The execution reached the maximum amount of seconds set" << endl;
             saveMeshProcess->run(mesh, parm("Output Mesh"), false);
             exit(0);
-        }
+    }
+
 
     return true;
 }

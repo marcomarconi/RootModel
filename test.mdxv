@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 0 0 0 0 1 0 0 0 0 1 0 -11.1617 -28.1946 -4672.03 1
+CameraFrame: 1 -1.23029e-17 1.11022e-16 0 1.23029e-17 1 -1.35689e-32 0 -1.11022e-16 1.49348e-32 1 0 -32.5249 -42.0405 -4672.03 1
 SceneRadius: 500
-CameraZoom: -2.976
+CameraZoom: -3.072
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 253.017
+Width: 240.076
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 253.017
+Width: 240.076
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 253.017
+Width: 240.076
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: test.mdxm
+MeshFile: test2.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05892 1.05892 1.05892
+Size: 1.05893 1.05893 1.05893
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -278,6 +278,52 @@ ParmName: Axis Name
 ParmString: 
 ParmName: Width
 ParmString: 2.0
+ProcessName: Mesh/Cell Atlas 3D/A Analyze Cells 3D
+NumParms: 3
+ParmName: Surface Mesh
+ParmString: Surface Mesh
+ParmName: Volume Threshold
+ParmString: 0
+ParmName: Mode
+ParmString: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Centroids
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Cell Property Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Create Contour Attr Map
+NumParms: 0
+ProcessName: Mesh/Cell Atlas 3D/Nucleus Stress/Export Nucleus Stress Data Steve
+NumParms: 3
+ParmName: Filename Contour Data
+ParmString: 
+ParmName: Filename Min Distance
+ParmString: 
+ParmName: Wall Type Min Distance
+ParmString: Side
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Cell Wall Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data
+NumParms: 1
+ParmName: Filename
+ParmString: 
+ProcessName: Mesh/Cell Atlas 3D/Test/Export Face Data2
+NumParms: 2
+ParmName: Filename
+ParmString: 
+ParmName: Histogram Bins
+ParmString: 20
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Cell Wall Labels
+NumParms: 1
+ParmName: Face Labeling
+ParmString: Face Type
+ProcessName: Mesh/Cell Atlas 3D/Test/Set Volume Label
+NumParms: 1
+ParmName: Label
+ParmString: 1
+ProcessName: Mesh/Cell Atlas 3D/Tools/Collapse Bezier Points
+NumParms: 0
 ProcessName: Mesh/Cell Axis/Cell Axis Load
 NumParms: 2
 ParmName: Type
@@ -1233,7 +1279,7 @@ ParmString: 0
 ParmName: Draw PINs
 ParmString: 0
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ProcessName: Model/Root/04 Divide Cells
 NumParms: 35
 ParmName: Cell Max Area
@@ -1251,7 +1297,7 @@ ParmString: 0.0
 ParmName: Wall Noise
 ParmString: 0.0
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Division Algorithm
 ParmString: 1
 ParmName: Max Joining Distance
@@ -1305,7 +1351,7 @@ ParmString: Model/Root/ClearCells
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ParmName: Manual Cell Division Enabled
-ParmString: True
+ParmString: False
 ProcessName: Model/Root/05 Mechanics
 NumParms: 28
 ParmName: Dt
@@ -1315,13 +1361,13 @@ ParmString: .1
 ParmName: Convergence Lag
 ParmString: 1
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Debug Steps
 ParmString: 10
 ParmName: Mass Spring Parameters
 ParmString: 
 ParmName: Wall EK
-ParmString: 0.05
+ParmString: .0.05
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
@@ -1367,7 +1413,7 @@ ParmString: Model/Root/23 Set Global Attr
 ProcessName: Model/Root/052 Mechanical Growth
 NumParms: 23
 ParmName: Verbose
-ParmString: True
+ParmString: False
 ParmName: Polarity Method
 ParmString: Cell Axis
 ParmName: Strain Tensor
@@ -1391,7 +1437,7 @@ ParmString: 0.01
 ParmName: MF Delete After Division
 ParmString: False
 ParmName: Prevent Cell Elongation
-ParmString: False
+ParmString: True
 ParmName: Zonation
 ParmString: 
 ParmName: Elongation Zone
@@ -1655,7 +1701,7 @@ ParmString: 0
 ParmName: PBD strain normalize
 ParmString: True
 ParmName: PBD shape stiffness
-ParmString: 1
+ParmString: 0.1
 ParmName: PBD shape allow stretching
 ParmString: True
 ProcessName: Model/Root/21 Print Cell Attr
@@ -1663,7 +1709,7 @@ NumParms: 0
 ProcessName: Model/Root/22 Set Cell Attr
 NumParms: 8
 ParmName: Cell Type
-ParmString: LRC
+ParmString: Epidermis
 ParmName: Vertices Masses
 ParmString: 1
 ParmName: Auxin production rate
@@ -1831,7 +1877,7 @@ ParmString: 70
 ParmName: Endodermis MF reorientation rate
 ParmString: -1
 ParmName: Epidermis Wall EK
-ParmString: -1
+ParmString: 1
 ParmName: Epidermis Wall CK
 ParmString: -1
 ParmName: Epidermis Shear EK
@@ -1843,7 +1889,7 @@ ParmString: -1
 ParmName: Epidermis Wall Max GR
 ParmString: -1
 ParmName: Epidermis Max area
-ParmString: 80
+ParmString: 60
 ParmName: Epidermis MF reorientation rate
 ParmString: -1
 ParmName: CEI Wall EK
@@ -1911,13 +1957,13 @@ ParmString: 60
 ParmName: LRC MF reorientation rate
 ParmString: -1
 ParmName: Substrate Wall EK
-ParmString: 1
+ParmString: -1
 ParmName: Substrate Wall CK
-ParmString: 1
+ParmString: -1
 ParmName: Substrate Shear EK
-ParmString: 1
+ParmString: -1
 ParmName: Substrate Shear CK
-ParmString: 1
+ParmString: -1
 ParmName: Substrate Turgor Pressure
 ParmString: 0
 ParmName: Substrate Wall Max GR
@@ -1927,15 +1973,15 @@ ParmString: 0
 ParmName: Substrate Max area
 ParmString: 1000
 ParmName: Source Wall EK
-ParmString: 1
-ParmName: Source Wall CK
-ParmString: 1
-ParmName: Source Shear EK
-ParmString: 1
-ParmName: Source Shear CK
-ParmString: 1
-ParmName: Source Turgor Pressure
 ParmString: -1
+ParmName: Source Wall CK
+ParmString: -1
+ParmName: Source Shear EK
+ParmString: -1
+ParmName: Source Shear CK
+ParmString: -1
+ParmName: Source Turgor Pressure
+ParmString: 0
 ParmName: Source Wall Max GR
 ParmString: -1
 ParmName: Source MF reorientation rate
@@ -2222,6 +2268,74 @@ ParmName: Low Threshold
 ParmString: 1000
 ParmName: High Threshold
 ParmString: 0
+ProcessName: Stack/ITK/Filters/ITK Curvature Anisotropic Diffusion Image Filter
+NumParms: 3
+ParmName: Time Step
+ParmString: 0.03
+ParmName: Iterations
+ParmString: 5
+ParmName: Conductance
+ParmString: 9.0
+ProcessName: Stack/ITK/Filters/ITK Curvature Flow Image Filter
+NumParms: 2
+ParmName: Time Step
+ParmString: .0.0625
+ParmName: Steps
+ParmString: 10
+ProcessName: Stack/ITK/Filters/ITK Gradient Magnitude Recursive Gaussian Image Filter
+NumParms: 1
+ParmName: Sigma
+ParmString: 0.5
+ProcessName: Stack/ITK/Filters/ITK Sigmoid Image Filter
+NumParms: 2
+ParmName: Alpha
+ParmString: 1000.0
+ParmName: Beta
+ParmString: 2000.0
+ProcessName: Stack/ITK/Filters/ITK Smoothing Recursive Gaussian Image Filter
+NumParms: 1
+ParmName: Radius
+ParmString: 1.0
+ProcessName: Stack/ITK/Registration/ITK Demons Registration
+NumParms: 6
+ParmName: Deformation File
+ParmString: deformation.vtk
+ParmName: Threshold at Mean
+ParmString: Yes
+ParmName: Histogram Levels
+ParmString: 1024
+ParmName: Match Points
+ParmString: 7
+ParmName: Iterations
+ParmString: 150
+ParmName: Sigma
+ParmString: 1.0
+ProcessName: Stack/ITK/Segmentation/ITK Watershed
+NumParms: 2
+ParmName: Fully Connected
+ParmString: No
+ParmName: Mark Watershed Line
+ParmString: No
+ProcessName: Stack/ITK/Segmentation/ITK Watershed Auto Seeded
+NumParms: 3
+ParmName: Fully Connected
+ParmString: No
+ParmName: Mark Watershed Line
+ParmString: No
+ParmName: Level
+ParmString: 1500
+ProcessName: Stack/ITK/System/ITK Image Reader
+NumParms: 3
+ParmName: File Name
+ParmString: 
+ParmName: Store
+ParmString: Main
+ParmName: Stack Number
+ParmString: 0
+ProcessName: Stack/ITK/System/ITK VTK Writer
+NumParms: 1
+ParmName: File Name
+ParmString: 
 ProcessName: Stack/Mesh Interaction/Annihilate
 NumParms: 4
 ParmName: Fill
@@ -2298,6 +2412,10 @@ ParmName: Adapt Factor
 ParmString: 0.3
 ParmName: Fill Value
 ParmString: 30000
+ProcessName: Stack/Morphology/Edge Detect Angle
+NumParms: 1
+ParmName: Fill Holes
+ParmString: No
 ProcessName: Stack/Morphology/Erode
 NumParms: 5
 ParmName: X Radius
@@ -2585,9 +2703,9 @@ ParmString: Rectangle
 ProcessName: Tools/Cell Maker/Mesh 2D/Cell Grids/Grid of Rectangular Cells
 NumParms: 9
 ParmName: Rows
-ParmString: 8
+ParmString: 10
 ParmName: Columns
-ParmString: 6
+ParmString: 8
 ParmName: Row Segments
 ParmString: 3
 ParmName: Col Segments
