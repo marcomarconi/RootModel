@@ -69,6 +69,7 @@ public:
         addParm("PBD shape allow stretching", "PBD shape allow stretchinge", "True",
                                                                         QStringList() << "False"
                                                                                       << "True");
+        addParm("Jolly1", "Jolly1", "0");
     }
 
 

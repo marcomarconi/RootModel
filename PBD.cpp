@@ -955,6 +955,8 @@ void PBD::solve() {
                     continue;
                 }
                 double stiffness = PBDstrainStiffness;
+                if(parm("Jolly1").toDouble() > 0 && (cellAttr[indexAttr[f].label].type == Tissue::Epidermis || cellAttr[indexAttr[f].label].type == Tissue::LRC))
+                    stiffness = parm("Jolly1").toDouble();
                 if(stiffnessCorrection)
                     stiffness = 1 - pow(1 - stiffness, 1. / (inter + 1));
                 corr0 *= stiffness;
