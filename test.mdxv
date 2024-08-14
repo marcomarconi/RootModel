@@ -71,15 +71,15 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 -1.23029e-17 1.11022e-16 0 1.23029e-17 1 -1.35689e-32 0 -1.11022e-16 1.49348e-32 1 0 -23.6619 -55.6538 -4672.03 1
+CameraFrame: 1 -1.23029e-17 1.11022e-16 0 1.23029e-17 1 -1.35689e-32 0 -1.11022e-16 1.49348e-32 1 0 -28.0569 -47.342 -4672.03 1
 SceneRadius: 500
-CameraZoom: -2.208
+CameraZoom: -2.112
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 287.465
+Width: 290.064
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 287.465
+Width: 290.064
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 287.465
+Width: 290.064
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.05893 1.05893 1.05893
+Size: 1.05962 1.05962 1.05962
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1137,11 +1137,11 @@ ParmString: True
 ParmName: Cell Division Enabled
 ParmString: True
 ParmName: Remesh at start
-ParmString: Hard
+ParmString: Soft
 ParmName: Remesh during execution
 ParmString: 0
 ParmName: Mesh Update Timer
-ParmString: 3
+ParmString: 5
 ParmName: Snapshots Timer
 ParmString: 0
 ParmName: Snapshots Directory
@@ -1841,7 +1841,7 @@ ParmString: -1
 ParmName: Epidermis Shear CK
 ParmString: -1
 ParmName: Epidermis Turgor Pressure
-ParmString: -1
+ParmString: 3
 ParmName: Epidermis Wall Max GR
 ParmString: -1
 ParmName: Epidermis Max area
@@ -1905,7 +1905,7 @@ ParmString: -1
 ParmName: LRC Shear CK
 ParmString: -1
 ParmName: LRC Turgor Pressure
-ParmString: -1
+ParmString: 0
 ParmName: LRC Wall Max GR
 ParmString: -1
 ParmName: LRC Max area
