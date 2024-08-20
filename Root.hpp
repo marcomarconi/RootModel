@@ -1786,6 +1786,37 @@ public:
 };
 
 
+class ResetTurgorPressure : public Process {
+public:
+    ResetTurgorPressure(const Process& process)
+        : Process(process) {
+        setName("Model/Root/5 Reset Turgor Pressure");
+        setDesc("Reset Turgor Pressure.");
+
+    }
+    bool step() {
+        Mesh* mesh = getMesh("Mesh 1");
+        if(!mesh or mesh->file().isEmpty())
+            throw(QString("Reset Turgor Pressure No current mesh"));
+
+        QString ccName = mesh->ccName();
+        if(ccName.isEmpty())
+            throw(QString("Reset Turgor Pressure, no cell complex selected"));
+
+        CCStructure& cs = mesh->ccStructure(ccName);
+        CCIndexDataAttr& indexAttr = mesh->indexAttr();
+        Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
+
+        for(auto c : cellAttr) {
+            Tissue::CellData& cD = cellAttr[c.first];
+            cD.pressure = 0;
+        }
+
+        return false;
+    }
+};
+
+
 class AddFace : public Process {
 public:
     AddFace(const Process& process)
