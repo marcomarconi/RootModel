@@ -70,6 +70,7 @@ public:
                                                                         QStringList() << "False"
                                                                                       << "True");
         addParm("Jolly1", "Jolly1", "0");
+        addParm("Jolly2", "Jolly2", "0");
     }
 
 

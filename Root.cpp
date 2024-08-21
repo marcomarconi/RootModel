@@ -2977,7 +2977,7 @@ bool Root::step() {
             double root_length = norm(SOURCEcm - QCcm) ;
             double root_angle = angle(substrate_normal/substrate_normal.norm(), source_normal/source_normal.norm()) * (180. / M_PI);
             //mdxInfo << "Root length " << root_length << " Meristem length " <<  lrc-QCcm.y()  << " Time " << stepCount << endl;
-            cout << "Angle: " << 180-root_angle << endl;
+            cout << "Steps: " << stepCount << " Angle: " << 180-root_angle << endl;
             /*
             for(auto c : cellAttr) {
                 Tissue::CellData& cD = cellAttr[c.first];
@@ -3733,7 +3733,7 @@ bool SetGlobalAttr::initialize(QWidget* parent) {
 bool SetGlobalAttr::step() {
     Mesh* mesh = getMesh("Mesh 1");
     if(!mesh or mesh->file().isEmpty())
-        throw(QString("SetCell::step No current mesh"));
+        throw(QString("SetGlobalAttr::step No current mesh"));
 
     CCStructure& cs = mesh->ccStructure("Tissue");
     Tissue::EdgeDataAttr& edgeAttr =
@@ -3800,7 +3800,7 @@ bool SetGlobalAttr::step() {
 bool SetCellAttr::step() {
     Mesh* mesh = getMesh("Mesh 1");
     if(!mesh or mesh->file().isEmpty())
-        throw(QString("SetCellAttr::step No current mesh, cannot rewind"));
+        throw(QString("SetCellAttr::step No current mesh"));
 
     QString ccName = mesh->ccName();
     if(ccName.isEmpty())
@@ -3825,13 +3825,21 @@ bool SetCellAttr::step() {
                 cD.periclinalDivision = parm("Periclinal Division") == "True";
             cD.mfRORate = parm("MF reorientation rate").toDouble();
             QStringList list = parm("Microfibril 1").split(QRegExp(","));
-            cD.a1[0] = list[0].toDouble();
-            cD.a1[1] = list[1].toDouble();
-            cD.a1[2] = list[2].toDouble();
+            if(list[0].toDouble() != 0 && list[1].toDouble() != 0 && list[2].toDouble() != 0){
+                cD.a1[0] = list[0].toDouble();
+                cD.a1[1] = list[1].toDouble();
+                cD.a1[2] = list[2].toDouble();
+            } else {
+                mdxInfo << "SetCellAttr: Microfibril 1 values all zero, skipping";
+            }
             list = parm("Microfibril 2").split(QRegExp(","));
-            cD.a2[0] = list[0].toDouble();
-            cD.a2[1] = list[1].toDouble();
-            cD.a2[2] = list[2].toDouble();
+            if(list[0].toDouble() != 0 && list[1].toDouble() != 0 && list[2].toDouble() != 0){
+                cD.a2[0] = list[0].toDouble();
+                cD.a2[1] = list[1].toDouble();
+                cD.a2[2] = list[2].toDouble();
+            } else {
+                mdxInfo << "SetCellAttr: Microfibril 2 values all zero, skipping";
+            }
             double mass =  parm("Vertices Masses").toDouble();
             cD.invmassVertices = 1. / mass;
             for(CCIndex f : (*cD.cellFaces)) {
