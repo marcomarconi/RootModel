@@ -957,7 +957,7 @@ void PBD::solve() {
                 double stiffness = PBDstrainStiffness;
                 if(parm("Jolly1").toDouble() > 0 && (cellAttr[indexAttr[f].label].type == Tissue::Epidermis))
                     stiffness = parm("Jolly1").toDouble();
-                if(parm("Jolly2").toDouble() > 0 && (cellAttr[indexAttr[f].label].type == Tissue::LRC))
+                if(parm("Jolly2").toDouble() > 0 && (cellAttr[indexAttr[f].label].type == Tissue::LRC || cellAttr[indexAttr[f].label].type == Tissue::Endodermis))
                     stiffness = parm("Jolly2").toDouble();
                 if(stiffnessCorrection)
                     stiffness = 1 - pow(1 - stiffness, 1. / (inter + 1));
@@ -1063,7 +1063,7 @@ void PBD::solve() {
             CCIndex v = cs.vertices()[i];
             Tissue::VertexData& vD = vMAttr[v];
             indexAttr[v].pos[2] = 0;
-            if(parm("Substrate Fixed") == "True" && (vD.substrate || vD.source)) {
+            if(parm("Substrate Fixed") == "True" && (vD.substrate /*|| vD.source*/)) {
                 indexAttr[v].pos -= indexAttr[v].pos - vD.prevPos;
                 vD.corrections["substrate/source"] -= indexAttr[v].pos - vD.prevPos;
             }
