@@ -5,11 +5,10 @@ library(LaplacesDemon)
 library(forcats)
 theme_set(theme_bw())
 
+### Growth rate
 #for f in `ls output*_`; do grep "Root length [^ ]* Meristem length [^ ]* Time [0-9]*" $f  -o | sed 's/Root length \([0-9\.]*\) Meristem length \([0-9\.]*\) Time \([0-9]*\)/\3,\1,\2/' | uniq | grep -v nan > $f.out; done
-
-# Growth rate
 {
-dir <- "/home/marco/trabajo/Models/RootModel/Brassino/Brassino_noAuxin_EK_2h_10steps/"
+dir <- "/home/marco/trabajo//Models/RootModel/Brassino/Brassino_noAuxin_EK_2h_10steps/"
 setwd(dir)
 files <- list()
 for(f in list.files(".","*.out")) {
@@ -31,20 +30,21 @@ df <- do.call(rbind, files) %>% mutate(Delay = fct_reorder(Delay, as.numeric(Del
 levels(df$Type) <- c("Scen. 1", "Scen. 3-LO", "Scen. 2", "Scen. 3-UP"); df$Type <- factor(df$Type, c("Scen. 1", "Scen. 2", "Scen. 3-UP", "Scen. 3-LO")); 
 levels(df$Delay) <- c("Delay 0", "Delay 20min", "Delay 1.5h", "Delay 3h", "Delay 6h");
 df$Time <- df$Time * 0.03
-ggplot(df %>% filter(Time < 40 & Basal == "0.1" & WGR == "1.0" & Delay!="Delay 0")) + 
+# Paper filter is "filter(Time < 40 & Basal == "0.01" & WGR == "1.0" & Delay!="Delay 0")"
+ggplot(df %>% filter(Time < 40 & Basal == "0.01" & WGR == "1.0" & Delay!="Delay 0")) + 
     geom_line(aes(Time, GR, color=Type), linewidth=3) + 
     scale_color_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) + 
     theme(text=element_text(size=32), axis.text = element_text(size=18), legend.title = element_blank(), legend.text = element_text(size = 18), legend.key.width = unit(x = 1, units = "cm")) + facet_wrap(~Delay) + 
-    ylim(c(0.5, 1.6)) + ylab("Root Growth Rate")+ xlab("Time (h)")
+    #ylim(c(0.5, 1.6)) + 
+    ylab("Root Growth Rate")+ xlab("Time (h)")
 
 #ggsave("~/GR.svg", width=6.51*2, height=5.76*1.25)
 }
 
 
 
-
+### Cell division
 #for f in `ls output*_`; do grep trig $f | cut -f 39 -d " " > $f.div; done
-# Cell division
 {
 files <- list()
 for(f in list.files(".","*.div")) {
@@ -67,9 +67,8 @@ ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0" & Delay != "0")) +
         geom_bar(aes(Delay, Count, fill=Type), color="gray1", stat="identity", position = position_dodge()) +    
         theme(text=element_text(size=32), axis.text.x = element_text(size=20, angle = 45, vjust = 0.5),legend.text = element_text(size = 18), legend.title = element_blank()) + 
             xlab("Delay")+  ylab("Cell Divisions")+   scale_fill_manual(values = c("#014d64", "orange3", "#6794a7", "#01a2d9")) 
-    ggsave("~/CD.svg", width=6.51*2, height=5.76*1.25)
+    #ggsave("~/CD.svg", width=6.51*2, height=5.76*1.25)
 }
-
 
 # Some cartoon plots
 {
@@ -92,9 +91,10 @@ ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0" & Delay != "0")) +
     
 }   
 
-
+### Cell Sizes
 #for f in `ls output*_`; do grep ^Brassino $f  > $f.brassino; done
 {
+  dir <- "/home/marco/trabajo//Models/RootModel/Brassino/Brassino_noAuxin_EK_2h_10steps/"
   files <- list()
   for(f in list.files(".","*.brassino")) {
     df <- read_csv(f, show_col_types = FALSE, col_names = FALSE)
@@ -104,20 +104,13 @@ ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0" & Delay != "0")) +
     df$Delay <- values[3]
     df$WGR <- values[4] %>% factor()
     colnames(df) <- c("Brassino", "CellType", "Mother", "Last", "Top", "Area", "CellGR", "Signal", "Auxin", "Basal", "Type", "Delay", "WGR")
-    files[[f]] <- df %>% group_by(Type, Delay, Basal, WGR, CellType, Time=ceiling(Last), Top) %>% 
-      summarize(Area=mean(Area), .groups = "drop")
+    files[[f]] <- df #%>% group_by(Type, Delay, Basal, WGR, CellType, Time=ceiling(Last), Top) %>%       summarize(Area=mean(Area), .groups = "drop")
   }
-<<<<<<< HEAD
+
   df <- do.call(rbind, files)%>% mutate(Top=factor(Top), Delay = fct_reorder(Delay, as.numeric(Delay))) %>% 
     group_by(CellType, Time, Delay, Basal, WGR, Top, Type) %>% summarize(M=mean(Area), SD=sd(Area)/sqrt(n()))
-  df %>% filter(Basal == "0.01" & WGR == "10.0" & Delay==1 & Type=="Upper" & CellType %in% c(6,7,8,9,12,13)) %>% ggplot() + 
+  df %>% filter(Basal == "0.01" & WGR == "1.0" & Delay==1 & Type=="Upper" & CellType %in% c(6,7,8,9,12,13)) %>% ggplot() + 
              geom_line(aes(Time, M, color=Top), linewidth=2) + 
-=======
-  df <- do.call(rbind, files)%>% mutate(Delay = fct_reorder(Delay, as.numeric(Delay))) %>% 
-    group_by(CellType, Time, Delay, Basal, WGR, Top, Type) %>% summarize(M=mean(Area), SD=sd(Area)/sqrt(n()), n())
-  df %>% filter(Basal == "0.01" & WGR == "1.0" & CellType==12 & Type=="None") %>% ggplot() + 
-             geom_line(aes(Time, M, color=factor(Top)), linewidth=2) + 
->>>>>>> 5064876b6aff965952a5b8b5d748fe07adda5575
              geom_errorbar(aes(Time, ymin=M-SD, ymax=M+SD), color="gray")  + 
       facet_wrap(~CellType) +     theme(text=element_text(size=32))
 }

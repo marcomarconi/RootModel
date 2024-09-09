@@ -1803,8 +1803,6 @@ public:
         if(ccName.isEmpty())
             throw(QString("Reset Turgor Pressure, no cell complex selected"));
 
-        CCStructure& cs = mesh->ccStructure(ccName);
-        CCIndexDataAttr& indexAttr = mesh->indexAttr();
         Tissue::CellDataAttr& cellAttr = mesh->attributes().attrMap<int, Tissue::CellData>("CellData");
 
         for(auto c : cellAttr) {

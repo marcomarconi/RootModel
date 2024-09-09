@@ -955,10 +955,12 @@ void PBD::solve() {
                     continue;
                 }
                 double stiffness = PBDstrainStiffness;
-                if(parm("Jolly1").toDouble() > 0 && (cellAttr[indexAttr[f].label].type == Tissue::Epidermis))
-                    stiffness = parm("Jolly1").toDouble();
-                if(parm("Jolly2").toDouble() > 0 && (cellAttr[indexAttr[f].label].type == Tissue::LRC || cellAttr[indexAttr[f].label].type == Tissue::Endodermis))
-                    stiffness = parm("Jolly2").toDouble();
+                double convex_stiffness = parm("Convex strain stiffness").toDouble();
+                double concave_stiffness = parm("Concave strain stiffness").toDouble();
+                if(convex_stiffness > 0 && (cellAttr[indexAttr[f].label].type == Tissue::Epidermis))
+                    stiffness = convex_stiffness;
+                if(concave_stiffness > 0 && (cellAttr[indexAttr[f].label].type == Tissue::LRC || cellAttr[indexAttr[f].label].type == Tissue::Endodermis))
+                    stiffness = concave_stiffness;
                 if(stiffnessCorrection)
                     stiffness = 1 - pow(1 - stiffness, 1. / (inter + 1));
                 corr0 *= stiffness;

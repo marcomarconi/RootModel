@@ -69,8 +69,9 @@ public:
         addParm("PBD shape allow stretching", "PBD shape allow stretchinge", "True",
                                                                         QStringList() << "False"
                                                                                       << "True");
-        addParm("Jolly1", "Jolly1", "0");
-        addParm("Jolly2", "Jolly2", "0");
+        addParm("Hook Parameters", "Hook Parameters", "");
+        addParm("Concave strain stiffness", "Concave strain stiffness", "0");
+        addParm("Convex strain stiffness", "Convex strain stiffness", "0");
     }
 
 
