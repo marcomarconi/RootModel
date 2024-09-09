@@ -79,7 +79,7 @@ CameraZoom: -1.728
 [Clip1]
 Enable: false
 Grid: false
-Width: 299.508
+Width: 299.209
 GridSize: 1
 GridSquares: 3
 GridColor: 11
@@ -90,7 +90,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 -0.00689962 -0.0261459 4.4854 1
 [Clip2]
 Enable: false
 Grid: false
-Width: 299.508
+Width: 299.209
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 299.508
+Width: 299.209
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: test_22082024.mdxm
+MeshFile: test_29082024.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -1663,7 +1663,7 @@ ParmString: Model/Root/03 Cell Tissue
 ParmName: Chemicals Solver Process
 ParmString: Model/Root/061 Chemicals Solver
 ProcessName: Model/Root/07 PBD Engine
-NumParms: 22
+NumParms: 23
 ParmName: Print Stats
 ParmString: False
 ParmName: Substrate Fixed
@@ -1704,9 +1704,11 @@ ParmName: PBD shape stiffness
 ParmString: 0.25
 ParmName: PBD shape allow stretching
 ParmString: True
-ParmName: Jolly1
+ParmName: Hook Parameters
+ParmString: 
+ParmName: Concave strain stiffness
 ParmString: 0
-ParmName: Jolly2
+ParmName: Convex strain stiffness
 ParmString: 0
 ProcessName: Model/Root/21 Print Cell Attr
 NumParms: 0
