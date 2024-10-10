@@ -71,26 +71,26 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 1 -1.23029e-17 1.11022e-16 0 1.23029e-17 1 -1.35689e-32 0 -1.11022e-16 1.49348e-32 1 0 -28.0569 -47.342 -4672.03 1
+CameraFrame: 0.999965 0.000107827 -0.00830944 0 -0.000109372 1 -0.00018552 0 0.00830942 0.000186422 0.999965 0 -24.3818 -47.2054 -4672.03 1
 SceneRadius: 500
-CameraZoom: -2.88
+CameraZoom: -2.496
 
 
 [Clip1]
 Enable: false
 Grid: false
-Width: 283.752
+Width: 270.465
 GridSize: 1
 GridSquares: 3
 GridColor: 11
 Normal: 1 0 0
-Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+Frame: 1 0 0 0 0 1 0 0 0 0 1 0 -0.00689962 -0.0261459 4.4854 1
 
 
 [Clip2]
 Enable: false
 Grid: false
-Width: 283.752
+Width: 270.465
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 283.752
+Width: 270.465
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: test____.mdxm
+MeshFile: test.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -136,7 +136,7 @@ ScaleX:1
 ScaleY:1
 ScaleZ:1
 Scale:1.73205
-LoadMeshScaleUm: true
+LoadMeshScaleUm: false
 LoadMeshTransform: false
 MeshShift: 0
 CCName: Tissue
@@ -188,7 +188,7 @@ DrawCutSurf: false
 Mode: 0
 CutSurfGrid: false
 Material: 0
-Size: 1.06068 1.06068 1.06068
+Size: 1.06125 1.06125 1.06125
 SurfSize: 15 15
 LineWidth: 1
 BezPoints: 5 5
@@ -1183,7 +1183,7 @@ ParmString: True
 ParmName: Cell Division Enabled
 ParmString: True
 ParmName: Remesh at start
-ParmString: Hard
+ParmString: Soft
 ParmName: Remesh during execution
 ParmString: 0
 ParmName: Mesh Update Timer
@@ -1269,7 +1269,7 @@ ParmString: 0
 ParmName: Draw Strain Tensors Rescale
 ParmString: 0
 ParmName: Draw MF
-ParmString: True
+ParmString: False
 ParmName: Draw Bounding Box
 ParmString: False
 ParmName: Draw Auxin-Flux Rescale
@@ -1351,7 +1351,7 @@ ParmString: Model/Root/ClearCells
 ParmName: Tissue Process
 ParmString: Model/Root/03 Cell Tissue
 ParmName: Manual Cell Division Enabled
-ParmString: False
+ParmString: True
 ProcessName: Model/Root/05 Mechanics
 NumParms: 28
 ParmName: Dt
@@ -1367,11 +1367,11 @@ ParmString: 10
 ParmName: Mass Spring Parameters
 ParmString: 
 ParmName: Wall EK
-ParmString: .0.05
+ParmString: 0.5
 ParmName: Wall CK
 ParmString: 1
 ParmName: Shear EK
-ParmString: 0.01
+ParmString: 0.5
 ParmName: Shear CK
 ParmString: 1
 ParmName: Auxin-induced wall relaxation K1
@@ -1393,7 +1393,7 @@ ParmString: 2
 ParmName: Turgor Pressure non-Meristem Reduction
 ParmString: 0.25
 ParmName: Turgor Pressure Rate
-ParmString: 0.5
+ParmString: 2
 ParmName: External Forces
 ParmString: 
 ParmName: Gravity Force
@@ -1663,9 +1663,9 @@ ParmString: Model/Root/03 Cell Tissue
 ParmName: Chemicals Solver Process
 ParmString: Model/Root/061 Chemicals Solver
 ProcessName: Model/Root/07 PBD Engine
-NumParms: 21
+NumParms: 23
 ParmName: Print Stats
-ParmString: True
+ParmString: False
 ParmName: Substrate Fixed
 ParmString: False
 ParmName: Velocity Update
@@ -1701,17 +1701,21 @@ ParmString: 0
 ParmName: PBD strain normalize
 ParmString: True
 ParmName: PBD shape stiffness
-ParmString: 0.2
+ParmString: 0.5
 ParmName: PBD shape allow stretching
 ParmString: True
-ParmName: Jolly1
+ParmName: Hook Parameters
+ParmString: 
+ParmName: Concave strain stiffness
+ParmString: 0
+ParmName: Convex strain stiffness
 ParmString: 0
 ProcessName: Model/Root/21 Print Cell Attr
 NumParms: 0
 ProcessName: Model/Root/22 Set Cell Attr
 NumParms: 8
 ParmName: Cell Type
-ParmString: Cortex
+ParmString: LRC
 ParmName: Vertices Masses
 ParmString: 1
 ParmName: Auxin production rate
@@ -1723,9 +1727,9 @@ ParmString: False
 ParmName: MF reorientation rate
 ParmString: -1
 ParmName: Microfibril 1
-ParmString: 0,-1,0
+ParmString: 0,0,0
 ParmName: Microfibril 2
-ParmString: 0.01,0,0
+ParmString: 0,0,0
 ProcessName: Model/Root/23 Set Global Attr
 NumParms: 131
 ParmName: Mechanics Process
@@ -1859,7 +1863,7 @@ ParmString: -1
 ParmName: Cortex Wall Max GR
 ParmString: -1
 ParmName: Cortex Max area
-ParmString: 40
+ParmString: 60
 ParmName: Cortex MF reorientation rate
 ParmString: -1
 ParmName: Endodermis Wall EK
@@ -1875,11 +1879,11 @@ ParmString: -1
 ParmName: Endodermis Wall Max GR
 ParmString: -1
 ParmName: Endodermis Max area
-ParmString: 70
+ParmString: 60
 ParmName: Endodermis MF reorientation rate
 ParmString: -1
 ParmName: Epidermis Wall EK
-ParmString: -1
+ParmString: 1
 ParmName: Epidermis Wall CK
 ParmString: -1
 ParmName: Epidermis Shear EK
@@ -1887,11 +1891,11 @@ ParmString: -1
 ParmName: Epidermis Shear CK
 ParmString: -1
 ParmName: Epidermis Turgor Pressure
-ParmString: 3
+ParmString: -1
 ParmName: Epidermis Wall Max GR
 ParmString: -1
 ParmName: Epidermis Max area
-ParmString: 40
+ParmString: 60
 ParmName: Epidermis MF reorientation rate
 ParmString: -1
 ParmName: CEI Wall EK
@@ -1943,7 +1947,7 @@ ParmString: 60
 ParmName: EpLrcInitial MF reorientation rate
 ParmString: -1
 ParmName: LRC Wall EK
-ParmString: 1
+ParmString: -1
 ParmName: LRC Wall CK
 ParmString: -1
 ParmName: LRC Shear EK
@@ -1951,11 +1955,11 @@ ParmString: -1
 ParmName: LRC Shear CK
 ParmString: -1
 ParmName: LRC Turgor Pressure
-ParmString: 0
+ParmString: -1
 ParmName: LRC Wall Max GR
 ParmString: -1
 ParmName: LRC Max area
-ParmString: 40
+ParmString: 60
 ParmName: LRC MF reorientation rate
 ParmString: -1
 ParmName: Substrate Wall EK
@@ -2036,6 +2040,8 @@ ParmName: Remesh Process
 ParmString: Model/Root/02 Remesh
 ParmName: Delete Selection Process
 ParmString: Mesh/System/Delete Selection
+ProcessName: Model/Root/5 Reset Turgor Pressure
+NumParms: 0
 ProcessName: Model/Root/Add Face
 NumParms: 2
 ParmName: Orientation

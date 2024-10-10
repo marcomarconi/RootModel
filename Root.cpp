@@ -3715,6 +3715,7 @@ bool PrintCellAttr::step() {
             meristem_size ++;
     }
     mdxInfo << "Meristem size in cells: " << round(meristem_size / 2) << endl;
+    mdxInfo << "Faces: " << cs.faces().size() << ", Edges: " << cs.edges().size() << ", Vertices: " << cs.vertices().size() << endl;
     return false;
 }
 

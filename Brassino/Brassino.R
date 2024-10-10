@@ -95,6 +95,7 @@ ggplot(df %>% filter(  Basal == "0.01" & WGR == "1.0" & Delay != "0")) +
 #for f in `ls output*_`; do grep ^Brassino $f  > $f.brassino; done
 {
   dir <- "/home/marco/trabajo//Models/RootModel/Brassino/Brassino_noAuxin_EK_2h_10steps/"
+  setwd(dir)    
   files <- list()
   for(f in list.files(".","*.brassino")) {
     df <- read_csv(f, show_col_types = FALSE, col_names = FALSE)
