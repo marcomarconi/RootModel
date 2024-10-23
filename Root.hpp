@@ -1808,6 +1808,7 @@ public:
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             cD.pressure = 0;
+            cD.pressureMax = -1;
         }
 
         return false;
