@@ -2654,10 +2654,10 @@ bool Root::step() {
             int minimum = remeshAvg / 2;
             int range = remeshAvg - minimum + 1;
             int num = rand() % range + minimum;
-            if(/*cD.area > cD.cellMaxArea &&*/ cD.remeshTime > num /* && cD.stage == 1*/) {
+            if(cD.area > cD.cellMaxArea && cD.remeshTime > num /* && cD.stage == 1*/) {
                 mdxInfo << "Remeshing Cell: " << cD.label << endl;
                 remeshCellProcess->step(cD.label);
-                cD.pressure = 0;
+                //cD.pressure = 0;
                 cD.remeshTime = 0;
             }
         }
