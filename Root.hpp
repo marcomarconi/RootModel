@@ -1248,7 +1248,7 @@ public:
         addParm("QC Ablation", "QC Ablation", "0");
         addParm("Source Removal", "Source Removal", "0");
         addParm("Alternate Source Removal", "Alternate Source Removal", "0");
-        addParm("Auxin Overflow", "Auxin Overflow", "0");
+        addParm("Auxin Overflow", "Auxin Overflow", "0,0,0,0");
         addParm("TIP Removal Time", "TIP Removal Time", "0");
         addParm("LRC Removal Time", "LRC Removal Time", "0");
         addParm("PIN2 Knockdown Time", "PIN2 Knockdown Time", "0");
@@ -1808,6 +1808,7 @@ public:
         for(auto c : cellAttr) {
             Tissue::CellData& cD = cellAttr[c.first];
             cD.pressure = 0;
+            cD.pressureMax = -1;
         }
 
         return false;
