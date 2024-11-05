@@ -71,7 +71,7 @@ Shininess: 32
 Specular: 0.2
 UnsharpStrength: 1
 MaxNbPeels: 10
-CameraFrame: 0.999996 0.00243315 -0.00153821 0 -0.00244208 0.99998 -0.00582901 0 0.001524 0.00583275 0.999982 0 -23.3607 -48.2545 -4672.03 1
+CameraFrame: 1 1.25078e-35 -1.24694e-18 0 4.70747e-37 1 1.04083e-17 0 1.24694e-18 -1.04083e-17 1 0 -21.7865 -34.6313 -4672.03 1
 SceneRadius: 500
 CameraZoom: -2.496
 
@@ -79,18 +79,18 @@ CameraZoom: -2.496
 [Clip1]
 Enable: false
 Grid: false
-Width: 280.239
+Width: 250.17
 GridSize: 1
 GridSquares: 3
 GridColor: 11
 Normal: 1 0 0
-Frame: 1 0 0 0 0 1 0 0 0 0 1 0 -0.00689962 -0.0261459 4.4854 1
+Frame: 0.99582 0.021069 0.0888756 0 -0.0913239 0.24719 0.964654 0 -0.00164487 -0.968738 0.24808 0 -0.00689962 -0.0261459 4.4854 1
 
 
 [Clip2]
 Enable: false
 Grid: false
-Width: 280.239
+Width: 250.17
 GridSize: 1
 GridSquares: 3
 GridColor: 12
@@ -101,7 +101,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Clip3]
 Enable: false
 Grid: false
-Width: 280.239
+Width: 250.17
 GridSize: 1
 GridSquares: 3
 GridColor: 13
@@ -112,7 +112,7 @@ Frame: 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
 [Stack1]
 StackFile: 
 WorkStackFile: 
-MeshFile: Root_Hook.mdxm
+MeshFile: Root_Hook_.mdxm
 MainShow: false
 MainBright:1
 MainOpacity:0.8
@@ -1389,7 +1389,7 @@ ParmString: None
 ParmName: Hydrostatic Parameters
 ParmString: 
 ParmName: Turgor Pressure
-ParmString: 3
+ParmString: 2
 ParmName: Turgor Pressure non-Meristem Reduction
 ParmString: 0.25
 ParmName: Turgor Pressure Rate
@@ -1715,7 +1715,7 @@ NumParms: 0
 ProcessName: Model/Root/22 Set Cell Attr
 NumParms: 8
 ParmName: Cell Type
-ParmString: Endodermis
+ParmString: Epidermis
 ParmName: Vertices Masses
 ParmString: 1
 ParmName: Auxin production rate
@@ -1851,7 +1851,7 @@ ParmString: -1
 ParmName: Pericycle Max area
 ParmString: 60
 ParmName: Cortex Wall EK
-ParmString: 0.5
+ParmString: -1
 ParmName: Cortex Wall CK
 ParmString: -1
 ParmName: Cortex Shear EK
@@ -1875,7 +1875,7 @@ ParmString: -1
 ParmName: Endodermis Shear CK
 ParmString: -1
 ParmName: Endodermis Turgor Pressure
-ParmString: -1
+ParmString: 1
 ParmName: Endodermis Wall Max GR
 ParmString: -1
 ParmName: Endodermis Max area
@@ -1883,7 +1883,7 @@ ParmString: 40
 ParmName: Endodermis MF reorientation rate
 ParmString: -1
 ParmName: Epidermis Wall EK
-ParmString: 1
+ParmString: 0.5
 ParmName: Epidermis Wall CK
 ParmString: -1
 ParmName: Epidermis Shear EK
