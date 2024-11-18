@@ -1177,7 +1177,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             (quasimodo_tissue != "EpidermisCortex") &&
             (quasimodo_tissue != "VascularMeristem") && (quasimodo_tissue != "VascularEZ") &&
             (quasimodo_tissue != "EpidermisMeristem") && (quasimodo_tissue != "EpidermisEZ") &&
-            (quasimodo_tissue != "EpidermisCortexMeristem") && (quasimodo_tissue != "EpidermisCortexEZ") &&
+            (quasimodo_tissue != "EpidermisCortexMeristem") && (quasimodo_tissue != "EpidermisCortexEZ") &&  (quasimodo_tissue != "EpidermisMeristem_noStage") &&
             (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
         cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC &&
