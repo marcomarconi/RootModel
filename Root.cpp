@@ -1201,7 +1201,7 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
         cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisCortexEZ" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) && cD.stage == 1){
         cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
-    } else if( quasimodo_tissue == "EpidermisMeristem_noStage" && cD.type == Tissue::Epidermis && cD.centroid.y() > lrc){
+    } else if( quasimodo_tissue == "EpidermisMeristem_noStage" && cD.type == Tissue::Epidermis && cD.centroid.y() < lrc){
         cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     }
     cD.quasimodo -= cD.quasimodo * quasimodo_decay_rate * Dt;
