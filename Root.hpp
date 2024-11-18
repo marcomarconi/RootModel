@@ -377,6 +377,7 @@ public:
                               << "Epidermis"
                               << "EpidermisMeristem"
                               << "EpidermisEZ"
+                              << "EpidermisMeristem_noStage"
                               << "LRC"
                               << "Columella"
                               << "Substrate"
