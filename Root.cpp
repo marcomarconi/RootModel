@@ -1181,7 +1181,9 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
             (Tissue::stringToCellType(quasimodo_tissue) == cD.type)) {
         cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "All" && (cD.type != Tissue::QC &&
-                                             cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial && cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) ){       if(cD.centroid.y() > lrc)
+                                             cD.type != Tissue::VascularInitial && cD.type != Tissue::ColumellaInitial &&
+                                             cD.type != Tissue::EpLrcInitial && cD.type != Tissue::CEI && cD.type != Tissue::LRC) ){
+        if(cD.centroid.y() > lrc)
             cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisCortex" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) ){
             cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
@@ -1198,6 +1200,8 @@ void Chemicals::calcDerivsCell(const CCStructure& cs,
     } else if( quasimodo_tissue == "EpidermisCortexMeristem" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) && cD.stage == 0){
         cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     } else if( quasimodo_tissue == "EpidermisCortexEZ" && (cD.type == Tissue::Epidermis || cD.type == Tissue::Cortex) && cD.stage == 1){
+        cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
+    } else if( quasimodo_tissue == "EpidermisMeristem_noStage" && cD.type == Tissue::Epidermis && cD.centroid.y() > lrc){
         cD.quasimodo += quasimodo_tissue_prod_rate * Dt;
     }
     cD.quasimodo -= cD.quasimodo * quasimodo_decay_rate * Dt;
