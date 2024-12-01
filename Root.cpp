@@ -212,7 +212,7 @@ bool Mechanics::step() {
                         face_stiffness = auxinMinimumWallEK;
 
                 }
-                if(quasimodoK > 0)
+                if(quasimodoK != 0) // careful with negative values
                     face_stiffness *= exp(-quasimodoK * cD.quasimodo);
             }
             stiffness += face_stiffness;
