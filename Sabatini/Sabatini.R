@@ -97,22 +97,22 @@ final_df %>% filter(Measure=="Meristem" & between(Time, 2200, 3250)) %>% na.omit
 ### the CVS is in the format: Time WT_root qua_root OE_root WT_meristem qua_meristem OE_meristem
 df <- read_csv("/home/marco/trabajo/Models/RootModel/Sabatini/Paper/Sabatini.csv")
 # Root GR
-root <- pivot_longer(df %>% select(1:4), -Time) %>% group_by(name) %>%  mutate(name = sub("_root", "", name), GR=EMA(c(NA, diff((value))) / (c(NA, diff((Time)))*0.03) )) %>% ungroup
-root$name <- factor(root$name, levels=c("WT", "qua", "OE"))
+root <- pivot_longer(df %>% select(1:6), -Time) %>% group_by(name) %>%  mutate(name = sub("_root", "", name), GR=EMA(c(NA, diff((value))) / (c(NA, diff((Time)))*0.03) )) %>% ungroup
+root$name <- factor(root$name, levels=c("WT", "qua", "OE_TZ", "KO_TZ", "neg"))
 root %>% filter(Time > 1000) %>% group_by(name) %>% reframe(M=mean(GR), S=sd(GR)) %>% ggplot() + geom_bar(aes(name, M), stat = "identity", fill="purple") + geom_errorbar(aes(name, ymin=M-S, ymax=M+S), width=0.25) + 
     theme(text = element_text(size=28), axis.title.x = element_blank(), axis.text.x = element_text( hjust = 1, angle = 45)) + 
     ylab(expression(paste("Growth Rate (", "\u03BCm/h)", sep = ""))) -> p
 p
 ggsave("/home/marco/trabajo/Models/RootModel/Sabatini/Paper/GR.svg", width = 8, height = 6)
 meristem <- pivot_longer(df %>% select(c(1, 5:7)), -Time) %>% group_by(name) %>%  mutate(name = sub("_meristem", "", name)) %>% ungroup
-meristem$name <- factor(meristem$name, levels=c("WT", "qua", "OE"))
+meristem$name <- factor(meristem$name, levels=c("WT", "qua", "OE_TZ", "KO_TZ", "neg"))
 meristem %>% filter(Time > 1000) %>% group_by(name) %>% reframe(M=mean(value), S=sd(value)) %>% ggplot() + geom_bar(aes(name, M), stat = "identity", fill="purple") + geom_errorbar(aes(name, ymin=M-S, ymax=M+S), width=0.25) + 
     theme(text = element_text(size=28), axis.title.x = element_blank(), axis.text.x = element_text( hjust = 1, angle = 45)) + 
     ylab("Meristem size") 
 
-meristem <- data.frame(Time=df$Time, df[,5:7] / df[,2:4] * 100)
+meristem <- data.frame(Time=df$Time, df[,7:11] / df[,2:6] * 100)
 meristem <- pivot_longer(meristem, -Time) %>% group_by(name) %>%  mutate(name = sub("_meristem", "", name)) %>% ungroup
-meristem$name <- factor(meristem$name, levels=c("WT", "qua", "OE"))
+meristem$name <- factor(meristem$name, levels=c("WT", "qua", "OE_TZ", "KO_TZ", "neg"))
 meristem %>% filter(Time > 1000) %>% group_by(name) %>% reframe(M=mean(value), S=sd(value)) %>% ggplot() + geom_bar(aes(name, M), stat = "identity", fill="purple") + geom_errorbar(aes(name, ymin=M-S, ymax=M+S), width=0.25) + 
     theme(text = element_text(size=28), axis.title.x = element_blank(), axis.text.x = element_text( hjust = 1, angle = 45)) + 
     ylab("Meristem size (%)") 
